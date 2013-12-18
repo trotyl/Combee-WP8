@@ -1,0 +1,62 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="Combee.login"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0" Loaded="PhoneApplicationPage_Loaded">
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar Opacity="1" BackgroundColor="#FF252C32">
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem x:Name="WebSiteButton" IsEnabled="True" Text="访问官网"/>
+            </shell:ApplicationBar.MenuItems>
+            <shell:ApplicationBarIconButton x:Name="HelpButton" IconUri="/Assets/AppBar/questionmark.png" IsEnabled="True" Text="帮助"/>
+            <shell:ApplicationBarIconButton x:Name="SupportButton" IconUri="/Assets/AppBar/feature.calendar.png" IsEnabled="True" Text="支持"/>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
+    <!--LayoutRoot 是包含所有页面内容的根网格-->
+    <Grid x:Name="LayoutRoot" Background="#FF34495E">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel 包含应用程序的名称和页标题-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="Combee - 组织消息通知中心" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="登录" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <!--ContentPanel - 在此处放置其他内容-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <ScrollViewer>
+                <StackPanel >
+                    <TextBlock Text="用户名(手机号/邮箱):" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="12,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="UserNameTextBox" Height="70" Margin="0,0,20,20" HorizontalAlignment="Stretch" KeyDown="UserNameTextBox_KeyDown">
+                        <TextBox.InputScope>
+                            <InputScope >
+                                <InputScopeName NameValue="NameOrPhoneNumber"/>
+                            </InputScope>
+                        </TextBox.InputScope>
+                    </TextBox>
+                    <TextBlock Text="密码:" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="12,0,0,0" HorizontalAlignment="Left"/>
+                    <PasswordBox x:Name="PasswordTextBox" Height="70" Margin="0,0,20,0" HorizontalAlignment="Stretch" MaxLength="17" KeyDown="PasswordTextBox_KeyDown" />
+                    <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                        <Button x:Name="LoginButton" Height="80" Width="200" Margin="0,20,0,0" HorizontalAlignment="Left" Content="登录" FontSize="30" BorderBrush="White" Click="LoginButton_Click"/>
+                        <Button x:Name="RegisterButton" Height="80" Width="200" Margin="0,20,0,0" HorizontalAlignment="Left" Content="注册" FontSize="30" BorderBrush="White"/>
+                    </StackPanel>
+                    <Image Source="/Combee;component/Assets/Combee.png" Margin="20"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+
+</phone:PhoneApplicationPage>
