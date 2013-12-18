@@ -54,12 +54,12 @@
         <DataTemplate x:Key="CovListTemplate">
             <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Background="#FF51697A">
                 <!--用图像替换矩形-->
-                <Image Name="CovImage" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}}" Width="90" Height="90" Margin="9,0,0,0" Stretch="UniformToFill"/>
+                <Image Name="CovImage" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}}" Width="90" Height="90" Margin="9,0,0,0" Stretch="UniformToFill" Tap="UserImage_Tap"/>
                 <StackPanel Width="311" Margin="8,-2,0,0">
-                    <TextBlock Name="ParticipantsNameTextBlock" Text="{Binding ParticipantsName}" Margin="10,10,80,0" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" TextTrimming="WordEllipsis" />
+                    <TextBlock Name="ParticipantsNameTextBlock" Text="{Binding ParticipantsName}" Margin="10,8,80,0" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" TextTrimming="WordEllipsis" />
                     <StackPanel Orientation="Vertical">
                         <TextBlock Name="CovTimeTextBlock" Text="{Binding UpdatedAt, Converter={StaticResource DisplayTime}}" TextWrapping="NoWrap" Margin="0,-48,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" />
-                        <TextBlock Name="ContentTextBlock" Text="{Binding Body}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <TextBlock Name="ContentTextBlock" Text="{Binding Body}" TextWrapping="Wrap" Margin="10,0,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                     </StackPanel>
                 </StackPanel>             
             </StackPanel>
@@ -80,7 +80,7 @@
     </phone:PhoneApplicationPage.ApplicationBar>
 
     <!--LayoutRoot 是包含所有页面内容的根网格-->
-    <Grid x:Name="LayoutRoot" Background="Transparent" >
+    <Grid x:Name="LayoutRoot" Background="#FF252C32" >
 
         <!-- 本地化说明:
             若要本地化显示的字符串，请将其值复制到应用程序的非特定语言资源文件(AppResources.resx)

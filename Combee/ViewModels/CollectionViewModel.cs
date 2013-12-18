@@ -313,8 +313,6 @@ namespace BindingData.ViewModel
 
                 // 在所有可观测集合中添加一个新的组织项目.
                 AllOrganizationsItems.Add(newOrgz);
-
-                App.NewViewModel.LoadCollectionsFromDatabase();
             }
 
             else
@@ -337,11 +335,10 @@ namespace BindingData.ViewModel
 
                     // 在数据库中保存更改.
                     myDB.SubmitChanges();
-
-                    App.NewViewModel.LoadCollectionsFromDatabase();
-
                 }
             }
+
+            App.NewViewModel.LoadCollectionsFromDatabase();
 
             if (newOrgz.IsAvatarLocal == false)
             {
@@ -444,9 +441,12 @@ namespace BindingData.ViewModel
 
             if (newUser.IsAvatarLocal == false)
             {
-                StartSaveAvatar(newUser);
+                Task.Run(() =>
+                {
+                    StartSaveAvatar(newUser);
+                });
             }
-
+        
         }
 
         public void StartSaveAvatar(Users user)

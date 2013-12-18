@@ -73,7 +73,7 @@
             <phone:PivotItem Header="资料">
                 <Grid>
                     <StackPanel >
-                        <Image x:Name="AvatarImage" Margin="20,0,0,0" Width="99" Height="99" HorizontalAlignment="Left" />
+                        <Image x:Name="AvatarImage" Margin="20,0,0,0" Width="99" Height="99" HorizontalAlignment="Left" Stretch="UniformToFill" />
                         <TextBlock x:Name="NameTextBlock" Text="" Margin="130,-120,0,0" HorizontalAlignment="Left" FontSize="60" />
                         <TextBlock x:Name="MailTextBlock" Text="" Margin="130,-32,0,0" FontSize="24" HorizontalAlignment="Left" />
                         <TextBlock x:Name="UidTextBlock" Text="" Margin="20,20,0,10" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="30" />

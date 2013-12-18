@@ -44,7 +44,7 @@ namespace Combee
             {
                 WebClient newWebClient = new WebClient();
                 newWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedUsers);
-                Uri uri = new Uri(Json.host + "users" + @"/" + id + Json.rear);
+                Uri uri = new Uri(Json.host + "users" + @"/" + id + Json.rear + ThisUser.private_token);
 
                 newWebClient.DownloadStringAsync(uri);
             }

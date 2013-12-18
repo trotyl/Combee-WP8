@@ -26,7 +26,6 @@ namespace Combee
 
         public static void SetValue(string _id, string _name, string _email, DateTime _created_at, string _avatar, string _phone, string _private_token)
         {
-
             id = _id;
             name = _name;
             email = _email;
@@ -56,6 +55,10 @@ namespace Combee
             if (!iso.DirectoryExists("uploads/avatar/user"))
             {
                 iso.CreateDirectory("uploads/avatar/user");
+            }
+            if (!iso.DirectoryExists("uploads/avatar/organization"))
+            {
+                iso.CreateDirectory("uploads/avatar/organization");
             }
             if (!iso.DirectoryExists("assets"))
             {
@@ -127,7 +130,7 @@ namespace Combee
                 }
             }
 
-            string fnl = pre + "retina_small_" + lst;
+            string fnl = pre + "mobile_" + lst;
             return fnl;
         }
     }

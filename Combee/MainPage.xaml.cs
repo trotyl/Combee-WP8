@@ -66,15 +66,15 @@ namespace Combee
                     ThisUser.name = (string)IsolatedStorageSettings.ApplicationSettings["name"];
                     ThisUser.id = (string)IsolatedStorageSettings.ApplicationSettings["id"];
                     ThisUser.private_token = (string)IsolatedStorageSettings.ApplicationSettings["private_token"];
-                    Json.GetAsync("receipts", "receipts");
-                    //Json.GetAsync("organizations", @"users/" + ThisUser.id + @"/organizations");
-                    //Json.GetAsync("conversations", @"user/conversations");
-
                 }
 
                 // 首次进入程序导航选项
                 if (!settings.Contains("entered"))
                 {
+                    Json.GetAsync("receipts", "receipts");
+                    Json.GetAsync("organizations", @"users/" + ThisUser.id + @"/organizations");
+                    Json.GetAsync("conversations", @"user/conversations");
+
                     settings.Add("entered", "1");
                     settings.Save();
                     var result = MessageBox.Show("欢迎使用Combee，是否进入新功能介绍？", "首次登录提示", MessageBoxButton.OKCancel);
@@ -83,6 +83,11 @@ namespace Combee
                         // cancel the closure of the form.
                         NavigationService.Navigate(new Uri("/Combee;component/Introduction.xaml", UriKind.Relative));
                     }
+                }
+
+                if(PhoneApplicationService.Current.State.ContainsKey("back"))
+                {
+                    UmsgList.ScrollTo(PhoneApplicationService.Current.State["back"]);
                 }
             }
         }
@@ -106,7 +111,18 @@ namespace Combee
 
         private void UserImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
+            //object ob = ((Image)sender).Parent;
+            //StackPanel stp = (StackPanel)ob;
+            //UmsgList.ScrollTo(stp);
+            //Receipts rpt = stp.
+
+            //PhoneApplicationService.Current.State["mode"] = "user";
+            //PhoneApplicationService.Current.State["back"] = sender;
+
+            //UmsgList.ScrollTo(PhoneApplicationService.Current.State["back"]);
+
             NavigationService.Navigate(new Uri("/Combee;component/Users.xaml?id=" + ((Image)sender).Tag.ToString(), UriKind.Relative));
+
         }
 
         private void ToastButton_Click(object sender, EventArgs e)
@@ -161,24 +177,28 @@ namespace Combee
             }
             else
             {
-                switch(MainPagePanorama.SelectedIndex)
-                {
-                    case 0:
-                        {
-                            Json.GetAsync("receipts", "receipts");
-                            break;
-                        }
-                    case 1:
-                        {
-                            Json.GetAsync("organizations", @"users/" + ThisUser.id + @"/organizations");
-                            break;
-                        }
-                    case 2:
-                        {
-                            Json.GetAsync("conversations", @"user/conversations");
-                            break;
-                        }
-                }
+                Json.GetAsync("receipts", "receipts");
+                Json.GetAsync("organizations", @"users/" + ThisUser.id + @"/organizations");
+                Json.GetAsync("conversations", @"user/conversations");
+
+                //switch(MainPagePanorama.SelectedIndex)
+                //{
+                //    case 0:
+                //        {
+                //            Json.GetAsync("receipts", "receipts");
+                //            break;
+                //        }
+                //    case 1:
+                //        {
+                //            Json.GetAsync("organizations", @"users/" + ThisUser.id + @"/organizations");
+                //            break;
+                //        }
+                //    case 2:
+                //        {
+                //            Json.GetAsync("conversations", @"user/conversations");
+                //            break;
+                //        }
+                //}
                 App.NewViewModel.LoadCollectionsFromDatabase();
             }
         }
