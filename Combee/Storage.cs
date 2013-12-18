@@ -16,7 +16,6 @@ namespace Combee
 {
     class ThisUser
     {
-
         public static string name = string.Empty;
         public static string id = string.Empty;
         public static string email = string.Empty;
