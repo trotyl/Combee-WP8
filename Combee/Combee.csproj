@@ -175,6 +175,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\短信.psd" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">
@@ -188,6 +189,7 @@
     <Content Include="Assets\AppBar\feature.phone.png" />
     <Content Include="Assets\AppBar\feature.settings.png" />
     <Content Include="Assets\AppBar\send.png" />
+    <Content Include="Assets\短信.png" />
     <Content Include="Images\appbar.add.rest.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
