@@ -99,7 +99,7 @@ namespace Combee
 
         private void fullUmsgStackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Combee;component/Receipts.xaml?id="+((StackPanel)sender).Tag.ToString(), UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Combee;component/Post.xaml?id="+((StackPanel)sender).Tag.ToString(), UriKind.Relative));
         }
 
         private void LikeButton_Click(object sender, EventArgs e)

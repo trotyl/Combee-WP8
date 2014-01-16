@@ -25,7 +25,7 @@
             <StackPanel Name="AllUmsgStackPanel" Orientation="Horizontal" Margin="12,2,0,4" Height="105" Background="#FF51697A">
                 <!--用图像替换矩形-->
                 <Image Name="UserImage" Tag="{Binding AuthorId}" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}}" Width="90" Height="90" Margin="9,0,0,0" Tap="UserImage_Tap" Stretch="UniformToFill"/>
-                <StackPanel Name="FullUmsgStackPanel" Tag="{Binding Id}" Width="311" Margin="8,-7,0,0" Tap="fullUmsgStackPanel_Tap">
+                <StackPanel Name="FullUmsgStackPanel" Tag="{Binding PostId}" Width="311" Margin="8,-7,0,0" Tap="fullUmsgStackPanel_Tap">
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                         <TextBlock Name="UserNameTextBlock" Text="{Binding AuthorName}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
                         <Border Visibility="Collapsed" BorderThickness="1" Width="24" Height="24" Margin="0,4,0,0" BorderBrush="#FFFFC700" Background="White" />
@@ -54,7 +54,7 @@
         <DataTemplate x:Key="CovListTemplate">
             <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Background="#FF51697A">
                 <!--用图像替换矩形-->
-                <Image Name="CovImage" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}}" Width="90" Height="90" Margin="9,0,0,0" Stretch="UniformToFill" Tap="UserImage_Tap"/>
+                <Image Name="CovImage" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}}" Width="90" Height="90" Margin="9,0,0,0" Stretch="UniformToFill" />
                 <StackPanel Width="311" Margin="8,-2,0,0">
                     <TextBlock Name="ParticipantsNameTextBlock" Text="{Binding ParticipantsName}" Margin="10,8,80,0" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" TextTrimming="WordEllipsis" />
                     <StackPanel Orientation="Vertical">

@@ -220,24 +220,6 @@ namespace BindingData.Model
             }
         }
 
-        ////优信附件ID集合
-        //private string[] _attachmentIds;
-
-        //[Column]
-        //public string[] AttachmentIds
-        //{
-        //    get { return _attachmentIds; }
-        //    set
-        //    {
-        //        if (_attachmentIds != value)
-        //        {
-        //            NotifyPropertyChanging("AttachmentIds");
-        //            _attachmentIds = value;
-        //            NotifyPropertyChanged("AttachmentIds");
-        //        }
-        //    }
-        //}
-
         //发送时间
         private DateTime _createdAt;
 
