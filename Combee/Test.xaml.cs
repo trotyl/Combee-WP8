@@ -141,6 +141,11 @@ namespace Combee
             }
         }
 
+        private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            wb.NavigateToString("<html><head></head><body>Silverlight Developer Site" + "<iframe src=\"http://www.silverlight.net\" WIDTH=300 HEIGHT=200>" + "</iframe></body></html>");
+        }
+
     }
 
 }
