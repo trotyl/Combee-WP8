@@ -40,10 +40,7 @@ namespace Combee
             else
             {
                 JObject o = JObject.Parse(e.Result);
-                ContentBrowser.IsEnabled = true;
-                ContentBrowser.IsHitTestVisible = true;
-                ContentBrowser.IsScriptEnabled = true;
-                ContentBrowser.NavigateToString("<html><head></head><body>Silverlight Developer Site" + "<iframe src=\"http://www.silverlight.net\" WIDTH=300 HEIGHT=200>" + "</iframe></body></html>");
+                ContentBrowser.NavigateToString((string)o["body_html"]);
                 TitleTextBlock.Text = (string)o["title"];
                 FromTextBlock.Text = (string)o["author"]["name"];
             }
