@@ -36,22 +36,27 @@ namespace Combee
             this.DataContext = App.NewViewModel;
         }
 
-        private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
+        // 程序退出确认(后退键重载)
+        protected override void OnBackKeyPress(CancelEventArgs e)
+        {
+            base.OnBackKeyPress(e);
+
+            MessageBoxResult result = MessageBox.Show("您确定要狠心地退出Combee? T^T", "退出确认", MessageBoxButton.OKCancel);
+            if (result == MessageBoxResult.Cancel)
+                e.Cancel = true;
+        }
+
+        // 判断是否已登录(导航至重载)
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
 
-            //判断当前是否已登录
+            // 判断当前是否含有token
             if (!settings.Contains("private_token"))
             {
                 if (!PhoneApplicationService.Current.State.ContainsKey("logined"))
                 {
                     NavigationService.Navigate(new Uri("/Combee;component/Login.xaml", UriKind.Relative));
-                }
-                else
-                {
-                    Page.IsEnabled = false;
-                    Page.Visibility = System.Windows.Visibility.Collapsed;
-                    Page.ApplicationBar.IsVisible = false;
                 }
             }
             else
@@ -85,11 +90,12 @@ namespace Combee
                     }
                 }
 
-                if(PhoneApplicationService.Current.State.ContainsKey("back"))
-                {
-                    UmsgList.ScrollTo(PhoneApplicationService.Current.State["back"]);
-                }
             }
+
+        }
+
+        private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
+        {
         }
 
         private void AboutButton_Click(object sender, EventArgs e)
@@ -181,33 +187,14 @@ namespace Combee
                 Json.GetAsync("organizations", @"users/" + ThisUser.id + @"/organizations");
                 Json.GetAsync("conversations", @"user/conversations");
 
-                //switch(MainPagePanorama.SelectedIndex)
-                //{
-                //    case 0:
-                //        {
-                //            Json.GetAsync("receipts", "receipts");
-                //            break;
-                //        }
-                //    case 1:
-                //        {
-                //            Json.GetAsync("organizations", @"users/" + ThisUser.id + @"/organizations");
-                //            break;
-                //        }
-                //    case 2:
-                //        {
-                //            Json.GetAsync("conversations", @"user/conversations");
-                //            break;
-                //        }
-                //}
                 App.NewViewModel.LoadCollectionsFromDatabase();
             }
         }
-        private void Page_Unloaded(object sender, RoutedEventArgs e)
+
+        public void AddReceipt(Receipts rpt)
         {
 
         }
-
-
     }
 
 }

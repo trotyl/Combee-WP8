@@ -15,7 +15,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0" Loaded="PhoneApplicationPage_Loaded" Tag="1" Unloaded="Page_Unloaded">
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0" Loaded="PhoneApplicationPage_Loaded" Tag="1">
     <phone:PhoneApplicationPage.Resources>
         <local:StringToImageSource x:Key="StringToImageSource" />
         <local:DisplayTime x:Key="DisplayTime" />

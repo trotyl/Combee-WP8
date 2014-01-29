@@ -31,10 +31,7 @@
 
         <!--TitlePanel 包含应用程序的名称和页标题-->
         <StackPanel Grid.Row="0" Margin="12,27,0,28">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Combee - 组织消息通知中心" Width="Auto" Style="{StaticResource PhoneTextNormalStyle}"/>
-                <TextBlock Text="新消息" Margin="90,2,0,0" HorizontalAlignment="Right" Foreground="#FFDEE809" TextDecorations="Underline" FontSize="18"/>
-            </StackPanel>
+            <TextBlock Text="Combee - 组织消息通知中心" Width="Auto" Style="{StaticResource PhoneTextNormalStyle}"/>
             <TextBlock Text="关于" Margin="9,7,0,0" TextAlignment="Center" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
