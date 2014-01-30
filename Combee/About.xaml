@@ -6,6 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:doc="clr-namespace:System.Windows.Documents;assembly=System.Windows"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -32,12 +33,18 @@
         <!--TitlePanel 包含应用程序的名称和页标题-->
         <StackPanel Grid.Row="0" Margin="12,27,0,28">
             <TextBlock Text="Combee - 组织消息通知中心" Width="Auto" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="关于" Margin="9,7,0,0" TextAlignment="Center" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="关于" Margin="9,7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - 在此处放置其他内容-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,20,12,0">
-            <TextBlock Text="写点什么好呢~&#13;版本号1.0.0.0" TextAlignment="Center"/>
+            <TextBlock Text="写点什么好呢~&#13;版本号1.0.0.0" TextAlignment="Center">
+                Combee for Windows Phone
+                <doc:LineBreak/>
+                版本号1.0.0.0
+                <doc:LineBreak/>
+
+            </TextBlock>
             <Image Source="/Combee;component/Assets/Combee.png" />
         </Grid>
     </Grid>
