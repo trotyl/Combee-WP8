@@ -27,18 +27,6 @@ namespace BindingData.ViewModel
             }
         }
 
-        //// 当前用户优信项目.
-        //private ObservableCollection<Receipts> _theReceiptsItems;
-        //public ObservableCollection<Receipts> TheReceiptsItems
-        //{
-        //    get { return _theReceiptsItems; }
-        //    set
-        //    {
-        //        _theReceiptsItems = value;
-        //        NotifyPropertyChanged("TheReceiptsItems");
-        //    }
-        //}
-
         // 所有组织项目.
         private ObservableCollection<Organizations> _allOrganizationsItems;
         public ObservableCollection<Organizations> AllOrganizationsItems
@@ -51,18 +39,6 @@ namespace BindingData.ViewModel
             }
         }
 
-        //// 当前用户组织项目.
-        //private ObservableCollection<Organizations> _theOrganizationsItems;
-        //public ObservableCollection<Organizations> TheOrganizationsItems
-        //{
-        //    get { return _theOrganizationsItems; }
-        //    set
-        //    {
-        //        _theOrganizationsItems = value;
-        //        NotifyPropertyChanged("TheOrganizationsItems");
-        //    }
-        //}
-        
         // 所有人员项目.
         private ObservableCollection<Users> _allUsersItems;
         public ObservableCollection<Users> AllUsersItems
@@ -109,9 +85,10 @@ namespace BindingData.ViewModel
         // 用来通知程序某属性已改变.
         private void NotifyPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
         #endregion
@@ -119,51 +96,6 @@ namespace BindingData.ViewModel
         // 查询数据库并加载集合用于全景页面.
         public void LoadCollectionsFromDatabase()
         {
-            //if (!Storage.hehe)
-            //{
-            //    Storage.hehe = true;
-
-            //    // 更新优信显示时间.
-            //    var ReceiptsInDB = from Receipts rpt in myDB.ReceiptsTable
-            //                            orderby rpt.Id descending
-            //                            select rpt;
-
-            //    if (ReceiptsInDB.Count() != 0)
-            //    {
-            //        foreach (Receipts rpt in ReceiptsInDB)
-            //        {
-            //            if (rpt.CreatedAt.Date == DateTime.Now.Date)
-            //            {
-            //                rpt.DisplayTime = rpt.CreatedAt.ToShortTimeString();
-            //            }
-            //            else
-            //            {
-            //                rpt.DisplayTime = rpt.CreatedAt.ToShortDateString();
-            //            }
-            //        }
-            //    }
-
-            //    // 更新会话显示时间.
-            //    var ConversationsInDB = from Conversations cov in myDB.ConversationsTable
-            //                                 orderby cov.UpdatedAt descending
-            //                                 select cov;
-
-            //    if (ConversationsInDB.Count() != 0)
-            //    {
-            //        foreach (Conversations cov in ConversationsInDB)
-            //        {
-            //            if (cov.UpdatedAt.Date == DateTime.Now.Date)
-            //            {
-            //                cov.DisplayTime = cov.CreatedAt.ToShortTimeString();
-            //            }
-            //            else
-            //            {
-            //                cov.DisplayTime = cov.CreatedAt.ToShortDateString();
-            //            }
-            //        }
-            //    }
-
-            //}
 
             var ReceiptsItemsInDB = from Receipts rpt in myDB.ReceiptsTable
                                     orderby rpt.Id descending
@@ -216,9 +148,9 @@ namespace BindingData.ViewModel
                 myDB.SubmitChanges();
 
                 // 在所有可观测集合中添加一个新的优信项目.
-                AllReceiptsItems.Add(newRpt);
+                AllReceiptsItems.Insert(0, newRpt);
 
-                App.NewViewModel.LoadCollectionsFromDatabase();
+                //App.NewViewModel.LoadCollectionsFromDatabase();
 
             }
 
@@ -242,7 +174,7 @@ namespace BindingData.ViewModel
                     // 在数据库中保存更改.
                     myDB.SubmitChanges();
 
-                    App.NewViewModel.LoadCollectionsFromDatabase();
+                    //App.NewViewModel.LoadCollectionsFromDatabase();
                 }
             }
 
@@ -268,7 +200,7 @@ namespace BindingData.ViewModel
             // 在数据库中保存更改.
             myDB.SubmitChanges();
 
-            App.NewViewModel.LoadCollectionsFromDatabase();
+            //App.NewViewModel.LoadCollectionsFromDatabase();
 
         }
 
@@ -287,7 +219,7 @@ namespace BindingData.ViewModel
                 // 在数据库中保存更改.
                 myDB.SubmitChanges();
 
-                App.NewViewModel.LoadCollectionsFromDatabase();
+                //App.NewViewModel.LoadCollectionsFromDatabase();
 
             }));
 
@@ -338,7 +270,7 @@ namespace BindingData.ViewModel
                 }
             }
 
-            App.NewViewModel.LoadCollectionsFromDatabase();
+            //App.NewViewModel.LoadCollectionsFromDatabase();
 
             if (newOrgz.IsAvatarLocal == false)
             {
@@ -363,7 +295,7 @@ namespace BindingData.ViewModel
             // 在数据库中保存更改.
             myDB.SubmitChanges();
 
-            App.NewViewModel.LoadCollectionsFromDatabase();
+            //App.NewViewModel.LoadCollectionsFromDatabase();
 
         }
 
@@ -382,7 +314,7 @@ namespace BindingData.ViewModel
                 // 在数据库中保存更改.
                 myDB.SubmitChanges();
 
-                App.NewViewModel.LoadCollectionsFromDatabase();
+                //App.NewViewModel.LoadCollectionsFromDatabase();
 
             }));
 
@@ -437,7 +369,7 @@ namespace BindingData.ViewModel
                     myDB.SubmitChanges();
                 }
             }
-            App.NewViewModel.LoadCollectionsFromDatabase();
+            //App.NewViewModel.LoadCollectionsFromDatabase();
 
             if (newUser.IsAvatarLocal == false)
             {
@@ -488,7 +420,7 @@ namespace BindingData.ViewModel
                 // 在所有可观测集合中添加一个新的优信项目.
                 AllConversationsItems.Add(newCov);
 
-                App.NewViewModel.LoadCollectionsFromDatabase();
+                //App.NewViewModel.LoadCollectionsFromDatabase();
 
             }
 
@@ -513,7 +445,7 @@ namespace BindingData.ViewModel
                     // 在数据库中保存更改.
                     myDB.SubmitChanges();
 
-                    App.NewViewModel.LoadCollectionsFromDatabase();
+                    //App.NewViewModel.LoadCollectionsFromDatabase();
 
                 }
             }
@@ -542,7 +474,7 @@ namespace BindingData.ViewModel
                 // 在数据库中保存更改.
                 myDB.SubmitChanges();
 
-                App.NewViewModel.LoadCollectionsFromDatabase();
+                //App.NewViewModel.LoadCollectionsFromDatabase();
             }));
 
         }

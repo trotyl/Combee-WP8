@@ -11,7 +11,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="True" Loaded="PhoneApplicationPage_Loaded">
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0" Loaded="PhoneApplicationPage_Loaded">
 
     <!--LayoutRoot 是包含所有页面内容的根网格-->
     <Grid x:Name="LayoutRoot" Background="#FF34495E">
@@ -25,7 +25,7 @@
                             <Border BorderThickness="1" Width="99" Height="99" BorderBrush="#FFFFC700" Background="#FFFFC700" Margin="10,0,20,0" HorizontalAlignment="Right"/>
                             <TextBlock x:Name="TitleTextBlock" Text="" TextWrapping="Wrap" Margin="0,-99,120,0" FontSize="30"/>
                             <TextBlock x:Name="FromTextBlock" Tag="{Binding postId}" Text="" TextAlignment="Right" Margin="9,-32,24,0" Style="{StaticResource PhoneTextNormalStyle}"/>
-                            <phone:WebBrowser x:Name="ContentBrowser" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Visibility="Visible" VerticalAlignment="Top" Height="600" />
+                            <phone:WebBrowser x:Name="ContentBrowser" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Visibility="Visible" VerticalAlignment="Top" Height="600" Opacity="0" LoadCompleted="ContentBrowser_LoadCompleted" />
                             <!--<TextBlock x:Name="mainTextBlock" Text="正在加载中, 请稍候..." FontSize="{StaticResource PhoneFontSizeLarge}" TextWrapping="Wrap"/>-->
                             
                         </StackPanel>

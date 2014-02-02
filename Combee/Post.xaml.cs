@@ -40,11 +40,21 @@ namespace Combee
             else
             {
                 JObject o = JObject.Parse(e.Result);
-                ContentBrowser.NavigateToString((string)o["body_html"]);
+                string rawHtml = string.Empty;
+                rawHtml += "<html><body bgcolor=\"#34495E\"><p>";
+                rawHtml += "<font color=\"#FFFFFF\">";
+                rawHtml += (string)o["body_html"];
+                rawHtml += "</p></font></body></html>";
+                ContentBrowser.NavigateToString(rawHtml);
                 TitleTextBlock.Text = (string)o["title"];
                 FromTextBlock.Text = (string)o["author"]["name"];
             }
 
+        }
+
+        private void ContentBrowser_LoadCompleted(object sender, NavigationEventArgs e)
+        {
+            ContentBrowser.Opacity = 1;
         }
 
     }

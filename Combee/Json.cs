@@ -84,8 +84,8 @@ namespace Combee
                             break;
                         }
                 }
-                Uri auri = new Uri(host + mode + rear + ThisUser.private_token + "&page=" + i);
-                webClient.DownloadStringAsync(new Uri(host + mode + rear + ThisUser.private_token + "&page=" + i));
+                Uri uri = new Uri(host + mode + rear + ThisUser.private_token + "&page=" + i);
+                webClient.DownloadStringAsync(uri);
             }
         }
 
@@ -99,7 +99,7 @@ namespace Combee
             else
             {
                 JArray arr = JArray.Parse(e.Result);
-                for (int i = 0; i < arr.Count; i++)
+                for (int i = arr.Count - 1; i >= 0; i--)
                 {
                     JToken t = arr[i];
                     JObject o = JObject.Parse(t.ToString());

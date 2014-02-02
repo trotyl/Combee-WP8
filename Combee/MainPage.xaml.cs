@@ -187,7 +187,7 @@ namespace Combee
                 Json.GetAsync("organizations", @"users/" + ThisUser.id + @"/organizations");
                 Json.GetAsync("conversations", @"user/conversations");
 
-                App.NewViewModel.LoadCollectionsFromDatabase();
+                //App.NewViewModel.LoadCollectionsFromDatabase();
             }
         }
 

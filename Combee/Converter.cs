@@ -23,10 +23,10 @@ namespace Combee
                 BitmapImage ret = new BitmapImage();
                 string filePath = Storage.GetSmallImage((string)value);
 
-                //if(filePath.Substring(0,4) == "http")
-                //{
-                //    return filePath;
-                //}
+                if (filePath.Substring(0, 4) == "http")
+                {
+                    return filePath;
+                }
 
                 using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())
                 {
