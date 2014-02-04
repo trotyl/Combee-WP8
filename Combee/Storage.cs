@@ -35,13 +35,14 @@ namespace Combee
             private_token = _private_token;
         }
     }
+
     class Storage
     {
         private static Object thisLock = new Object();
 
         public static bool hehe = false;
 
-        public static void SaveAvatar(string uri)
+        public static void Initials()
         {
             IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication();
             if (!iso.DirectoryExists("uploads"))
@@ -52,9 +53,17 @@ namespace Combee
             {
                 iso.CreateDirectory("uploads/avatar");
             }
+            if (!iso.DirectoryExists("uploads/header"))
+            {
+                iso.CreateDirectory("uploads/header");
+            }
             if (!iso.DirectoryExists("uploads/avatar/user"))
             {
                 iso.CreateDirectory("uploads/avatar/user");
+            }
+            if (!iso.DirectoryExists("uploads/header/user"))
+            {
+                iso.CreateDirectory("uploads/header/user");
             }
             if (!iso.DirectoryExists("uploads/avatar/organization"))
             {
@@ -68,6 +77,10 @@ namespace Combee
             {
                 iso.CreateDirectory("assets/avatar");
             }
+            if (!iso.DirectoryExists("assets/header"))
+            {
+                iso.CreateDirectory("assets/header");
+            }
             if (!iso.DirectoryExists("assets/avatar/organization"))
             {
                 iso.CreateDirectory("assets/avatar/organization");
@@ -76,6 +89,19 @@ namespace Combee
             {
                 iso.CreateDirectory("assets/avatar/user");
             }
+            if (!iso.DirectoryExists("assets/header/user"))
+            {
+                iso.CreateDirectory("assets/header/user");
+            }
+
+            iso.Dispose();
+
+        }
+
+        public static void SaveAvatar(string uri)
+        {
+            IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication();
+            uri = GetSmallImage(uri);
             if (iso.FileExists(uri))
             {
                 return;
@@ -95,23 +121,26 @@ namespace Combee
 
         private static void OpenReadCallback(object sender, OpenReadCompletedEventArgs e)
         {
-
             lock (thisLock)
             {
                 using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    if(iso.FileExists(e.UserState.ToString()))
+                    if (iso.FileExists(e.UserState.ToString()))
                     {
-                        return;
+                        //什么也不需要做...但是不能直接返回
                     }
-                    using (var fileStream = iso.OpenFile
-                        (e.UserState.ToString(), FileMode.OpenOrCreate, FileAccess.Write))
+                    else
                     {
-                        var stream = e.Result;
-                        stream.CopyTo(fileStream);
+                        using (var fileStream = iso.OpenFile
+                            (e.UserState.ToString(), FileMode.OpenOrCreate, FileAccess.Write))
+                        {
+                            var stream = e.Result;
+                            stream.CopyTo(fileStream);
+                        }
                     }
                 }
 
+                App.NewViewModel.AlterAvatar(GetDefaultImage(e.UserState.ToString()));
             }
         }
 
@@ -132,6 +161,12 @@ namespace Combee
 
             string fnl = pre + "mobile_" + lst;
             return fnl;
+        }
+
+        public static string GetDefaultImage(string str)
+        {
+            str = str.Replace("mobile_", string.Empty);
+            return str;
         }
     }
 }

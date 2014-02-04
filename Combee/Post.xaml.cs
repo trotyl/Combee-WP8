@@ -8,6 +8,10 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Newtonsoft.Json.Linq;
+using BindingData.Model;
+using System.IO.IsolatedStorage;
+using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace Combee
 {
@@ -23,12 +27,38 @@ namespace Combee
             //加载正文信息
             string id = NavigationContext.QueryString["id"];
 
+            var query = from Receipts rpt in App.NewViewModel.myDB.ReceiptsTable
+                        where rpt.PostId == id
+                        select rpt;
+            if(query.Count() != 0)
+            {
+                Receipts r = query.First();
+                TitleTextBlock.Text = r.Title;
+                FromTextBlock.Text = r.AuthorName;
 
-            WebClient newWebClient = new WebClient();
-            newWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedPost);
-            Uri uri = new Uri(Json.host + "posts" + @"/" + id + Json.rear + ThisUser.private_token);
+                IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForApplication();
+                IsolatedStorageFileStream fileStream = isoFile.OpenFile(Storage.GetSmallImage(r.AuthorAvatar), FileMode.Open, FileAccess.Read);
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.SetSource(fileStream);
+                AvatarImage.Source = bitmap;
 
-            newWebClient.DownloadStringAsync(uri);
+                string rawHtml = string.Empty;
+                rawHtml += "<html><body bgcolor=\"#34495E\"><p>";
+                rawHtml += "<font color=\"#FFFFFF\">";
+                rawHtml += r.BodyHtml;
+                rawHtml += "</p></font></body></html>";
+                ContentBrowser.NavigateToString(rawHtml);
+
+            }
+
+            else
+            {
+                WebClient newWebClient = new WebClient();
+                newWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedPost);
+                Uri uri = new Uri(Json.host + "posts" + @"/" + id + Json.rear + ThisUser.private_token);
+
+                newWebClient.DownloadStringAsync(uri);
+            }
         }
 
         private void RetrievedPost(object sender, DownloadStringCompletedEventArgs e)

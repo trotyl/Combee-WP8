@@ -220,6 +220,24 @@ namespace BindingData.Model
             }
         }
 
+        //优信文本
+        private string _bodyHtml;
+
+        [Column]
+        public string BodyHtml
+        {
+            get { return _bodyHtml; }
+            set
+            {
+                if (_bodyHtml != value)
+                {
+                    NotifyPropertyChanging("BodyHtml");
+                    _bodyHtml = value;
+                    NotifyPropertyChanged("BodyHtml");
+                }
+            }
+        }
+
         //发送时间
         private DateTime _createdAt;
 
@@ -286,6 +304,7 @@ namespace BindingData.Model
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+
         }
 
         #endregion
@@ -766,10 +785,12 @@ namespace BindingData.Model
         // 用来提示属性更改
         private void NotifyPropertyChanged(string propertyName)
         {
+
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+
         }
 
         #endregion

@@ -20,17 +20,16 @@
             <!--枢轴项一-->
             <phone:PivotItem Header="正文">
                 <Grid>
-                    <ScrollViewer>
-                        <StackPanel Grid.Row="0" Margin="12,0,0,28">
-                            <Border BorderThickness="1" Width="99" Height="99" BorderBrush="#FFFFC700" Background="#FFFFC700" Margin="10,0,20,0" HorizontalAlignment="Right"/>
-                            <TextBlock x:Name="TitleTextBlock" Text="" TextWrapping="Wrap" Margin="0,-99,120,0" FontSize="30"/>
-                            <TextBlock x:Name="FromTextBlock" Tag="{Binding postId}" Text="" TextAlignment="Right" Margin="9,-32,24,0" Style="{StaticResource PhoneTextNormalStyle}"/>
-                            <phone:WebBrowser x:Name="ContentBrowser" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Visibility="Visible" VerticalAlignment="Top" Height="600" Opacity="0" LoadCompleted="ContentBrowser_LoadCompleted" />
-                            <!--<TextBlock x:Name="mainTextBlock" Text="正在加载中, 请稍候..." FontSize="{StaticResource PhoneFontSizeLarge}" TextWrapping="Wrap"/>-->
-                            
-                        </StackPanel>
+                    <StackPanel Grid.Row="0" Margin="12,0,0,28">
+                        <TextBlock x:Name="TitleTextBlock" Text="" TextWrapping="Wrap" Margin="0,0,0,10" FontSize="30"/>
+                        <Grid Height="100">
+                            <Image x:Name="AvatarImage" Margin="0,0,0,0" Width="100" Height="100" HorizontalAlignment="Left" Stretch="UniformToFill" />
+                            <TextBlock x:Name="FromTextBlock" Text="" TextAlignment="Right" Margin="100,0,0,0" Style="{StaticResource PhoneTextNormalStyle}"/>
+                            <Image x:Name="HeaderImage" Margin="100,0,0,0" Stretch="UniformToFill" />
+                        </Grid>
+                    </StackPanel>
 
-                    </ScrollViewer>
+                    <phone:WebBrowser x:Name="ContentBrowser" Margin="0,200,0,0" Opacity="0" LoadCompleted="ContentBrowser_LoadCompleted" ScrollViewer.VerticalScrollBarVisibility="Auto" />
                 </Grid>
             </phone:PivotItem>
 

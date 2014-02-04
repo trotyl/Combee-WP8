@@ -25,7 +25,8 @@ namespace Combee
 
                 if (filePath.Substring(0, 4) == "http")
                 {
-                    return filePath;
+                    //return filePath;
+                    return null;
                 }
 
                 using (IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication())

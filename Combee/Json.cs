@@ -89,6 +89,7 @@ namespace Combee
             }
         }
 
+        //接收到优信列表
         private static void RetrievedReceipts(object sender, DownloadStringCompletedEventArgs e)
         {
 
@@ -133,17 +134,34 @@ namespace Combee
                     string body = (string)o["post"]["body"];
                     rpt.Body = body;
 
+                    string body_html = (string)o["post"]["body_html"];
+                    rpt.BodyHtml = body_html;
+
                     DateTime created_at = (DateTime)o["post"]["created_at"];
                     rpt.CreatedAt = created_at;
 
-                    string author_name = (string)o["post"]["author"]["name"];
-                    rpt.AuthorName = author_name;
+                    Users user = new Users();
 
                     string author_id = (string)o["post"]["author"]["id"];
                     rpt.AuthorId = author_id;
+                    user.Id = author_id;
+
+                    string author_name = (string)o["post"]["author"]["name"];
+                    rpt.AuthorName = author_name;
+                    user.Name = author_name;
+
+                    string author_email = (string)o["post"]["author"]["email"];
+                    user.Email = author_email;
+
+                    string author_created = (string)o["post"]["author"]["created_at"];
+                    user.CreatedAt = author_created;
 
                     string author_avatar = (string)o["post"]["author"]["avatar"];
                     rpt.AuthorAvatar = author_avatar;
+                    user.Avatar = author_avatar;
+
+                    string author_phone = (string)o["post"]["author"]["phone"];
+                    user.Phone = author_phone;
 
                     rpt.DisplayAvatar = @"https://combee.co" + author_avatar;
 

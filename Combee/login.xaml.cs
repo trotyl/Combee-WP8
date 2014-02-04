@@ -29,6 +29,7 @@ namespace Combee
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
             PhoneApplicationService.Current.State["logined"] = false;
+            Storage.Initials();
             //UserNameTextBox.Focus();
         }
 
@@ -172,6 +173,34 @@ namespace Combee
             webBrowserTask.Show();
 
         }
+
+        private void PasswordTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            PasswordTextBox.Opacity = 1;
+            TempTextBox.Opacity = 0;
+        }
+
+        private void PasswordTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if(PasswordTextBox.Password == string.Empty)
+            {
+                TempTextBox.Opacity = 1;
+                PasswordTextBox.Opacity = 0;
+            }
+        }
+
+        private void UserNameTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (UserNameTextBox.Text == "电子邮件/电话")
+                UserNameTextBox.Text = string.Empty;
+        }
+
+        private void UserNameTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (UserNameTextBox.Text == string.Empty)
+                UserNameTextBox.Text = "电子邮件/电话";
+        }
+
 
     }
 }

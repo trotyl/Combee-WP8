@@ -15,6 +15,8 @@ namespace BindingData.ViewModel
 {
     public class TheViewModel : INotifyPropertyChanged
     {
+        private static Object thisLock = new Object();
+
         // 所有优信项目.
         private ObservableCollection<Receipts> _allReceiptsItems;
         public ObservableCollection<Receipts> AllReceiptsItems
@@ -96,38 +98,40 @@ namespace BindingData.ViewModel
         // 查询数据库并加载集合用于全景页面.
         public void LoadCollectionsFromDatabase()
         {
+            lock (thisLock)
+            {
+                var ReceiptsItemsInDB = from Receipts rpt in myDB.ReceiptsTable
+                                        orderby rpt.Id descending
+                                        select rpt;
 
-            var ReceiptsItemsInDB = from Receipts rpt in myDB.ReceiptsTable
-                                    orderby rpt.Id descending
-                                    select rpt;
+                // 查询数据库并加载所有优信项目.
+                AllReceiptsItems = new ObservableCollection<Receipts>(ReceiptsItemsInDB);
 
-            // 查询数据库并加载所有优信项目.
-            AllReceiptsItems = new ObservableCollection<Receipts>(ReceiptsItemsInDB);
 
-            // 更新会话显示时间.
-            var ConversationsItemsInDB = from Conversations cov in myDB.ConversationsTable
-                                         orderby cov.UpdatedAt descending
-                                         select cov;
+                // 更新会话显示时间.
+                var ConversationsItemsInDB = from Conversations cov in myDB.ConversationsTable
+                                             orderby cov.UpdatedAt descending
+                                             select cov;
 
-            // 查询数据库并加载所有组织项目.
-            AllConversationsItems = new ObservableCollection<Conversations>(ConversationsItemsInDB);
+                // 查询数据库并加载所有组织项目.
+                AllConversationsItems = new ObservableCollection<Conversations>(ConversationsItemsInDB);
 
-            // 制定在数据库中对所有组织项目的查询.
-            var OrganizationsItemsInDB = from Organizations o in myDB.OrganizationsTable
-                                         where o.InIt == true
-                                         orderby o.Name
-                                         select o;
+                // 制定在数据库中对所有组织项目的查询.
+                var OrganizationsItemsInDB = from Organizations o in myDB.OrganizationsTable
+                                             where o.InIt == true
+                                             orderby o.Name
+                                             select o;
 
-            // 查询数据库并加载所有组织项目.
-            AllOrganizationsItems = new ObservableCollection<Organizations>(OrganizationsItemsInDB);
+                // 查询数据库并加载所有组织项目.
+                AllOrganizationsItems = new ObservableCollection<Organizations>(OrganizationsItemsInDB);
 
-            // 制定在数据库中对所有人员项目的查询.
-            var UsersItemsInDB = from Users us in myDB.UsersTable
-                                 select us;
+                // 制定在数据库中对所有人员项目的查询.
+                var UsersItemsInDB = from Users us in myDB.UsersTable
+                                     select us;
 
-            // 查询数据库并加载所有人员项目.
-            AllUsersItems = new ObservableCollection<Users>(UsersItemsInDB);
-
+                // 查询数据库并加载所有人员项目.
+                AllUsersItems = new ObservableCollection<Users>(UsersItemsInDB);
+            }
         }
 
         #region Receipts相关方法
@@ -135,55 +139,55 @@ namespace BindingData.ViewModel
         // 在数据库和集合中添加一个优信项目.
         public void AddReceiptsItem(Receipts newRpt)
         {
-            var query = from rpt in myDB.ReceiptsTable
-                        where rpt.Id == newRpt.Id
-                        select rpt;
-
-            if (query.Count() == 0)
+            lock (thisLock)
             {
-                // 在数据上下文中添加一个优信项目.
-                myDB.ReceiptsTable.InsertOnSubmit(newRpt);
+                var query = from rpt in myDB.ReceiptsTable
+                            where rpt.Id == newRpt.Id
+                            select rpt;
 
-                // 在数据库中保存更改.
-                myDB.SubmitChanges();
-
-                // 在所有可观测集合中添加一个新的优信项目.
-                AllReceiptsItems.Insert(0, newRpt);
-
-                //App.NewViewModel.LoadCollectionsFromDatabase();
-
-            }
-
-            else
-            {
-                // 从DataContext中取出该Receipts
-                Receipts theRpt = myDB.ReceiptsTable.First(r => r.Id == newRpt.Id);
-
-                if(!theRpt.Equals(newRpt))
+                if (query.Count() == 0)
                 {
-                    if(theRpt.AuthorAvatar != newRpt.AuthorAvatar)
-                    {
-                        theRpt.AuthorAvatar = newRpt.AuthorAvatar;
-                        theRpt.DisplayAvatar = newRpt.AuthorAvatar;
-                        theRpt.IsAvatarLocal = false;
-                    }
-                    theRpt.AuthorName = newRpt.AuthorName;
-                    theRpt.Favorited = newRpt.Favorited;
-                    theRpt.Read = newRpt.Read;
+                    // 在数据上下文中添加一个优信项目.
+                    myDB.ReceiptsTable.InsertOnSubmit(newRpt);
 
                     // 在数据库中保存更改.
                     myDB.SubmitChanges();
 
-                    //App.NewViewModel.LoadCollectionsFromDatabase();
+                    // 在所有可观测集合中添加一个新的优信项目.
+                    AllReceiptsItems.Insert(0, newRpt);
+
+                }
+
+                else
+                {
+                    // 从DataContext中取出该Receipts
+                    Receipts theRpt = myDB.ReceiptsTable.First(r => r.Id == newRpt.Id);
+
+                    if (!theRpt.Equals(newRpt))
+                    {
+                        if (theRpt.AuthorAvatar != newRpt.AuthorAvatar)
+                        {
+                            theRpt.AuthorAvatar = newRpt.AuthorAvatar;
+                            theRpt.DisplayAvatar = newRpt.AuthorAvatar;
+                            theRpt.IsAvatarLocal = false;
+                        }
+                        theRpt.AuthorName = newRpt.AuthorName;
+                        theRpt.Favorited = newRpt.Favorited;
+                        theRpt.Read = newRpt.Read;
+
+                        // 在数据库中保存更改.
+                        myDB.SubmitChanges();
+
+                    }
                 }
             }
-
             if (newRpt.IsAvatarLocal == false)
             {
-                Task.Run(() =>
-                {
-                    StartSaveAvatar(newRpt);
-                });
+                //Task.Run(() =>
+                //{
+                    Storage.SaveAvatar(newRpt.AuthorAvatar);
+                //});
+                
             }
         }
  
@@ -200,29 +204,6 @@ namespace BindingData.ViewModel
             // 在数据库中保存更改.
             myDB.SubmitChanges();
 
-            //App.NewViewModel.LoadCollectionsFromDatabase();
-
-        }
-
-        public void StartSaveAvatar(Receipts rpt)
-        {
-            Storage.SaveAvatar(Storage.GetSmallImage(rpt.AuthorAvatar));
-
-            Deployment.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                // 从DataContext中取出该Receipts
-                Receipts theRpt = myDB.ReceiptsTable.First(r => r.Id == rpt.Id);
-
-                theRpt.DisplayAvatar = rpt.AuthorAvatar;
-                theRpt.IsAvatarLocal = true;
-
-                // 在数据库中保存更改.
-                myDB.SubmitChanges();
-
-                //App.NewViewModel.LoadCollectionsFromDatabase();
-
-            }));
-
         }
 
         #endregion
@@ -231,53 +212,54 @@ namespace BindingData.ViewModel
         // 在数据库和集合中添加一个组织项目.
         public void AddOrganizationsItem(Organizations newOrgz)
         {
-            var query = from orgz in myDB.OrganizationsTable
-                        where orgz.Id == newOrgz.Id
-                        select orgz;
-
-            if (query.Count() == 0)
+            lock (thisLock)
             {
-                // 在数据上下文中添加一个组织项目.
-                myDB.OrganizationsTable.InsertOnSubmit(newOrgz);
+                var query = from orgz in myDB.OrganizationsTable
+                            where orgz.Id == newOrgz.Id
+                            select orgz;
 
-                // 在数据库中保存更改.
-                myDB.SubmitChanges();
-
-                // 在所有可观测集合中添加一个新的组织项目.
-                AllOrganizationsItems.Add(newOrgz);
-            }
-
-            else
-            {
-                // 从DataContext中取出该Receipts
-                Organizations theOrgz = myDB.OrganizationsTable.First(r => r.Id == newOrgz.Id);
-
-                if (!theOrgz.Equals(newOrgz))
+                if (query.Count() == 0)
                 {
-                    if (theOrgz.Avatar != newOrgz.Avatar)
-                    {
-                        theOrgz.Avatar = newOrgz.Avatar;
-                        theOrgz.DisplayAvatar = newOrgz.Avatar;
-                        theOrgz.IsAvatarLocal = false;
-                    }
-                    theOrgz.Name = newOrgz.Name;
-                    theOrgz.Bio = newOrgz.Bio;
-                    theOrgz.Members = newOrgz.Members;
-                    theOrgz.ParentId = newOrgz.ParentId;
+                    // 在数据上下文中添加一个组织项目.
+                    myDB.OrganizationsTable.InsertOnSubmit(newOrgz);
 
                     // 在数据库中保存更改.
                     myDB.SubmitChanges();
+
+                    // 在所有可观测集合中添加一个新的组织项目.
+                    AllOrganizationsItems.Add(newOrgz);
+                }
+
+                else
+                {
+                    // 从DataContext中取出该Receipts
+                    Organizations theOrgz = myDB.OrganizationsTable.First(r => r.Id == newOrgz.Id);
+
+                    if (!theOrgz.Equals(newOrgz))
+                    {
+                        if (theOrgz.Avatar != newOrgz.Avatar)
+                        {
+                            theOrgz.Avatar = newOrgz.Avatar;
+                            theOrgz.DisplayAvatar = newOrgz.Avatar;
+                            theOrgz.IsAvatarLocal = false;
+                        }
+                        theOrgz.Name = newOrgz.Name;
+                        theOrgz.Bio = newOrgz.Bio;
+                        theOrgz.Members = newOrgz.Members;
+                        theOrgz.ParentId = newOrgz.ParentId;
+
+                        // 在数据库中保存更改.
+                        myDB.SubmitChanges();
+                    }
                 }
             }
 
-            //App.NewViewModel.LoadCollectionsFromDatabase();
-
             if (newOrgz.IsAvatarLocal == false)
             {
-                Task.Run(() =>
-                {
-                    StartSaveAvatar(newOrgz);
-                });
+                //Task.Run(() =>
+                //{
+                    Storage.SaveAvatar(newOrgz.Avatar);
+                //});
             }
 
         }
@@ -295,29 +277,6 @@ namespace BindingData.ViewModel
             // 在数据库中保存更改.
             myDB.SubmitChanges();
 
-            //App.NewViewModel.LoadCollectionsFromDatabase();
-
-        }
-
-        public void StartSaveAvatar(Organizations orgz)
-        {
-            Storage.SaveAvatar(Storage.GetSmallImage(orgz.Avatar));
-
-            Deployment.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                // 从DataContext中取出该Organizations
-                Organizations theOrgz = myDB.OrganizationsTable.First(r => r.Id == orgz.Id);
-
-                theOrgz.DisplayAvatar = orgz.Avatar;
-                theOrgz.IsAvatarLocal = true;
-
-                // 在数据库中保存更改.
-                myDB.SubmitChanges();
-
-                //App.NewViewModel.LoadCollectionsFromDatabase();
-
-            }));
-
         }
 
         #endregion
@@ -327,75 +286,108 @@ namespace BindingData.ViewModel
         // 在数据库和集合中添加一个人员项目.
         public void AddUsersItem(Users newUser)
         {
-            var query = from user in myDB.UsersTable
-                        where user.Id == newUser.Id
-                        select user;
-
-            if (query.Count() == 0)
+            lock (thisLock)
             {
-                // 在数据上下文中添加一个组织项目.
-                myDB.UsersTable.InsertOnSubmit(newUser);
+                var query = from user in myDB.UsersTable
+                            where user.Id == newUser.Id
+                            select user;
 
-                // 在数据库中保存更改.
-                myDB.SubmitChanges();
-
-                // 在所有可观测集合中添加一个新的组织项目.
-                AllUsersItems.Add(newUser);
-            }
-
-            else
-            {
-                // 从DataContext中取出该Receipts
-                Users theUser = myDB.UsersTable.First(r => r.Id == newUser.Id);
-
-                if (!theUser.Equals(newUser))
+                if (query.Count() == 0)
                 {
-                    if (theUser.Avatar != newUser.Avatar)
-                    {
-                        theUser.Avatar = newUser.Avatar;
-                        theUser.DisplayAvatar = newUser.Avatar;
-                        theUser.IsAvatarLocal = false;
-                    }
-                    theUser.Bio = newUser.Bio;
-                    theUser.Blog = newUser.Blog;
-                    theUser.Email = newUser.Email;
-                    theUser.Gender = newUser.Gender;
-                    theUser.Name = newUser.Name;
-                    theUser.Phone = newUser.Phone;
-                    theUser.Qq = newUser.Qq;
-                    theUser.Uid = newUser.Uid;
+                    // 在数据上下文中添加一个人员项目.
+                    myDB.UsersTable.InsertOnSubmit(newUser);
 
                     // 在数据库中保存更改.
                     myDB.SubmitChanges();
+
+                    // 在所有可观测集合中添加一个新的人员项目.
+                    AllUsersItems.Add(newUser);
+                }
+
+                else
+                {
+                    // 从DataContext中取出该Receipts
+                    Users theUser = myDB.UsersTable.First(r => r.Id == newUser.Id);
+
+                    if (!theUser.Equals(newUser))
+                    {
+                        if (theUser.Avatar != newUser.Avatar)
+                        {
+                            theUser.Avatar = newUser.Avatar;
+                            theUser.DisplayAvatar = newUser.Avatar;
+                            theUser.IsAvatarLocal = false;
+                        }
+                        theUser.Bio = newUser.Bio;
+                        theUser.Blog = newUser.Blog;
+                        theUser.Email = newUser.Email;
+                        theUser.Gender = newUser.Gender;
+                        theUser.Name = newUser.Name;
+                        theUser.Phone = newUser.Phone;
+                        theUser.Qq = newUser.Qq;
+                        theUser.Uid = newUser.Uid;
+
+                        // 在数据库中保存更改.
+                        myDB.SubmitChanges();
+                    }
                 }
             }
-            //App.NewViewModel.LoadCollectionsFromDatabase();
-
             if (newUser.IsAvatarLocal == false)
             {
-                Task.Run(() =>
-                {
-                    StartSaveAvatar(newUser);
-                });
+                //Task.Run(() =>
+                //{
+                    Storage.SaveAvatar(newUser.Avatar);
+                //});
             }
-        
+
         }
 
-        public void StartSaveAvatar(Users user)
+        public void AlterAvatar(string avatar)
         {
-            Storage.SaveAvatar(user.Avatar);
 
-            Deployment.Current.Dispatcher.BeginInvoke(new Action(() =>
+
+            lock (thisLock)
             {
-                // 从DataContext中取出该Receipts
-                Users theUser = myDB.UsersTable.First(r => r.Id == user.Id);
+                var query_user = from user in myDB.UsersTable
+                                 where user.Avatar == avatar
+                                 select user;
+                foreach (Users u in query_user)
+                {
+                    u.DisplayAvatar = avatar;
+                    u.IsAvatarLocal = true;
+                }
 
-                theUser.DisplayAvatar = user.Avatar;
-                theUser.IsAvatarLocal = true;
+                var query_receipt = from rpt in myDB.ReceiptsTable
+                                    where rpt.AuthorAvatar == avatar
+                                    select rpt;
 
+                foreach (Receipts r in query_receipt)
+                {
+                    r.DisplayAvatar = avatar;
+                    r.IsAvatarLocal = true;
+                }
+
+                var query_organization = from orgz in myDB.OrganizationsTable
+                                         where orgz.Avatar == avatar
+                                         select orgz;
+
+                foreach (Organizations o in query_organization)
+                {
+                    o.DisplayAvatar = avatar;
+                    o.IsAvatarLocal = true;
+                }
+
+                var query_conversation = from cov in myDB.ConversationsTable
+                                         where cov.OriginatorAvatar == avatar
+                                         select cov;
+
+                foreach (Conversations c in query_conversation)
+                {
+                    c.DisplayAvatar = avatar;
+                    c.IsAvatarLocal = true;
+                }
                 // 在数据库中保存更改.
                 myDB.SubmitChanges();
-            }));
+            }
 
         }
 
@@ -405,77 +397,56 @@ namespace BindingData.ViewModel
         // 在数据库和集合中添加一个私信项目.
         public void AddConversationsItem(Conversations newCov)
         {
-            var query = from cov in myDB.ConversationsTable
-                        where cov.Id == newCov.Id
-                        select cov;
-
-            if (query.Count() == 0)
+            lock (thisLock)
             {
-                // 在数据上下文中添加一个优信项目.
-                myDB.ConversationsTable.InsertOnSubmit(newCov);
+                var query = from cov in myDB.ConversationsTable
+                            where cov.Id == newCov.Id
+                            select cov;
 
-                // 在数据库中保存更改.
-                myDB.SubmitChanges();
-
-                // 在所有可观测集合中添加一个新的优信项目.
-                AllConversationsItems.Add(newCov);
-
-                //App.NewViewModel.LoadCollectionsFromDatabase();
-
-            }
-
-            else
-            {
-                // 从DataContext中取出该Receipts
-                Conversations theCov = myDB.ConversationsTable.First(r => r.Id == newCov.Id);
-
-                if (!theCov.Equals(newCov))
+                if (query.Count() == 0)
                 {
-                    if (theCov.OriginatorAvatar != newCov.OriginatorAvatar)
-                    {
-                        theCov.OriginatorAvatar = newCov.OriginatorAvatar;
-                        theCov.DisplayAvatar = newCov.OriginatorAvatar;
-                        theCov.IsAvatarLocal = false;
-                    }
-                    theCov.Body = newCov.Body;
-                    theCov.ParticipantsId = newCov.ParticipantsId;
-                    theCov.ParticipantsName = newCov.ParticipantsName;
-                    theCov.UpdatedAt = newCov.UpdatedAt;
+                    // 在数据上下文中添加一个优信项目.
+                    myDB.ConversationsTable.InsertOnSubmit(newCov);
 
                     // 在数据库中保存更改.
                     myDB.SubmitChanges();
 
-                    //App.NewViewModel.LoadCollectionsFromDatabase();
+                    // 在所有可观测集合中添加一个新的优信项目.
+                    AllConversationsItems.Add(newCov);
 
                 }
-            }
 
+                else
+                {
+                    // 从DataContext中取出该Receipts
+                    Conversations theCov = myDB.ConversationsTable.First(r => r.Id == newCov.Id);
+
+                    if (!theCov.Equals(newCov))
+                    {
+                        if (theCov.OriginatorAvatar != newCov.OriginatorAvatar)
+                        {
+                            theCov.OriginatorAvatar = newCov.OriginatorAvatar;
+                            theCov.DisplayAvatar = newCov.OriginatorAvatar;
+                            theCov.IsAvatarLocal = false;
+                        }
+                        theCov.Body = newCov.Body;
+                        theCov.ParticipantsId = newCov.ParticipantsId;
+                        theCov.ParticipantsName = newCov.ParticipantsName;
+                        theCov.UpdatedAt = newCov.UpdatedAt;
+
+                        // 在数据库中保存更改.
+                        myDB.SubmitChanges();
+
+                    }
+                }
+            }
             if (newCov.IsAvatarLocal == false)
             {
-                Task.Run(() =>
-                {
-                    StartSaveAvatar(newCov);
-                });
+                //Task.Run(() =>
+                //{
+                    Storage.SaveAvatar(newCov.OriginatorAvatar);
+                //});
             }
-
-        }
-
-        public void StartSaveAvatar(Conversations cov)
-        {
-            Storage.SaveAvatar(Storage.GetSmallImage(cov.OriginatorAvatar));
-            Deployment.Current.Dispatcher.BeginInvoke(new Action(() => 
-            {
-                // 从DataContext中取出该Conversations
-                Conversations theCov = myDB.ConversationsTable.First(r => r.Id == cov.Id);
-
-                theCov.DisplayAvatar = cov.OriginatorAvatar;
-                theCov.IsAvatarLocal = true;
-
-                // 在数据库中保存更改.
-                myDB.SubmitChanges();
-
-                //App.NewViewModel.LoadCollectionsFromDatabase();
-            }));
 
         }
 

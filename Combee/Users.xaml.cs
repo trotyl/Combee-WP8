@@ -13,6 +13,8 @@ using BindingData.ViewModel;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json.Linq;
+using System.IO.IsolatedStorage;
+using System.IO;
 
 namespace Combee
 {
@@ -54,8 +56,8 @@ namespace Combee
         {
             SmsComposeTask smsComposeTask = new SmsComposeTask();
 
-            smsComposeTask.To = PhoneTextBlock.Text;
-            smsComposeTask.Body = "来自优信WindowsPhone客户端的消息:\n";
+            smsComposeTask.To = PhoneTextBlock.Text.Replace("手机: ",string.Empty);
+            smsComposeTask.Body = string.Empty;
 
             smsComposeTask.Show();
         }
@@ -64,7 +66,7 @@ namespace Combee
         {
             PhoneCallTask phoneCallTask = new PhoneCallTask();
 
-            phoneCallTask.PhoneNumber = PhoneTextBlock.Text;
+            phoneCallTask.PhoneNumber = PhoneTextBlock.Text.Replace("手机: ", string.Empty);
             phoneCallTask.DisplayName = NameTextBlock.Text;
 
             phoneCallTask.Show();
@@ -76,31 +78,31 @@ namespace Combee
             
             savePhoneNumberTask = new SavePhoneNumberTask();
             savePhoneNumberTask.Completed += new EventHandler<TaskEventArgs>(savePhoneNumberTask_Completed);
-            
-            savePhoneNumberTask.PhoneNumber = PhoneTextBlock.Text;
+
+            savePhoneNumberTask.PhoneNumber = PhoneTextBlock.Text.Replace("手机: ", string.Empty);
 
             savePhoneNumberTask.Show();
         }
 
         void savePhoneNumberTask_Completed(object sender, TaskEventArgs e)
         {
-            switch (e.TaskResult)
-            {
-                //Logic for when the number was saved successfully
-                case TaskResult.OK:
-                    MessageBox.Show("保存成功咯~");
-                    break;
+            //switch (e.TaskResult)
+            //{
+            //    //Logic for when the number was saved successfully
+            //    case TaskResult.OK:
+            //        MessageBox.Show("保存成功咯~");
+            //        break;
 
-                //Logic for when the task was cancelled by the user
-                case TaskResult.Cancel:
-                    MessageBox.Show("为什么不存了捏...?");
-                    break;
+            //    //Logic for when the task was cancelled by the user
+            //    case TaskResult.Cancel:
+            //        MessageBox.Show("为什么不存了捏...?");
+            //        break;
 
-                //Logic for when the number could not be saved
-                case TaskResult.None:
-                    MessageBox.Show("保存失败了啊...");
-                    break;
-            }
+            //    //Logic for when the number could not be saved
+            //    case TaskResult.None:
+            //        MessageBox.Show("保存失败了啊...");
+            //        break;
+            //}
         }
 
         private void RetrievedUsers(object sender, DownloadStringCompletedEventArgs e)
@@ -159,7 +161,13 @@ namespace Combee
 
         private void UseUsers(Users user)
         {
-            AvatarImage.Source = new BitmapImage(new Uri(@"https://combee.co/" + user.Avatar));
+            IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForApplication();
+            IsolatedStorageFileStream fileStream = isoFile.OpenFile(Storage.GetSmallImage(user.Avatar), FileMode.Open, FileAccess.Read);
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.SetSource(fileStream);
+            AvatarImage.Source = bitmap;
+
+            //AvatarImage.Source = new BitmapImage(new Uri(@"https://combee.co/" + user.Avatar));
             NameTextBlock.Text = user.Name;
             switch(user.Gender)
             {

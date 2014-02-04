@@ -195,6 +195,11 @@ namespace Combee
         {
 
         }
+
+        private void UmsgList_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            //MessageBox.Show("Y");
+        }
     }
 
 }

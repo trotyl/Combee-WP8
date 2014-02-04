@@ -30,7 +30,7 @@
                         <Border Visibility="Collapsed" BorderThickness="1" Width="24" Height="24" Margin="0,4,0,0" BorderBrush="#FFFFC700" Background="White" />
                     </StackPanel>
                     <TextBlock Name="TimeTextBlock" Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-40,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" />
-                    <TextBlock Name="TitleTextBlock" Text="{Binding Title, Mode=OneWay}" TextWrapping="Wrap" Margin="10,4,0,0"  Height="25" TextTrimming="None" />
+                    <TextBlock Name="TitleTextBlock" Text="{Binding Title, Mode=OneWay}" TextWrapping="Wrap" Margin="10,4,0,0"  Height="25" TextTrimming="None" FontFamily="Portable User Interface" />
                     <TextBlock Name="ContentTextBlock" Text="{Binding Body, Mode=OneWay}" TextWrapping="NoWrap" Margin="10,4,5,0" Style="{StaticResource PhoneTextSubtleStyle}" Height="28" TextTrimming="WordEllipsis" />
                 </StackPanel>
             </StackPanel>
@@ -101,11 +101,10 @@
          -->
         
             <!--Panorama 控件-->
-        <phone:Panorama x:Name="MainPagePanorama" Margin="0,0,0,0">
+        <phone:Panorama x:Name="MainPagePanorama" Margin="0,0,0,0" FontFamily="Portable User Interface">
             <!--全景控件标题,只能含单个控件-->
             <phone:Panorama.Title>
                 <Image Source="/Combee;component/Assets/Combee.png" Margin="100,50,0,10"/>
-                <!--<TextBlock Text="Combee" FontSize="50" Margin="0,40,0,20" Height="60"></TextBlock>-->
             </phone:Panorama.Title>
             <phone:Panorama.Background>
                 <ImageBrush ImageSource="/Combee;component/Assets/PanoramaBackground.png"/>
@@ -114,7 +113,7 @@
             <!--Panorama 项目一-->
             <phone:PanoramaItem x:Name="ReceiptsPanoramaItem" Header="优信" Orientation="Vertical">
                 <!--具有文字环绕的单行列表-->
-                <phone:LongListSelector x:Name="UmsgList" ItemTemplate="{StaticResource UmsgListTemplate}" ItemsSource="{Binding AllReceiptsItems, Mode=OneWay}" Margin="0,-38,-22,2" />
+                <phone:LongListSelector x:Name="UmsgList" ItemTemplate="{StaticResource UmsgListTemplate}" ItemsSource="{Binding AllReceiptsItems, Mode=OneWay}" Margin="0,-38,-22,2" PropertyChanged="UmsgList_PropertyChanged" />
             </phone:PanoramaItem>
 
             <!--Panorama 项目二-->
