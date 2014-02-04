@@ -944,6 +944,24 @@ namespace BindingData.Model
             }
         }
 
+        //会话发起人ID
+        private string _originatorId;
+
+        [Column]
+        public string OriginatorId
+        {
+            get { return _originatorId; }
+            set
+            {
+                if (_originatorId != value)
+                {
+                    NotifyPropertyChanging("OriginatorId");
+                    _originatorId = value;
+                    NotifyPropertyChanged("OriginatorId");
+                }
+            }
+        }
+
         //会话最后项文本
         private string _body;
 
@@ -1030,9 +1048,6 @@ namespace BindingData.Model
 
         // 给Conversations项指定一个表
         public Table<Conversations> ConversationsTable;
-
-        // 给当前用户Organizations项指定一个表
-        public Table<Organizations> TheOrganizationsTable;
 
     }
 }

@@ -33,16 +33,14 @@ namespace Combee
             //加载人员信息
             string id = NavigationContext.QueryString["id"];
             var thisPerson = from user in App.NewViewModel.myDB.UsersTable
-                             where user.Phone == id
+                             where user.Id == id
                              select user;
             if(thisPerson.Count() != 0)
             {
-                foreach(Users user in thisPerson)
-                {
-                    UseUsers(user);
-                }
+                Users user = thisPerson.First();
+                UseUsers(user);
             }
-            else
+            //else
             {
                 WebClient newWebClient = new WebClient();
                 newWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedUsers);
@@ -177,6 +175,7 @@ namespace Combee
             if(user.Email != null && user.Email != string.Empty)
             {
                 MailTextBlock.Text = user.Email;
+                MailTextBlock.Visibility = System.Windows.Visibility.Visible;
             }
             else
             {
@@ -185,6 +184,7 @@ namespace Combee
             if (user.Uid != null && user.Uid != string.Empty)
             {
                 UidTextBlock.Text = "学号/工号: " + user.Uid;
+                UidTextBlock.Visibility = System.Windows.Visibility.Visible;
             }
             else
             {
@@ -193,6 +193,7 @@ namespace Combee
             if (user.Qq != null && user.Qq != string.Empty)
             {
                 QqTextBlock.Text = "QQ: " + user.Qq;
+                QqTextBlock.Visibility = System.Windows.Visibility.Visible;
             }
             else
             {
@@ -201,6 +202,7 @@ namespace Combee
             if (user.Phone != null && user.Phone != string.Empty)
             {
                 PhoneTextBlock.Text = "手机: " + user.Phone;
+                PhoneTextBlock.Visibility = System.Windows.Visibility.Visible;
             }
             else
             {
@@ -209,10 +211,34 @@ namespace Combee
             if (user.Bio != null && user.Bio != string.Empty)
             {
                 BioTextBlock.Text = "座右铭: " + user.Bio;
+                BioTextBlock.Visibility = System.Windows.Visibility.Visible;
             }
             else
             {
                 BioTextBlock.Visibility = System.Windows.Visibility.Collapsed;
+            }
+            if(user.CreatedAt != null )
+            {
+                CreatedTextBlock.Text = "注册于: " + user.CreatedAt.ToString();
+                CreatedTextBlock.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                CreatedTextBlock.Visibility = System.Windows.Visibility.Collapsed;
+            }
+
+            var thisReceipts = from rpt in App.NewViewModel.myDB.ReceiptsTable
+                        where rpt.AuthorId == user.Id
+                        select rpt;
+
+            App.NewViewModel.ReceiptsItems.Clear();
+
+            if(thisReceipts.Count() != 0)
+            {
+                foreach(Receipts rpt in thisReceipts)
+                {
+                    App.NewViewModel.ReceiptsItems.Add(rpt);
+                }
             }
 
         }

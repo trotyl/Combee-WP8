@@ -53,7 +53,7 @@
         <DataTemplate x:Key="CovListTemplate">
             <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Background="#FF51697A">
                 <!--用图像替换矩形-->
-                <Image Name="CovImage" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Stretch="UniformToFill" />
+                <Image Name="CovImage" Tag="{Binding OriginatorId, Mode=OneWay}" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
                 <StackPanel Width="311" Margin="8,-2,0,0">
                     <TextBlock Name="ParticipantsNameTextBlock" Text="{Binding ParticipantsName, Mode=OneWay}" Margin="10,8,80,0" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" TextTrimming="WordEllipsis" />
                     <StackPanel Orientation="Vertical">

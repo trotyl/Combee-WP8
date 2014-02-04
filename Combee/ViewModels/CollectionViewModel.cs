@@ -65,6 +65,12 @@ namespace BindingData.ViewModel
             }
         }
 
+        // 当前人员组织集合
+        public ObservableCollection<Organizations> OrganizationsItems { get; private set; }
+
+        // 当前人员优信集合
+        public ObservableCollection<Receipts> ReceiptsItems { get; private set; }
+
         // 对本地数据库的 LINQ to SQL 的数据上下文.
         public MyDataContext myDB;
 
@@ -72,6 +78,7 @@ namespace BindingData.ViewModel
         public TheViewModel(string toDoDBConnectionString)
         {
             myDB = new MyDataContext(toDoDBConnectionString);
+
         }
 
         // 把数据上下文中的变化写入数据库.
@@ -131,6 +138,9 @@ namespace BindingData.ViewModel
 
                 // 查询数据库并加载所有人员项目.
                 AllUsersItems = new ObservableCollection<Users>(UsersItemsInDB);
+
+                ReceiptsItems = new ObservableCollection<Receipts>();
+                OrganizationsItems = new ObservableCollection<Organizations>();
             }
         }
 

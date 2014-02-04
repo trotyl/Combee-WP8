@@ -127,7 +127,8 @@ namespace Combee
 
             //UmsgList.ScrollTo(PhoneApplicationService.Current.State["back"]);
 
-            NavigationService.Navigate(new Uri("/Combee;component/Users.xaml?id=" + ((Image)sender).Tag.ToString(), UriKind.Relative));
+            string id = ((Image)sender).Tag.ToString();
+            NavigationService.Navigate(new Uri("/Combee;component/Users.xaml?id=" + id, UriKind.Relative));
 
         }
 

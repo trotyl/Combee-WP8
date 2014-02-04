@@ -74,12 +74,16 @@
                 <Grid>
                     <StackPanel >
                         <Image x:Name="AvatarImage" Margin="20,0,0,0" Width="99" Height="99" HorizontalAlignment="Left" Stretch="UniformToFill" />
-                        <TextBlock x:Name="NameTextBlock" Text="" Margin="130,-120,0,0" HorizontalAlignment="Left" FontSize="60" />
-                        <TextBlock x:Name="MailTextBlock" Text="" Margin="130,-32,0,0" FontSize="24" HorizontalAlignment="Left" />
+                        <TextBlock x:Name="NameTextBlock" Text="" Margin="130,-108,0,0" HorizontalAlignment="Left" FontSize="50" />
+                        <TextBlock x:Name="MailTextBlock" Text="" Margin="130,-40,0,0" FontSize="24" HorizontalAlignment="Left" />
+                        <Border Height="50"/>
                         <TextBlock x:Name="UidTextBlock" Text="" Margin="20,20,0,10" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="30" />
                         <TextBlock x:Name="QqTextBlock" Text="" Margin="20,0,0,10" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="30" />
                         <TextBlock x:Name="PhoneTextBlock" Text="" Margin="20,0,0,10" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="30" />
                         <TextBlock x:Name="BioTextBlock" Text="" Margin="20,0,0,10" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="30" />
+                        <Border Height="50"/>
+                        <TextBlock x:Name="CreatedTextBlock" Text="" Margin="20,0,0,10" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="20" />
+
                     </StackPanel>
                 </Grid>
             </phone:PivotItem>
@@ -87,14 +91,14 @@
             <!--枢轴项二-->
             <phone:PivotItem Header="优信">
                 <Grid>
-                    <phone:LongListSelector ItemsSource="{Binding Receipts}" ItemTemplate="{StaticResource UmsgListTemplate}" Margin="0,-38,-22,2"/>
+                    <phone:LongListSelector ItemsSource="{Binding ReceiptsItems}" ItemTemplate="{StaticResource UmsgListTemplate}" Margin="0,-38,-22,2"/>
                 </Grid>
             </phone:PivotItem>
 
             <!--枢轴项三-->
             <phone:PivotItem Header="组织">
                 <Grid>
-                    <phone:LongListSelector ItemsSource="{Binding Organizations}" ItemTemplate="{StaticResource OrgzListTemplate}" Margin="0,-38,-22,2"/>
+                    <phone:LongListSelector ItemsSource="{Binding OrganizationsItems}" ItemTemplate="{StaticResource OrgzListTemplate}" Margin="0,-38,-22,2"/>
                 </Grid>
             </phone:PivotItem>
         </phone:Pivot>

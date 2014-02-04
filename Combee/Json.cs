@@ -63,7 +63,7 @@ namespace Combee
         public static void GetAsync(string item, string mode)
         {
             //接收消息
-            for (int i = 1; i < 2; i++ )
+            for (int i = 1; i >= 1; i-- )
             {
                 WebClient webClient = new WebClient();
                 switch (item)
@@ -164,9 +164,12 @@ namespace Combee
                     user.Phone = author_phone;
 
                     rpt.DisplayAvatar = @"https://combee.co" + author_avatar;
+                    user.DisplayAvatar = @"https://combee.co" + author_avatar;
 
                     rpt.IsAvatarLocal = false;
+                    user.IsAvatarLocal = false;
 
+                    App.NewViewModel.AddUsersItem(user);
                     App.NewViewModel.AddReceiptsItem(rpt);
 
                 }
@@ -283,6 +286,9 @@ namespace Combee
 
                     string originator_avatar = (string)o["originator"]["avatar"];
                     cov.OriginatorAvatar = originator_avatar;
+
+                    string originator_id = (string)o["originator"]["id"];
+                    cov.OriginatorId = originator_id;
 
                     cov.DisplayAvatar = @"https://combee.co" + originator_avatar;
 
