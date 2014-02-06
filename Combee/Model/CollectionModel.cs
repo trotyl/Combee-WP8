@@ -1030,6 +1030,189 @@ namespace BindingData.Model
         #endregion
     }
 
+    [Table]
+    public class Comment : INotifyPropertyChanged, INotifyPropertyChanging
+    {
+        //版本号,它说有用的,虽然我也不知道有什么用
+        [Column(IsVersion = true)]
+        private Binary _version;
+
+        //评论ID
+        private string _id;
+
+        [Column(IsPrimaryKey = true, CanBeNull = false, AutoSync = AutoSync.OnInsert)]
+        public string Id
+        {
+            get { return _id; }
+            set
+            {
+                if (_id != value)
+                {
+                    NotifyPropertyChanging("Id");
+                    _id = value;
+                    NotifyPropertyChanged("Id");
+                }
+            }
+        }
+
+        //评论创建时间
+        private DateTime _createdAt;
+
+        [Column]
+        public DateTime CreatedAt
+        {
+            get { return _createdAt; }
+            set
+            {
+                if (_createdAt != value)
+                {
+                    NotifyPropertyChanging("CreatedAt");
+                    _createdAt = value;
+                    NotifyPropertyChanged("CreatedAt");
+                }
+            }
+        }
+
+        //评论显示图像
+        private string _displayAvatar;
+
+        [Column]
+        public string DisplayAvatar
+        {
+            get { return _displayAvatar; }
+            set
+            {
+                if (_displayAvatar != value)
+                {
+                    NotifyPropertyChanging("DisplayAvatar");
+                    _displayAvatar = value;
+                    NotifyPropertyChanged("DisplayAvatar");
+                }
+            }
+        }
+
+        //评论人员姓名
+        private string _userName;
+
+        [Column]
+        public string UserName
+        {
+            get { return _userName; }
+            set
+            {
+                if (_userName != value)
+                {
+                    NotifyPropertyChanging("UserName");
+                    _userName = value;
+                    NotifyPropertyChanged("UserName");
+                }
+            }
+        }
+
+        //评论人员头像
+        private string _userAvatar;
+
+        [Column]
+        public string UserAvatar
+        {
+            get { return _userAvatar; }
+            set
+            {
+                if (_userAvatar != value)
+                {
+                    NotifyPropertyChanging("UserAvatar");
+                    _userAvatar = value;
+                    NotifyPropertyChanged("UserAvatar");
+                }
+            }
+        }
+
+        //评论人员ID
+        private string _userId;
+
+        [Column]
+        public string UserId
+        {
+            get { return _userId; }
+            set
+            {
+                if (_userId != value)
+                {
+                    NotifyPropertyChanging("UserId");
+                    _userId = value;
+                    NotifyPropertyChanged("UserId");
+                }
+            }
+        }
+
+        //评论文本
+        private string _body;
+
+        [Column]
+        public string Body
+        {
+            get { return _body; }
+            set
+            {
+                if (_body != value)
+                {
+                    NotifyPropertyChanging("Body");
+                    _body = value;
+                    NotifyPropertyChanged("Body");
+                }
+            }
+        }
+
+        //头像是否已存于本地
+        private bool _isAvatarLocal;
+
+        [Column]
+        public bool IsAvatarLocal
+        {
+            get { return _isAvatarLocal; }
+            set
+            {
+                if (_isAvatarLocal != value)
+                {
+                    NotifyPropertyChanging("IsAvatarLocal");
+                    _isAvatarLocal = value;
+                    NotifyPropertyChanged("IsAvatarLocal");
+                }
+            }
+        }
+
+        // 更改跟踪相关,其实我也看不太懂
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // 用来提示属性更改
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanging Members
+
+        public event PropertyChangingEventHandler PropertyChanging;
+
+        // 用来提示属性即将更改
+        private void NotifyPropertyChanging(string propertyName)
+        {
+            if (PropertyChanging != null)
+            {
+                PropertyChanging(this, new PropertyChangingEventArgs(propertyName));
+            }
+        }
+
+        #endregion
+    }
+
     public class MyDataContext : DataContext
     {
         // 传递连接字符串给base类

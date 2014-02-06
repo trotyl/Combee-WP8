@@ -43,6 +43,7 @@
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
+        
         <!--组织列表控件模版-->
         <DataTemplate x:Key="OrgzListTemplate">
             <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Background="#FF51697A">

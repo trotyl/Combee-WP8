@@ -140,7 +140,6 @@
     <Compile Include="Receipts.xaml.cs">
       <DependentUpon>Receipts.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Comment.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs">
       <SubType>Code</SubType>
     </Compile>

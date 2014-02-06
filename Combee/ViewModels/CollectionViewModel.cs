@@ -145,6 +145,7 @@ namespace BindingData.ViewModel
 
                 ReceiptsItems = new ObservableCollection<Receipts>();
                 OrganizationsItems = new ObservableCollection<Organizations>();
+                CommentItems = new ObservableCollection<Comment>();
             }
         }
 

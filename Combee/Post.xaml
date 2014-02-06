@@ -7,12 +7,33 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:local="clr-namespace:Combee"
     mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0" Loaded="PhoneApplicationPage_Loaded">
+
+    <phone:PhoneApplicationPage.Resources>
+        <local:StringToImageSource x:Key="StringToImageSource" />
+        <local:DisplayTime x:Key="DisplayTime" />
+        <!--评论列表控件模版-->
+        <DataTemplate x:Key="CmtListTemplate">
+            <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Background="#FF51697A">
+                <Image Tag="{Binding UserId, Mode=OneWay}" Source="{Binding UserAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
+                <StackPanel Width="311" Margin="8,-2,0,0">
+                    <TextBlock Text="{Binding UserName, Mode=OneWay}" Margin="10,8,80,0" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" TextTrimming="WordEllipsis" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-48,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" FontFamily="Portable User Interface" />
+                        <TextBlock Text="{Binding Body, Mode=OneWay}" TextWrapping="Wrap" Margin="10,0,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+    </phone:PhoneApplicationPage.Resources>
+
 
     <!--LayoutRoot 是包含所有页面内容的根网格-->
     <Grid x:Name="LayoutRoot" Background="#FF34495E">
@@ -30,7 +51,7 @@
                         </Grid>
                     </StackPanel>
 
-                    <phone:WebBrowser x:Name="ContentBrowser" Margin="0,150,0,0" Opacity="0" LoadCompleted="ContentBrowser_LoadCompleted" ScrollViewer.VerticalScrollBarVisibility="Auto" IsGeolocationEnabled="True" IsScriptEnabled="True" IsHitTestVisible="False" >
+                    <phone:WebBrowser x:Name="ContentBrowser" Margin="0,150,0,10" Opacity="0" LoadCompleted="ContentBrowser_LoadCompleted" ScrollViewer.VerticalScrollBarVisibility="Auto" IsGeolocationEnabled="True" IsScriptEnabled="True" IsHitTestVisible="False" >
                         <toolkit:GestureService.GestureListener>
                             <toolkit:GestureListener Flick="GestureListener_Flick" />
                         </toolkit:GestureService.GestureListener>
@@ -40,7 +61,23 @@
 
             <!--枢轴项二-->
             <phone:PivotItem Header="评论">
-                <Grid/>
+                <Grid  Margin="0,20,20,0">
+                    <phone:LongListSelector ItemsSource="{Binding CommentItems}" Margin="0,-38,-22,2">
+                        <phone:LongListSelector.ItemTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Background="#FF51697A">
+                                <Image Tag="{Binding UserId, Mode=OneWay}" Source="{Binding UserAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
+                                <StackPanel Width="311" Margin="8,-2,0,0">
+                                    <TextBlock Text="{Binding UserName, Mode=OneWay}" Margin="10,8,80,0" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" TextTrimming="WordEllipsis" />
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-48,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" FontFamily="Portable User Interface" />
+                                        <TextBlock Text="{Binding Body, Mode=OneWay}" TextWrapping="Wrap" Margin="10,0,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </phone:LongListSelector.ItemTemplate>
+                    </phone:LongListSelector>
+                    <!--ItemTemplate="{StaticResource CmtListTemplate}"-->
+                </Grid>
             </phone:PivotItem>
 
             <!--枢轴项三-->

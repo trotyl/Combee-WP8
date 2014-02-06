@@ -124,38 +124,31 @@ namespace Combee
                 JArray arr = JArray.Parse(e.Result);
                 for (int i = 0; i < arr.Count(); i++)
                 {
-                    JToken tk = arr[i];
-                    JObject o = JObject.Parse(tk.ToString());
+                    JObject o = JObject.Parse(arr[i].ToString());
                     Organizations orgz = new Organizations();
 
-                    string id = (string)o["id"];
-                    orgz.Id = id;
+                    orgz.Id = (string)o["id"];
 
-                    string name = (string)o["name"];
-                    orgz.Name = name;
+                    orgz.Name = (string)o["name"];
 
-                    DateTime created_at = (DateTime)o["created_at"];
-                    orgz.CreatedAt = created_at;
+                    orgz.CreatedAt = (DateTime)o["created_at"];
 
-                    string avatar = (string)o["avatar"];
-                    orgz.Avatar = avatar;
+                    orgz.Avatar = (string)o["avatar"];
 
-                    orgz.DisplayAvatar = @"https://combee.co" + avatar;
+                    orgz.DisplayAvatar = @"https://combee.co" + (string)o["avatar"];
 
                     orgz.IsAvatarLocal = false;
 
-                    string parent_id = (string)o["parent_id"];
-                    orgz.ParentId = parent_id;
+                    orgz.ParentId = (string)o["parent_id"];
 
-                    string members = (string)o["members"];
-                    orgz.Members = members;
+                    orgz.Members = (string)o["members"];
 
                     orgz.Bio = null;
                     orgz.Header = null;
                     orgz.InIt = true;
                     orgz.JoinedAt = DateTime.Now;
 
-                    Storage.SaveAvatar(avatar);
+                    Storage.SaveAvatar((string)o["avatar"]);
                     App.NewViewModel.OrganizationsItems.Add(orgz);
 
                 }
@@ -224,7 +217,6 @@ namespace Combee
             bitmap.SetSource(fileStream);
             AvatarImage.Source = bitmap;
 
-            //AvatarImage.Source = new BitmapImage(new Uri(@"https://combee.co/" + user.Avatar));
             NameTextBlock.Text = user.Name;
             switch(user.Gender)
             {

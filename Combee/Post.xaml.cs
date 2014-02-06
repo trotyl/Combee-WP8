@@ -12,6 +12,7 @@ using BindingData.Model;
 using System.IO.IsolatedStorage;
 using System.Windows.Media.Imaging;
 using System.IO;
+using Combee.ViewModels;
 
 namespace Combee
 {
@@ -77,6 +78,35 @@ namespace Combee
             {
                 MessageBox.Show(e.Error.Message);
             }
+            else
+            {
+                JArray arr = JArray.Parse(e.Result);
+                for (int i = 0; i < arr.Count(); i++)
+                {
+                    JObject ob = JObject.Parse(arr[i].ToString());
+                    Comment cm = new Comment();
+
+                    cm.Id = (string)ob["id"];
+
+                    cm.Body = (string)ob["body"];
+
+                    cm.CreatedAt = (DateTime)ob["created_at"];
+
+                    cm.UserId = (string)ob["user"]["id"];
+
+                    cm.UserName = (string)ob["user"]["name"];
+
+                    cm.UserAvatar = (string)ob["user"]["avatar"];
+
+                    cm.DisplayAvatar = @"https://combee.co" + cm.UserAvatar;
+
+                    cm.IsAvatarLocal = false;
+
+                    Storage.SaveAvatar(cm.UserAvatar);
+
+                    App.NewViewModel.CommentItems.Add(cm);
+                }
+            }
         }
 
         private void PutedRead(object sender, UploadStringCompletedEventArgs e)
@@ -120,6 +150,12 @@ namespace Combee
             {
                 this.pivot.SelectedIndex = 1;
             }
+        }
+
+        private void UserImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            string id = ((Image)sender).Tag.ToString();
+            NavigationService.Navigate(new Uri("/Combee;component/Users.xaml?id=" + id, UriKind.Relative));
         }
 
     }

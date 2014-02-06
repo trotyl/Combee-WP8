@@ -191,11 +191,6 @@ namespace Combee
             }
         }
 
-        public void AddReceipt(Receipts rpt)
-        {
-
-        }
-
         private void UmsgList_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             //MessageBox.Show("Y");
