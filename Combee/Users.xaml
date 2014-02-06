@@ -90,14 +90,14 @@
  
             <!--枢轴项二-->
             <phone:PivotItem Header="优信">
-                <Grid>
+                <Grid Margin="0,20,20,0">
                     <phone:LongListSelector ItemsSource="{Binding ReceiptsItems}" ItemTemplate="{StaticResource UmsgListTemplate}" Margin="0,-38,-22,2"/>
                 </Grid>
             </phone:PivotItem>
 
             <!--枢轴项三-->
             <phone:PivotItem Header="组织">
-                <Grid>
+                <Grid Margin="0,20,20,0">
                     <phone:LongListSelector ItemsSource="{Binding OrganizationsItems}" ItemTemplate="{StaticResource OrgzListTemplate}" Margin="0,-38,-22,2"/>
                 </Grid>
             </phone:PivotItem>

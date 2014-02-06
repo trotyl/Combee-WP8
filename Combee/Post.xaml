@@ -6,6 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -16,7 +17,7 @@
     <!--LayoutRoot 是包含所有页面内容的根网格-->
     <Grid x:Name="LayoutRoot" Background="#FF34495E">
         <!--枢轴控件-->
-        <phone:Pivot Title="Combee - 组织消息通知中心">
+        <phone:Pivot x:Name="pivot" Title="Combee - 组织消息通知中心">
             <!--枢轴项一-->
             <phone:PivotItem Header="正文">
                 <Grid>
@@ -29,7 +30,11 @@
                         </Grid>
                     </StackPanel>
 
-                    <phone:WebBrowser x:Name="ContentBrowser" Margin="0,200,0,0" Opacity="0" LoadCompleted="ContentBrowser_LoadCompleted" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                    <phone:WebBrowser x:Name="ContentBrowser" Margin="0,150,0,0" Opacity="0" LoadCompleted="ContentBrowser_LoadCompleted" ScrollViewer.VerticalScrollBarVisibility="Auto" IsGeolocationEnabled="True" IsScriptEnabled="True" IsHitTestVisible="False" >
+                        <toolkit:GestureService.GestureListener>
+                            <toolkit:GestureListener Flick="GestureListener_Flick" />
+                        </toolkit:GestureService.GestureListener>
+                    </phone:WebBrowser>
                 </Grid>
             </phone:PivotItem>
 

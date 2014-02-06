@@ -55,7 +55,7 @@ namespace Combee
                 settings.Save();
 
                 GetAsync("receipts", "receipts");
-                GetAsync("organizations", @"users/" + ThisUser.id + @"/organizations");
+                GetAsync("organizations", "user/" + ThisUser.id + "/organizations");
                 GetAsync("conversations", @"user/conversations");
             }
         }

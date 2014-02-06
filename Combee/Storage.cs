@@ -104,6 +104,7 @@ namespace Combee
             uri = GetSmallImage(uri);
             if (iso.FileExists(uri))
             {
+                App.NewViewModel.AlterAvatar(GetDefaultImage(uri));
                 return;
             }
             iso.Dispose();
@@ -127,7 +128,8 @@ namespace Combee
                 {
                     if (iso.FileExists(e.UserState.ToString()))
                     {
-                        //什么也不需要做...但是不能直接返回
+                        App.NewViewModel.AlterAvatar(GetDefaultImage(e.UserState.ToString()));
+                        return;
                     }
                     else
                     {

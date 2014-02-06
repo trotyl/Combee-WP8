@@ -77,7 +77,7 @@ namespace Combee
                 if (!settings.Contains("entered"))
                 {
                     Json.GetAsync("receipts", "receipts");
-                    Json.GetAsync("organizations", @"users/" + ThisUser.id + @"/organizations");
+                    Json.GetAsync("organizations", "users/" + ThisUser.id + "/organizations");
                     Json.GetAsync("conversations", @"user/conversations");
 
                     settings.Add("entered", "1");
@@ -185,10 +185,9 @@ namespace Combee
             else
             {
                 Json.GetAsync("receipts", "receipts");
-                Json.GetAsync("organizations", @"users/" + ThisUser.id + @"/organizations");
-                Json.GetAsync("conversations", @"user/conversations");
+                Json.GetAsync("organizations", "users/" + ThisUser.id + "/organizations");
+                Json.GetAsync("conversations", "user/conversations");
 
-                //App.NewViewModel.LoadCollectionsFromDatabase();
             }
         }
 

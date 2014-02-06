@@ -40,13 +40,23 @@ namespace Combee
                 Users user = thisPerson.First();
                 UseUsers(user);
             }
-            //else
+            
             {
+                //获取用户资料
                 WebClient newWebClient = new WebClient();
                 newWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedUsers);
                 Uri uri = new Uri(Json.host + "users" + @"/" + id + Json.rear + ThisUser.private_token);
 
                 newWebClient.DownloadStringAsync(uri);
+
+            }
+            {
+                //获取用户组织
+                WebClient webClient = new WebClient();
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedOrganizations);
+                Uri uri = new Uri(Json.host + "users" + @"/" + id + @"/organizations" + Json.rear + ThisUser.private_token);
+
+                webClient.DownloadStringAsync(uri);
             }
         }
 
@@ -101,6 +111,55 @@ namespace Combee
             //        MessageBox.Show("保存失败了啊...");
             //        break;
             //}
+        }
+
+        private void RetrievedOrganizations(object sender, DownloadStringCompletedEventArgs e)
+        {
+            if(e.Error != null)
+            {
+                MessageBox.Show(e.Error.Message.ToString());
+            }
+            else
+            {
+                JArray arr = JArray.Parse(e.Result);
+                for (int i = 0; i < arr.Count(); i++)
+                {
+                    JToken tk = arr[i];
+                    JObject o = JObject.Parse(tk.ToString());
+                    Organizations orgz = new Organizations();
+
+                    string id = (string)o["id"];
+                    orgz.Id = id;
+
+                    string name = (string)o["name"];
+                    orgz.Name = name;
+
+                    DateTime created_at = (DateTime)o["created_at"];
+                    orgz.CreatedAt = created_at;
+
+                    string avatar = (string)o["avatar"];
+                    orgz.Avatar = avatar;
+
+                    orgz.DisplayAvatar = @"https://combee.co" + avatar;
+
+                    orgz.IsAvatarLocal = false;
+
+                    string parent_id = (string)o["parent_id"];
+                    orgz.ParentId = parent_id;
+
+                    string members = (string)o["members"];
+                    orgz.Members = members;
+
+                    orgz.Bio = null;
+                    orgz.Header = null;
+                    orgz.InIt = true;
+                    orgz.JoinedAt = DateTime.Now;
+
+                    Storage.SaveAvatar(avatar);
+                    App.NewViewModel.OrganizationsItems.Add(orgz);
+
+                }
+            }
         }
 
         private void RetrievedUsers(object sender, DownloadStringCompletedEventArgs e)

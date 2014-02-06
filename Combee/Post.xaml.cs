@@ -43,12 +43,17 @@ namespace Combee
                 AvatarImage.Source = bitmap;
 
                 string rawHtml = string.Empty;
-                rawHtml += "<html><body bgcolor=\"#34495E\"><p>";
+                rawHtml += "<html><meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0' /><body bgcolor=\"#34495E\"><p>";
                 rawHtml += "<font color=\"#FFFFFF\">";
+                //rawHtml += "";
                 rawHtml += r.BodyHtml;
                 rawHtml += "</p></font></body></html>";
                 ContentBrowser.NavigateToString(rawHtml);
 
+                WebClient readWebClient = new WebClient();
+                Uri uri = new Uri(Json.host + "receipts/" + r.Id + "/read" + Json.rear + ThisUser.private_token);
+                readWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(PutedRead);
+                readWebClient.UploadStringAsync(uri, "PUT", string.Empty);
             }
 
             else
@@ -59,22 +64,44 @@ namespace Combee
 
                 newWebClient.DownloadStringAsync(uri);
             }
+
+            WebClient commentsWebClient = new WebClient();
+            commentsWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedComments);
+            Uri theUri = new Uri(Json.host + "posts/" + id + "/comments" + Json.rear + ThisUser.private_token);
+            commentsWebClient.DownloadStringAsync(theUri);
+        }
+
+        private void RetrievedComments(object sender, DownloadStringCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                MessageBox.Show(e.Error.Message);
+            }
+        }
+
+        private void PutedRead(object sender, UploadStringCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                MessageBox.Show(e.Error.Message);
+            }
+
         }
 
         private void RetrievedPost(object sender, DownloadStringCompletedEventArgs e)
         {
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message.ToString());
+                MessageBox.Show(e.Error.Message);
             }
             else
             {
                 JObject o = JObject.Parse(e.Result);
                 string rawHtml = string.Empty;
-                rawHtml += "<html><body bgcolor=\"#34495E\"><p>";
+                rawHtml += "<html><body bgcolor=\"#34495E\"><div>";
                 rawHtml += "<font color=\"#FFFFFF\">";
                 rawHtml += (string)o["body_html"];
-                rawHtml += "</p></font></body></html>";
+                rawHtml += "</div></font></body></html>";
                 ContentBrowser.NavigateToString(rawHtml);
                 TitleTextBlock.Text = (string)o["title"];
                 FromTextBlock.Text = (string)o["author"]["name"];
@@ -85,6 +112,14 @@ namespace Combee
         private void ContentBrowser_LoadCompleted(object sender, NavigationEventArgs e)
         {
             ContentBrowser.Opacity = 1;
+        }
+
+        private void GestureListener_Flick(object sender, FlickGestureEventArgs e)
+        {
+            if (e.Direction.ToString() == "Horizontal")
+            {
+                this.pivot.SelectedIndex = 1;
+            }
         }
 
     }

@@ -10,6 +10,7 @@ using Combee;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using System.Windows;
+using Combee.ViewModels;
 
 namespace BindingData.ViewModel
 {
@@ -70,6 +71,9 @@ namespace BindingData.ViewModel
 
         // 当前人员优信集合
         public ObservableCollection<Receipts> ReceiptsItems { get; private set; }
+
+        // 当前优信评论集合
+        public ObservableCollection<Comment> CommentItems { get; private set; }
 
         // 对本地数据库的 LINQ to SQL 的数据上下文.
         public MyDataContext myDB;
