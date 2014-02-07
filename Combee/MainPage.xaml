@@ -29,7 +29,7 @@
                         <TextBlock Name="UserNameTextBlock" Text="{Binding AuthorName, Mode=OneWay}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
                         <Border Visibility="Collapsed" BorderThickness="1" Width="24" Height="24" Margin="0,4,0,0" BorderBrush="#FFFFC700" Background="White" />
                     </StackPanel>
-                    <TextBlock Name="TimeTextBlock" Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-40,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" />
+                    <TextBlock Name="TimeTextBlock" Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-32,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" />
                     <TextBlock Name="TitleTextBlock" Text="{Binding Title, Mode=OneWay}" TextWrapping="Wrap" Margin="10,4,0,0"  Height="25" TextTrimming="None" FontFamily="Portable User Interface" />
                     <TextBlock Name="ContentTextBlock" Text="{Binding Body, Mode=OneWay}" TextWrapping="NoWrap" Margin="10,4,5,0" Style="{StaticResource PhoneTextSubtleStyle}" Height="28" TextTrimming="WordEllipsis" />
                 </StackPanel>
@@ -57,7 +57,7 @@
                 <StackPanel Width="311" Margin="8,-2,0,0">
                     <TextBlock Name="ParticipantsNameTextBlock" Text="{Binding ParticipantsName, Mode=OneWay}" Margin="10,8,80,0" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" TextTrimming="WordEllipsis" />
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Name="CovTimeTextBlock" Text="{Binding UpdatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-48,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" />
+                        <TextBlock Name="CovTimeTextBlock" Text="{Binding UpdatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-40,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" />
                         <TextBlock Name="ContentTextBlock" Text="{Binding Body, Mode=OneWay}" TextWrapping="Wrap" Margin="10,0,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                     </StackPanel>
                 </StackPanel>             
@@ -75,6 +75,7 @@
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton x:Name="RenewButton" IconUri="/Assets/AppBar/refresh.png" IsEnabled="True" Text="刷新" Click="RenewButton_Click"/>
             <shell:ApplicationBarIconButton x:Name="ToastButton" IconUri="/Assets/AppBar/share.png" IsEnabled="True" Text="通知中心" Click="ToastButton_Click"/>
+            <shell:ApplicationBarIconButton x:Name="NewPostButton" IconUri="/Images/appbar.add.rest.png" IsEnabled="True" Text="新优信" Click="NewPostButton_Click"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 

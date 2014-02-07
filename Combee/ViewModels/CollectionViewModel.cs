@@ -168,8 +168,14 @@ namespace BindingData.ViewModel
                     // 在数据库中保存更改.
                     myDB.SubmitChanges();
 
+                    int i = 0;
+                    foreach(Receipts rpt in AllReceiptsItems)
+                    {
+                        if (rpt.CreatedAt > newRpt.CreatedAt)
+                            i++;
+                    }
                     // 在所有可观测集合中添加一个新的优信项目.
-                    AllReceiptsItems.Insert(0, newRpt);
+                    AllReceiptsItems.Insert(i, newRpt);
 
                 }
 
@@ -198,11 +204,7 @@ namespace BindingData.ViewModel
             }
             if (newRpt.IsAvatarLocal == false)
             {
-                //Task.Run(() =>
-                //{
-                    Storage.SaveAvatar(newRpt.AuthorAvatar);
-                //});
-                
+                Storage.SaveAvatar(newRpt.AuthorAvatar);
             }
         }
  
@@ -399,6 +401,15 @@ namespace BindingData.ViewModel
                 {
                     c.DisplayAvatar = avatar;
                     c.IsAvatarLocal = true;
+                }
+
+                foreach (Comment cmt in CommentItems)
+                {
+                    if(cmt.UserAvatar == avatar)
+                    {
+                        cmt.DisplayAvatar = avatar;
+                        cmt.IsAvatarLocal = true;
+                    }
                 }
                 // 在数据库中保存更改.
                 myDB.SubmitChanges();

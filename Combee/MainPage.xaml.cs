@@ -195,6 +195,11 @@ namespace Combee
         {
             //MessageBox.Show("Y");
         }
+
+        private void NewPostButton_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Combee;component/NewPost.xaml", UriKind.Relative));
+        }
     }
 
 }

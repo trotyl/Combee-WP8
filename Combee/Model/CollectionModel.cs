@@ -93,6 +93,42 @@ namespace BindingData.Model
                 }
             }
         }
+
+        //表单ID
+        private string _formId;
+
+        [Column]
+        public string FormId
+        {
+            get { return _formId; }
+            set
+            {
+                if (_formId != value)
+                {
+                    NotifyPropertyChanging("FormId");
+                    _formId = value;
+                    NotifyPropertyChanged("FormId");
+                }
+            }
+        }
+
+        //表单标题
+        private string _formTitle;
+
+        [Column]
+        public string FormTitle
+        {
+            get { return _formTitle; }
+            set
+            {
+                if (_formTitle != value)
+                {
+                    NotifyPropertyChanging("FormTitle");
+                    _formTitle = value;
+                    NotifyPropertyChanged("FormTitle");
+                }
+            }
+        }
         
         //优信标题
         private string _title;

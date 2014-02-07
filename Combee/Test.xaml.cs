@@ -146,6 +146,31 @@ namespace Combee
             wb.NavigateToString("<html><head></head><body>Silverlight Developer Site" + "<iframe src=\"http://www.silverlight.net\" WIDTH=300 HEIGHT=200>" + "</iframe></body></html>");
         }
 
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 
 }

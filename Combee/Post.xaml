@@ -25,7 +25,7 @@
                 <StackPanel Width="311" Margin="8,-2,0,0">
                     <TextBlock Text="{Binding UserName, Mode=OneWay}" Margin="10,8,80,0" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" TextTrimming="WordEllipsis" />
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-48,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" FontFamily="Portable User Interface" />
+                        <TextBlock Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-38,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" FontFamily="Portable User Interface" />
                         <TextBlock Text="{Binding Body, Mode=OneWay}" TextWrapping="Wrap" Margin="10,0,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                     </StackPanel>
                 </StackPanel>
@@ -33,6 +33,13 @@
         </DataTemplate>
 
     </phone:PhoneApplicationPage.Resources>
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar Opacity="0.7">
+            <shell:ApplicationBarIconButton x:Name="CommentButton" IconUri="/Images/appbar.add.rest.png" IsEnabled="True" Text="评论"/>
+            <shell:ApplicationBarIconButton x:Name="DeletedButton" IconUri="/Images/appbar.delete.rest.png" IsEnabled="True" Text="删除" Click="DeletedButton_Click"/>
+            <shell:ApplicationBarIconButton x:Name="SubmitButton" IconUri="/Images/appbar.check.rest.png" IsEnabled="True" Text="提交" Click="SubmitButton_Click"/>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
 
 
     <!--LayoutRoot 是包含所有页面内容的根网格-->
@@ -42,6 +49,7 @@
             <!--枢轴项一-->
             <phone:PivotItem Header="正文">
                 <Grid>
+
                     <StackPanel Grid.Row="0" Margin="12,0,0,28">
                         <TextBlock x:Name="TitleTextBlock" Text="" TextWrapping="Wrap" Margin="0,0,0,10" FontSize="30"/>
                         <Grid Height="100">
@@ -51,38 +59,29 @@
                         </Grid>
                     </StackPanel>
 
-                    <phone:WebBrowser x:Name="ContentBrowser" Margin="0,150,0,10" Opacity="0" LoadCompleted="ContentBrowser_LoadCompleted" ScrollViewer.VerticalScrollBarVisibility="Auto" IsGeolocationEnabled="True" IsScriptEnabled="True" IsHitTestVisible="False" >
+                    <phone:WebBrowser x:Name="ContentBrowser" Margin="0,150,0,20" VerticalAlignment="Stretch" Opacity="0" LoadCompleted="ContentBrowser_LoadCompleted" ScrollViewer.VerticalScrollBarVisibility="Auto" IsGeolocationEnabled="True" IsScriptEnabled="True" >
                         <toolkit:GestureService.GestureListener>
                             <toolkit:GestureListener Flick="GestureListener_Flick" />
                         </toolkit:GestureService.GestureListener>
                     </phone:WebBrowser>
+
                 </Grid>
             </phone:PivotItem>
 
             <!--枢轴项二-->
             <phone:PivotItem Header="评论">
-                <Grid  Margin="0,20,20,0">
-                    <phone:LongListSelector ItemsSource="{Binding CommentItems}" Margin="0,-38,-22,2">
-                        <phone:LongListSelector.ItemTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Background="#FF51697A">
-                                <Image Tag="{Binding UserId, Mode=OneWay}" Source="{Binding UserAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
-                                <StackPanel Width="311" Margin="8,-2,0,0">
-                                    <TextBlock Text="{Binding UserName, Mode=OneWay}" Margin="10,8,80,0" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" TextTrimming="WordEllipsis" />
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBlock Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-48,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" FontFamily="Portable User Interface" />
-                                        <TextBlock Text="{Binding Body, Mode=OneWay}" TextWrapping="Wrap" Margin="10,0,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </StackPanel>
-                        </phone:LongListSelector.ItemTemplate>
-                    </phone:LongListSelector>
-                    <!--ItemTemplate="{StaticResource CmtListTemplate}"-->
+                <Grid Margin="0,20,20,0">
+                    <phone:LongListSelector ItemsSource="{Binding CommentItems}" ItemTemplate="{StaticResource CmtListTemplate}" Margin="0,-38,-22,2"/>
                 </Grid>
             </phone:PivotItem>
 
             <!--枢轴项三-->
             <phone:PivotItem Header="表单">
-                <Grid/>
+                <Grid>
+                    <ScrollViewer>
+                        <StackPanel x:Name="FormPanel" />
+                    </ScrollViewer>
+                </Grid>
             </phone:PivotItem>
         </phone:Pivot>
     </Grid>

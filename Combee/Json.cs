@@ -63,7 +63,7 @@ namespace Combee
         public static void GetAsync(string item, string mode)
         {
             //接收消息
-            for (int i = 1; i >= 1; i-- )
+            for (int i = 1; i <= 3; i++ )
             {
                 WebClient webClient = new WebClient();
                 switch (item)
@@ -162,6 +162,16 @@ namespace Combee
 
                     string author_phone = (string)o["post"]["author"]["phone"];
                     user.Phone = author_phone;
+
+                    if(o["post"]["forms"].Count() > 0)
+                    {
+                        string form_id = (string)o["post"]["forms"][0]["id"];
+                        rpt.FormId = form_id;
+
+                        string form_title = (string)o["post"]["forms"][0]["title"];
+                        rpt.FormTitle = form_title;
+
+                    }
 
                     rpt.DisplayAvatar = @"https://combee.co" + author_avatar;
                     user.DisplayAvatar = @"https://combee.co" + author_avatar;
@@ -391,5 +401,24 @@ namespace Combee
             }
             return result.ToString();
         }
+    }
+
+    class Form
+    {
+        public static string id;
+        public static string title;
+        public static List<FormItem> list = new List<FormItem>();
+    }
+
+    class FormItem
+    {
+        public string id;
+        public bool required;
+        public string identifier;
+        public string _type;
+        public string label;
+        public string value;
+        public bool ready;
+        public bool number;
     }
 }

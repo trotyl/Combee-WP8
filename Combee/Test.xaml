@@ -28,14 +28,16 @@
 
         <!--ContentPanel - 在此处放置其他内容-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <StackPanel>
                 <ScrollViewer >
                     <TextBlock x:Name="MyTextBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="436"/>
                 </ScrollViewer>
-                <!--<ScrollViewer >
-                    <TextBlock x:Name="YourTextBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="436"/>
-                </ScrollViewer>-->
-            <Button x:Name="MyButton" Content="Button" HorizontalAlignment="Left" Margin="100,470,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.496,-0.873" Height="105" Width="211" Click="MyButton_Click"/>
-            <phone:WebBrowser x:Name="wb" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                <TextBox TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus" />
+                <RadioButton Checked="RadioButton_Checked" />
+                <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                <Button x:Name="MyButton" Content="Button" HorizontalAlignment="Left" Margin="100,470,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.496,-0.873" Height="105" Width="211" Click="MyButton_Click"/>
+                <phone:WebBrowser x:Name="wb" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            </StackPanel>
         </Grid>
     </Grid>
 
