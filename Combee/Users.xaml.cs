@@ -57,6 +57,8 @@ namespace Combee
                 Uri uri = new Uri(Json.host + "users" + @"/" + id + @"/organizations" + Json.rear + ThisUser.private_token);
 
                 webClient.DownloadStringAsync(uri);
+
+                App.NewViewModel.OrganizationsItems.Clear();
             }
         }
 
@@ -94,23 +96,23 @@ namespace Combee
 
         void savePhoneNumberTask_Completed(object sender, TaskEventArgs e)
         {
-            //switch (e.TaskResult)
-            //{
-            //    //Logic for when the number was saved successfully
-            //    case TaskResult.OK:
-            //        MessageBox.Show("保存成功咯~");
-            //        break;
+            switch (e.TaskResult)
+            {
+                //Logic for when the number was saved successfully
+                case TaskResult.OK:
+                    //MessageBox.Show("保存成功咯~");
+                    break;
 
-            //    //Logic for when the task was cancelled by the user
-            //    case TaskResult.Cancel:
-            //        MessageBox.Show("为什么不存了捏...?");
-            //        break;
+                //Logic for when the task was cancelled by the user
+                case TaskResult.Cancel:
+                    //MessageBox.Show("为什么不存了捏...?");
+                    break;
 
-            //    //Logic for when the number could not be saved
-            //    case TaskResult.None:
-            //        MessageBox.Show("保存失败了啊...");
-            //        break;
-            //}
+                //Logic for when the number could not be saved
+                case TaskResult.None:
+                    //MessageBox.Show("保存失败了啊...");
+                    break;
+            }
         }
 
         private void RetrievedOrganizations(object sender, DownloadStringCompletedEventArgs e)
@@ -128,29 +130,21 @@ namespace Combee
                     Organizations orgz = new Organizations();
 
                     orgz.Id = (string)o["id"];
-
                     orgz.Name = (string)o["name"];
-
                     orgz.CreatedAt = (DateTime)o["created_at"];
-
                     orgz.Avatar = (string)o["avatar"];
-
                     orgz.DisplayAvatar = @"https://combee.co" + (string)o["avatar"];
-
                     orgz.IsAvatarLocal = false;
-
                     orgz.ParentId = (string)o["parent_id"];
-
                     orgz.Members = (string)o["members"];
-
                     orgz.Bio = null;
                     orgz.Header = null;
-                    orgz.InIt = true;
+                    orgz.InIt = false;
                     orgz.JoinedAt = DateTime.Now;
 
                     Storage.SaveAvatar((string)o["avatar"]);
+                    App.NewViewModel.AddOrganizationsItem(orgz);
                     App.NewViewModel.OrganizationsItems.Add(orgz);
-
                 }
             }
         }

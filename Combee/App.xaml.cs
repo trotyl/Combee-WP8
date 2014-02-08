@@ -13,6 +13,7 @@ using Combee.ViewModels;
 
 using BindingData.Model;
 using BindingData.ViewModel;
+using System.Windows.Controls;
 
 namespace Combee
 {
@@ -278,5 +279,6 @@ namespace Combee
                 throw;
             }
         }
+
     }
 }

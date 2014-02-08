@@ -241,23 +241,15 @@ namespace Combee
                     Comment cm = new Comment();
 
                     cm.Id = (string)ob["id"];
-
                     cm.Body = (string)ob["body"];
-
                     cm.CreatedAt = (DateTime)ob["created_at"];
-
                     cm.UserId = (string)ob["user"]["id"];
-
                     cm.UserName = (string)ob["user"]["name"];
-
                     cm.UserAvatar = (string)ob["user"]["avatar"];
-
                     cm.DisplayAvatar = @"https://combee.co" + cm.UserAvatar;
-
                     cm.IsAvatarLocal = false;
 
                     Storage.SaveAvatar(cm.UserAvatar);
-
                     App.NewViewModel.CommentItems.Add(cm);
                 }
             }

@@ -15,7 +15,7 @@
     shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0" Loaded="PhoneApplicationPage_Loaded">
     <phone:PhoneApplicationPage.ApplicationBar >
         <shell:ApplicationBar Opacity="0.7">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.check.rest.png" IsEnabled="True" Text="发送"/>
+            <shell:ApplicationBarIconButton x:Name="SubmitButton" IconUri="/Images/appbar.check.rest.png" IsEnabled="True" Text="发送" Click="SubmitButton_Click"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 
@@ -28,7 +28,7 @@
                 <Grid>
                     <StackPanel>
                         <TextBox x:Name="TitleBox" Text="标题" GotFocus="TitleBox_GotFocus" LostFocus="TitleBox_LostFocus"/>
-                        <TextBox x:Name="BodyBox" Text="内容" Height="250" GotFocus="BodyBox_GotFocus" LostFocus="BodyBox_LostFocus"/>
+                        <TextBox x:Name="BodyBox" Text="内容" Height="250" GotFocus="BodyBox_GotFocus" LostFocus="BodyBox_LostFocus" TextWrapping="Wrap"/>
                         <StackPanel Orientation="Horizontal">
                             <CheckBox x:Name="TimeBox"/>
                             <TextBlock x:Name="TimeBlock" Text="2" FontSize="30" VerticalAlignment="Center"/>
@@ -41,7 +41,18 @@
 
             <!--枢轴项二-->
             <phone:PivotItem Header="组织">
-                <Grid/>
+                <Grid>
+                    <phone:LongListSelector ItemsSource="{Binding AllOrganizationsItems, Mode=OneWay}">
+                        <phone:LongListSelector.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox Tag="{Binding Id, Mode=OneWay}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                                    <TextBlock Text="{Binding Name, Mode=OneWay}" VerticalAlignment="Center" FontSize="30"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </phone:LongListSelector.ItemTemplate>
+                    </phone:LongListSelector>
+                </Grid>
             </phone:PivotItem>
         </phone:Pivot>
     </Grid>

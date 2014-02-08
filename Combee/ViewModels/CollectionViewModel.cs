@@ -243,8 +243,15 @@ namespace BindingData.ViewModel
                     // 在数据库中保存更改.
                     myDB.SubmitChanges();
 
-                    // 在所有可观测集合中添加一个新的组织项目.
-                    AllOrganizationsItems.Add(newOrgz);
+                    if (newOrgz.InIt)
+                    {
+                        // 在所有可观测集合中添加一个新的组织项目.
+                        AllOrganizationsItems.Add(newOrgz);
+                    }
+                    else
+                    {
+                        
+                    }
                 }
 
                 else
@@ -403,13 +410,13 @@ namespace BindingData.ViewModel
                     c.IsAvatarLocal = true;
                 }
 
-                foreach (Comment cmt in CommentItems)
+                var query_comment = from cmt in myDB.CommentTable
+                                    where cmt.UserAvatar == avatar
+                                    select cmt;
+                foreach (Comment c in query_comment)
                 {
-                    if(cmt.UserAvatar == avatar)
-                    {
-                        cmt.DisplayAvatar = avatar;
-                        cmt.IsAvatarLocal = true;
-                    }
+                    c.DisplayAvatar = avatar;
+                    c.IsAvatarLocal = true;
                 }
                 // 在数据库中保存更改.
                 myDB.SubmitChanges();

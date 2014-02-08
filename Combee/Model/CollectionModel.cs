@@ -1268,5 +1268,7 @@ namespace BindingData.Model
         // 给Conversations项指定一个表
         public Table<Conversations> ConversationsTable;
 
+        public Table<Comment> CommentTable;
+
     }
 }

@@ -421,4 +421,9 @@ namespace Combee
         public bool ready;
         public bool number;
     }
+
+    class PostState
+    {
+        public static List<string> organizations = new List<string>();
+    }
 }

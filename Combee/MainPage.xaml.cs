@@ -191,14 +191,14 @@ namespace Combee
             }
         }
 
-        private void UmsgList_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            //MessageBox.Show("Y");
-        }
-
         private void NewPostButton_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/Combee;component/NewPost.xaml", UriKind.Relative));
+        }
+
+        private void StackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Combee;component/Organization.xaml?id=" + ((StackPanel)sender).Tag.ToString(), UriKind.Relative));
         }
     }
 

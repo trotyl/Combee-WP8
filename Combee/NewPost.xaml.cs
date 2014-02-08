@@ -35,6 +35,7 @@ namespace Combee
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
             TimeSlider.Value = 2.0;
+            PostState.organizations.Clear();
         }
 
         private void TitleBox_GotFocus(object sender, RoutedEventArgs e)
@@ -66,6 +67,55 @@ namespace Combee
             if (BodyBox.Text == string.Empty)
             {
                 BodyBox.Text = "内容";
+            }
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            PostState.organizations.Add(((CheckBox)sender).Tag.ToString());
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            PostState.organizations.Remove(((CheckBox)sender).Tag.ToString());
+        }
+
+        private void SubmitButton_Click(object sender, EventArgs e)
+        {
+            string uriStr = Json.host + "posts" + Json.rear + ThisUser.private_token;
+            uriStr += "&title=" + TitleBox.Text;
+            uriStr += "&body_html=" + BodyBox.Text;
+            if (PostState.organizations.Count > 0)
+            {
+                foreach (string orgz in PostState.organizations)
+                {
+                    uriStr += "&organization_ids[]=" + orgz;
+                }
+                int time = (int)(TimeSlider.Value * 3600);
+                if (TimeBox.IsChecked == true)
+                {
+                    uriStr += "&delayed_sms_at=" + time;
+                }
+                WebClient submitWebClient = new WebClient();
+                Uri uri = new Uri(uriStr);
+                submitWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(Submitted);
+                submitWebClient.UploadStringAsync(uri, "POST", string.Empty);
+            }
+            else
+            {
+                MessageBox.Show("组织列表为空!");
+            }
+        }
+
+        private void Submitted(object sender, UploadStringCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                MessageBox.Show(e.Error.Message);
+            }
+            else
+            {
+                NavigationService.GoBack();
             }
         }
     }

@@ -71,7 +71,7 @@
             <!--枢轴项二-->
             <phone:PivotItem Header="评论">
                 <Grid Margin="0,20,20,0">
-                    <phone:LongListSelector ItemsSource="{Binding CommentItems}" ItemTemplate="{StaticResource CmtListTemplate}" Margin="0,-38,-22,2"/>
+                    <phone:LongListSelector ItemsSource="{Binding CommentItems, Mode=OneWay}" ItemTemplate="{StaticResource CmtListTemplate}" Margin="0,-38,-22,2"/>
                 </Grid>
             </phone:PivotItem>
 
