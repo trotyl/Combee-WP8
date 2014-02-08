@@ -32,7 +32,6 @@ namespace Combee
         { 
             InitializeComponent();
     
-            // 为观测模型设置页面的数据上下文属性.
             this.DataContext = App.NewViewModel;
         }
 
@@ -43,7 +42,9 @@ namespace Combee
 
             MessageBoxResult result = MessageBox.Show("您确定要狠心地退出Combee? T^T", "退出确认", MessageBoxButton.OKCancel);
             if (result == MessageBoxResult.Cancel)
+            {
                 e.Cancel = true;
+            }
         }
 
         // 判断是否已登录(导航至重载)
@@ -76,11 +77,9 @@ namespace Combee
                 // 首次进入程序导航选项
                 if (!settings.Contains("entered"))
                 {
-                    Json.GetAsync("receipts", "receipts");
-                    Json.GetAsync("organizations", "users/" + ThisUser.id + "/organizations");
-                    Json.GetAsync("conversations", @"user/conversations");
+                    Json.GetAsyncAll();
 
-                    settings.Add("entered", "1");
+                    settings.Add("entered", "true");
                     settings.Save();
                     var result = MessageBox.Show("欢迎使用Combee，是否进入新功能介绍？", "首次登录提示", MessageBoxButton.OKCancel);
                     if (result == MessageBoxResult.OK)
@@ -117,16 +116,6 @@ namespace Combee
 
         private void UserImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            //object ob = ((Image)sender).Parent;
-            //StackPanel stp = (StackPanel)ob;
-            //UmsgList.ScrollTo(stp);
-            //Receipts rpt = stp.
-
-            //PhoneApplicationService.Current.State["mode"] = "user";
-            //PhoneApplicationService.Current.State["back"] = sender;
-
-            //UmsgList.ScrollTo(PhoneApplicationService.Current.State["back"]);
-
             string id = ((Image)sender).Tag.ToString();
             NavigationService.Navigate(new Uri("/Combee;component/Users.xaml?id=" + id, UriKind.Relative));
 
@@ -138,23 +127,10 @@ namespace Combee
             toast.Title = "Toast测试";
             toast.Content = "来自 张建奇 的私信。";
             toast.Show();
-            //NavigationService.Navigate(new Uri("/Combee;component/Test.xaml", UriKind.Relative));
         }
 
         private void SetButton_Click(object sender, EventArgs e)
         {
-            # region 测试添加优信条目
-            string nn = "1";
-            if (PhoneApplicationService.Current.State.ContainsKey("nn"))
-            {
-                // If it exists, assign the data to the application member variable.
-                nn = PhoneApplicationService.Current.State["nn"] as string;
-            }
-
-            nn = (Int32.Parse(nn) + 1).ToString();
-            PhoneApplicationService.Current.State["nn"] = nn;
-            # endregion
-
             ApplicationBarIconButton btn = (ApplicationBarIconButton)ApplicationBar.Buttons[0];
             if (btn.Text == "私信")
             {
@@ -165,7 +141,6 @@ namespace Combee
             {
                 btn.IconUri = new Uri("/Assets/AppBar/favs.png", UriKind.Relative);
                 btn.Text = "私信";
-
             }
         }
 
@@ -184,10 +159,7 @@ namespace Combee
             }
             else
             {
-                Json.GetAsync("receipts", "receipts");
-                Json.GetAsync("organizations", "users/" + ThisUser.id + "/organizations");
-                Json.GetAsync("conversations", "user/conversations");
-
+                Json.GetAsyncAll();
             }
         }
 

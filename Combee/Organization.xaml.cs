@@ -57,15 +57,30 @@ namespace Combee
                 orgzWebClient.DownloadStringAsync(uri);
             }
             {
+                //获取组织的下级组织
+                WebClient childrenWebClient = new WebClient();
+                childrenWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedChildren);
+                Uri uri = new Uri(Json.host + "organizations/" + id + "/children" + Json.rear + ThisUser.private_token);
+
+                childrenWebClient.DownloadStringAsync(uri);
+
+                App.NewViewModel.OrganizationsItems.Clear();
+            }
+            {
                 //获取组织的人员
                 WebClient userWebClient = new WebClient();
                 userWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedMembers);
                 Uri uri = new Uri(Json.host + "organizations/" + id + "/members" + Json.rear + ThisUser.private_token);
 
                 userWebClient.DownloadStringAsync(uri);
-
+                
                 App.NewViewModel.OrganizationsItems.Clear();
             }
+        }
+
+        private void RetrievedChildren(object sender, DownloadStringCompletedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void RetrievedMembers(object sender, DownloadStringCompletedEventArgs e)

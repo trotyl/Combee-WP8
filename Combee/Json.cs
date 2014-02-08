@@ -54,10 +54,15 @@ namespace Combee
                 }
                 settings.Save();
 
-                GetAsync("receipts", "receipts");
-                GetAsync("organizations", "user/" + ThisUser.id + "/organizations");
-                GetAsync("conversations", @"user/conversations");
+                GetAsyncAll();
             }
+        }
+
+        public static void GetAsyncAll()
+        {
+            GetAsync("receipts", "receipts");
+            GetAsync("organizations", "user/" + ThisUser.id + "/organizations");
+            GetAsync("conversations", "conversations");
         }
 
         public static void GetAsync(string item, string mode)
