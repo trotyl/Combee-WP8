@@ -563,10 +563,10 @@ namespace BindingData.Model
         }
 
         // 用户创建时间
-        private string _createdAt;
+        private DateTime _createdAt;
 
         [Column]
-        public string CreatedAt
+        public DateTime CreatedAt
         {
             get { return _createdAt; }
             set
@@ -1261,6 +1261,9 @@ namespace BindingData.Model
 
         // 给Organizations项指定一个表
         public Table<Organizations> OrganizationsTable;
+
+        // 给Organizations项指定一个表
+        public Table<Organizations> AllOrganizationsTable;
 
         // 给People项指定一个表
         public Table<Users> UsersTable;

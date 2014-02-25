@@ -38,7 +38,7 @@
 
         <!--ContentPanel - 在此处放置其他内容-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,20,12,0">
-            <TextBlock Text="写点什么好呢~&#13;版本号1.0.0.0" TextAlignment="Center">
+            <TextBlock TextAlignment="Center">
                 Combee for Windows Phone
                 <doc:LineBreak/>
                 版本号1.0.0.0

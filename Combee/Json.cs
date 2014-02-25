@@ -61,7 +61,7 @@ namespace Combee
         public static void GetAsyncAll()
         {
             GetAsync("receipts", "receipts");
-            GetAsync("organizations", "user/" + ThisUser.id + "/organizations");
+            GetAsync("organizations", "users/" + ThisUser.id + "/organizations");
             GetAsync("conversations", "conversations");
         }
 
@@ -158,7 +158,7 @@ namespace Combee
                     string author_email = (string)o["post"]["author"]["email"];
                     user.Email = author_email;
 
-                    string author_created = (string)o["post"]["author"]["created_at"];
+                    DateTime author_created = (DateTime)o["post"]["author"]["created_at"];
                     user.CreatedAt = author_created;
 
                     string author_avatar = (string)o["post"]["author"]["avatar"];

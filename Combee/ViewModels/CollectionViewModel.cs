@@ -66,14 +66,53 @@ namespace BindingData.ViewModel
             }
         }
 
-        // 当前人员组织集合
-        public ObservableCollection<Organizations> OrganizationsItems { get; private set; }
+        // 当前页面组织集合
+        private ObservableCollection<Organizations> _organizationsItems;
+        public ObservableCollection<Organizations> OrganizationsItems 
+        {
+            get { return _organizationsItems; }
+            set
+            {
+                _organizationsItems = value;
+                NotifyPropertyChanged("OrganizationsItems");
+            }
+        }
 
-        // 当前人员优信集合
-        public ObservableCollection<Receipts> ReceiptsItems { get; private set; }
+        // 当前页面优信集合
+        private ObservableCollection<Receipts> _receiptsItems;
+        public ObservableCollection<Receipts> ReceiptsItems
+        {
+            get { return _receiptsItems; }
+            set
+            {
+                _receiptsItems = value;
+                NotifyPropertyChanged("ReceiptsItems");
+            }
+        }
 
-        // 当前优信评论集合
-        public ObservableCollection<Comment> CommentItems { get; private set; }
+        // 当前页面人员项目.
+        private ObservableCollection<Users> _usersItems;
+        public ObservableCollection<Users> UsersItems
+        {
+            get { return _usersItems; }
+            set
+            {
+                _usersItems = value;
+                NotifyPropertyChanged("UsersItems");
+            }
+        }
+
+        // 当前页面评论集合
+        private ObservableCollection<Comment> _commentItems;
+        public ObservableCollection<Comment> CommentItems 
+        {
+            get { return _commentItems; }
+            set
+            {
+                _commentItems = value;
+                NotifyPropertyChanged("CommentItems");
+            }
+        }
 
         // 对本地数据库的 LINQ to SQL 的数据上下文.
         public MyDataContext myDB;
@@ -413,10 +452,20 @@ namespace BindingData.ViewModel
                 var query_comment = from cmt in myDB.CommentTable
                                     where cmt.UserAvatar == avatar
                                     select cmt;
+
                 foreach (Comment c in query_comment)
                 {
                     c.DisplayAvatar = avatar;
                     c.IsAvatarLocal = true;
+                }
+
+                foreach (Organizations o in App.NewViewModel.OrganizationsItems)
+                {
+                    if (o.Avatar == avatar)
+                    {
+                        o.DisplayAvatar = avatar;
+                        o.IsAvatarLocal = true;
+                    }
                 }
                 // 在数据库中保存更改.
                 myDB.SubmitChanges();

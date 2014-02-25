@@ -14,6 +14,7 @@ using Combee.ViewModels;
 using BindingData.Model;
 using BindingData.ViewModel;
 using System.Windows.Controls;
+using System.IO.IsolatedStorage;
 
 namespace Combee
 {
@@ -115,6 +116,21 @@ namespace Combee
         // 此代码在重新激活应用程序时不执行
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+
+            if (settings.Contains("private_token"))
+            {
+                if (!settings.Contains("name") || !settings.Contains("id") || !settings.Contains("private_token"))
+                {
+                    Json.GetCurrentUser();
+                }
+                else
+                {
+                    ThisUser.name = (string)IsolatedStorageSettings.ApplicationSettings["name"];
+                    ThisUser.id = (string)IsolatedStorageSettings.ApplicationSettings["id"];
+                    ThisUser.private_token = (string)IsolatedStorageSettings.ApplicationSettings["private_token"];
+                }
+            }
         }
 
         // 激活应用程序(置于前台)时执行的代码
@@ -122,10 +138,27 @@ namespace Combee
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
             // 确保正确恢复应用程序状态
-            if (!App.ViewModel.IsDataLoaded)
+            //if (!App.ViewModel.IsDataLoaded)
+            //{
+            //    App.ViewModel.LoadData();
+            //}
+
+            IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+
+            if (settings.Contains("private_token"))
             {
-                App.ViewModel.LoadData();
+                if (!settings.Contains("name") || !settings.Contains("id") || !settings.Contains("private_token"))
+                {
+                    Json.GetCurrentUser();
+                }
+                else
+                {
+                    ThisUser.name = (string)IsolatedStorageSettings.ApplicationSettings["name"];
+                    ThisUser.id = (string)IsolatedStorageSettings.ApplicationSettings["id"];
+                    ThisUser.private_token = (string)IsolatedStorageSettings.ApplicationSettings["private_token"];
+                }
             }
+
         }
 
         // 停用应用程序(发送到后台)时执行的代码

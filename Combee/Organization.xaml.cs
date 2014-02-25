@@ -37,6 +37,10 @@ namespace Combee
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
+            App.NewViewModel.OrganizationsItems.Clear();
+            App.NewViewModel.ReceiptsItems.Clear();
+            App.NewViewModel.UsersItems.Clear();
+
             //加载组织信息
             string id = NavigationContext.QueryString["id"];
             var query_organization = from orgz in App.NewViewModel.myDB.OrganizationsTable
@@ -64,7 +68,6 @@ namespace Combee
 
                 childrenWebClient.DownloadStringAsync(uri);
 
-                App.NewViewModel.OrganizationsItems.Clear();
             }
             {
                 //获取组织的人员
@@ -74,13 +77,40 @@ namespace Combee
 
                 userWebClient.DownloadStringAsync(uri);
                 
-                App.NewViewModel.OrganizationsItems.Clear();
             }
         }
 
         private void RetrievedChildren(object sender, DownloadStringCompletedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (e.Error != null)
+            {
+                MessageBox.Show(e.Error.Message);
+            }
+            else
+            {
+                JArray arr = JArray.Parse(e.Result);
+                for (int i = 0; i < arr.Count(); i++)
+                {
+                    JObject o = JObject.Parse(arr[i].ToString());
+                    Organizations orgz = new Organizations();
+
+                    orgz.Id = (string)o["id"];
+                    orgz.Name = (string)o["name"];
+                    orgz.CreatedAt = (DateTime)o["created_at"];
+                    orgz.Avatar = (string)o["avatar"];
+                    orgz.DisplayAvatar = @"https://combee.co" + orgz.Avatar;
+                    orgz.IsAvatarLocal = false;
+                    orgz.ParentId = (string)o["parent_id"];
+                    orgz.Members = (string)o["members"];
+                    orgz.Bio = null;
+                    orgz.Header = null;
+                    orgz.InIt = false;
+                    orgz.JoinedAt = DateTime.Now;
+
+                    App.NewViewModel.AddOrganizationsItem(orgz);
+                }
+            }
+
         }
 
         private void RetrievedMembers(object sender, DownloadStringCompletedEventArgs e)
@@ -97,6 +127,9 @@ namespace Combee
                     JObject o = JObject.Parse(arr[i].ToString());
                     Users user = new Users();
 
+                    user.Id = (string)o["id"];
+                    user.Name = (string)o["name"];
+                    user.CreatedAt = (DateTime)o["created_at"];
 
                 }
             }

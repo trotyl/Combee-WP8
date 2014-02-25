@@ -8,6 +8,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
+using Microsoft.Phone.Info;
 
 namespace Combee
 {
@@ -30,9 +31,22 @@ namespace Combee
             EmailComposeTask emailComposeTask = new EmailComposeTask();
 
             emailComposeTask.Subject = "使用反馈: " + "Combee For WindowsPhone";
-            emailComposeTask.Body = "版本号: 1.0.0.0&#13;";
-            emailComposeTask.To = "trotyl@qq.com";
-            //emailComposeTask.Cc = "cc@example.com";
+            string body = "设备信息：\n";
+            body += DeviceStatus.DeviceManufacturer + "\n";
+            body += DeviceStatus.DeviceName +"\n";
+            body += DeviceStatus.DeviceFirmwareVersion + "\n";
+            body += DeviceStatus.DeviceHardwareVersion + "\n";
+            body += DeviceStatus.DeviceTotalMemory.ToString() + "\n";
+            body += DeviceStatus.ApplicationCurrentMemoryUsage.ToString() + "\n";
+            body += DeviceStatus.ApplicationMemoryUsageLimit.ToString() + "\n";
+            body += DeviceStatus.ApplicationPeakMemoryUsage.ToString() + "\n";
+            body += DeviceStatus.IsKeyboardPresent.ToString() + "\n";
+            body += DeviceStatus.IsKeyboardDeployed.ToString() + "\n";
+            body += DeviceStatus.PowerSource.ToString() + "\n";
+            body += "\n请输入反馈内容：\n";
+            emailComposeTask.Body = body;
+            emailComposeTask.To = "support@combee.co";
+            emailComposeTask.Cc = "trotyl@qq.com";
             //emailComposeTask.Bcc = "bcc@example.com";
 
             emailComposeTask.Show();

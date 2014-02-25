@@ -74,24 +74,40 @@ namespace Combee
 
         private void CallButton_Click(object sender, EventArgs e)
         {
-            PhoneCallTask phoneCallTask = new PhoneCallTask();
+            try
+            {
+                PhoneCallTask phoneCallTask = new PhoneCallTask();
 
-            phoneCallTask.PhoneNumber = PhoneTextBlock.Text.Replace("手机: ", string.Empty);
-            phoneCallTask.DisplayName = NameTextBlock.Text;
+                phoneCallTask.PhoneNumber = PhoneTextBlock.Text.Replace("手机: ", string.Empty);
+                phoneCallTask.DisplayName = NameTextBlock.Text;
 
-            phoneCallTask.Show();
+                phoneCallTask.Show();
+            }
+            catch (Exception ee)
+            {
+                MessageBox.Show(ee.Message);
+            }
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            SavePhoneNumberTask savePhoneNumberTask;
-            
-            savePhoneNumberTask = new SavePhoneNumberTask();
-            savePhoneNumberTask.Completed += new EventHandler<TaskEventArgs>(savePhoneNumberTask_Completed);
+            try
+            {
+                SavePhoneNumberTask savePhoneNumberTask;
 
-            savePhoneNumberTask.PhoneNumber = PhoneTextBlock.Text.Replace("手机: ", string.Empty);
+                savePhoneNumberTask = new SavePhoneNumberTask();
+                savePhoneNumberTask.Completed += new EventHandler<TaskEventArgs>(savePhoneNumberTask_Completed);
 
-            savePhoneNumberTask.Show();
+                savePhoneNumberTask.PhoneNumber = PhoneTextBlock.Text.Replace("手机: ", string.Empty);
+
+
+                savePhoneNumberTask.Show();
+
+            }
+            catch (Exception ee)
+            {
+                MessageBox.Show(ee.Message);
+            }
         }
 
         void savePhoneNumberTask_Completed(object sender, TaskEventArgs e)
@@ -161,41 +177,18 @@ namespace Combee
                 JObject o = JObject.Parse(e.Result);
                 Users user = new Users();
 
-                string id = (string)o["id"];
-                user.Id = id;
-
-                string name = (string)o["name"];
-                user.Name = name;
-
-                string email = (string)o["email"];
-                user.Email = email;
-
-                string created_at = (string)o["created_at"];
-                user.CreatedAt = created_at;
-
-                string avatar = (string)o["avatar"];
-                user.Avatar = avatar;
-
-                string bio = (string)o["bio"];
-                user.Bio = bio;
-
-                string gender = (string)o["gender"];
-                user.Gender = gender;
-
-                string qq = (string)o["qq"];
-                user.Qq = qq;
-
-                string blog = (string)o["blog"];
-                user.Blog = blog;
-
-                string uid = (string)o["uid"];
-                user.Uid = uid;
-
-                string header = (string)o["header"];
-                user.Header = header;
-
-                string phone = (string)o["phone"];
-                user.Phone = phone;
+                user.Id = (string)o["id"];
+                user.Name = (string)o["name"];
+                user.Email = (string)o["email"];
+                user.CreatedAt = (DateTime)o["created_at"];
+                user.Avatar = (string)o["avatar"];
+                user.Bio = (string)o["bio"];
+                user.Gender = (string)o["gender"];
+                user.Qq = (string)o["qq"];
+                user.Blog = (string)o["blog"];
+                user.Uid = (string)o["uid"];
+                user.Header = (string)o["header"];
+                user.Phone = (string)o["phone"];
 
                 UseUsers(user);
                 App.NewViewModel.AddUsersItem(user);

@@ -124,8 +124,15 @@
             <!--Panorama 项目三-->
             <phone:PanoramaItem x:Name="ConversationsPanoramaItem" Header="私信" Orientation="Vertical">
                 <!--具有大型图像占位符的双倍宽度的全景-->
-                <phone:LongListSelector x:Name="ConversationsList" ItemTemplate="{StaticResource CovListTemplate}" ItemsSource="{Binding AllConversationsItems, Mode=OneWay}" Margin="0,-38,-22,2" />
+                <phone:LongListSelector x:Name="ConversationsList" ItemTemplate="{StaticResource CovListTemplate}" ItemsSource="{Binding AllConversationsItems, Mode=OneWay}" Margin="0,-38,-10,2" />
             </phone:PanoramaItem>
+
+            <!--Panorama 项目四-->
+            <phone:PanoramaItem Header="无题" Visibility="Collapsed" Orientation="Vertical">
+                <!--具有大型图像占位符的双倍宽度的全景-->
+                <phone:LongListSelector  />
+            </phone:PanoramaItem>
+
         </phone:Panorama>
 
         <!--取消注释，以显示对齐网格，从而帮助确保
