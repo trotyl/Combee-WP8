@@ -13,9 +13,9 @@ using Microsoft.Phone.Tasks;
 
 namespace Combee
 {
-    public partial class login : PhoneApplicationPage
+    public partial class LoginPage : PhoneApplicationPage
     {
-        public login()
+        public LoginPage()
         {
             InitializeComponent();
         }
@@ -28,8 +28,8 @@ namespace Combee
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            PhoneApplicationService.Current.State["logined"] = false;
             Storage.Initials();
+            
             //UserNameTextBox.Focus();
         }
 
@@ -49,7 +49,7 @@ namespace Combee
             }
         }
 
-        private void GetToken(object sender, UploadStringCompletedEventArgs e)
+        private void GetSession(object sender, UploadStringCompletedEventArgs e)
         {
             if(e.Error != null)
             {
@@ -59,50 +59,8 @@ namespace Combee
             }
             else
             {
-                PhoneApplicationService.Current.State["logined"] = true;
-
-                //MessageBox.Show(e.Result.ToString());
                 JObject o = JObject.Parse(e.Result);
-
-                ThisUser.id = (string)o["id"];
-                ThisUser.name = (string)o["name"];
-                ThisUser.email = (string)o["email"];
-                ThisUser.created_at = (DateTime)o["created_at"];
-                ThisUser.avatar = (string)o["avatar"];
-                ThisUser.phone = (string)o["phone"];
-                ThisUser.private_token = (string)o["private_token"];
-
-                IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
-
-                if (!settings.Contains("id"))
-                {
-                    settings.Add("id", ThisUser.id);
-                }
-                if (!settings.Contains("name"))
-                {
-                    settings.Add("name", ThisUser.name);
-                }
-                if (!settings.Contains("email"))
-                {
-                    settings.Add("email", ThisUser.email);
-                }
-                if (!settings.Contains("created_at"))
-                {
-                    settings.Add("created_at", ThisUser.created_at);
-                }
-                if (!settings.Contains("avatar"))
-                {
-                    settings.Add("avatar", ThisUser.avatar);
-                }
-                if (!settings.Contains("phone"))
-                {
-                    settings.Add("phone", ThisUser.phone);
-                }
-                if (!settings.Contains("private_token"))
-                {
-                    settings.Add("private_token", ThisUser.private_token);
-                }
-                settings.Save();
+                CurrentUser.Login(o);
 
                 NavigationService.GoBack();
             }
@@ -140,13 +98,10 @@ namespace Combee
 
                 //尝试登录以获取用户信息
                 WebClient client = new WebClient();
-                client.UploadStringCompleted += new UploadStringCompletedEventHandler(GetToken);
-                PostArgs arg = new PostArgs();
-                arg["login"] = UserNameTextBox.Text;
-                arg["password"] = PasswordTextBox.Password;
-                Uri newUri = new Uri(Json.host + "session?" + arg.ToString());
+                client.UploadStringCompleted += new UploadStringCompletedEventHandler(GetSession);
+                Uri uri = UriString.GetLoginUri(UserNameTextBox.Text, PasswordTextBox.Password);
                 //MessageBox.Show(arg.ToString());
-                client.UploadStringAsync(newUri, "POST", "", (object)"");
+                client.UploadStringAsync(uri, "POST", "", (object)string.Empty);
             }
 
         }

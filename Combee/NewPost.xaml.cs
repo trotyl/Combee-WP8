@@ -82,36 +82,26 @@ namespace Combee
 
         private void SubmitButton_Click(object sender, EventArgs e)
         {
-            string uriStr = Json.host + "posts" + Json.rear + ThisUser.private_token;
-            uriStr += "&title=" + TitleBox.Text;
-            uriStr += "&body_html=" + BodyBox.Text;
-            if (PostState.organizations.Count > 0)
+            if (PostState.organizations.Count == 0)
             {
-                foreach (string orgz in PostState.organizations)
-                {
-                    uriStr += "&organization_ids[]=" + orgz;
-                }
-                int time = (int)(TimeSlider.Value * 3600);
-                if (TimeBox.IsChecked == true)
-                {
-                    uriStr += "&delayed_sms_at=" + time;
-                }
-                WebClient submitWebClient = new WebClient();
-                Uri uri = new Uri(uriStr);
-                submitWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(Submitted);
-                submitWebClient.UploadStringAsync(uri, "POST", string.Empty);
+                MessageBox.Show("所选发送组织为空!");
+                return;
             }
-            else
-            {
-                MessageBox.Show("组织列表为空!");
-            }
-        }
+            SubmitButton.IsEnabled = false;
+            int time = (int)(TimeSlider.Value * 3600);
+            Uri uri = UriString.GetPostUri(TitleBox.Text, BodyBox.Text, (TimeBox.IsChecked == true ? (int?)time : null));
 
+            WebClient submitWebClient = new WebClient();
+            submitWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(Submitted);
+            submitWebClient.UploadStringAsync(uri, "POST", string.Empty);
+        }
+       
         private void Submitted(object sender, UploadStringCompletedEventArgs e)
         {
             if (e.Error != null)
             {
                 MessageBox.Show(e.Error.Message);
+                SubmitButton.IsEnabled = true;
             }
             else
             {

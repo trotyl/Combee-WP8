@@ -116,20 +116,9 @@ namespace Combee
         // 此代码在重新激活应用程序时不执行
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
-            IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
-
-            if (settings.Contains("private_token"))
+            if (CurrentUser.IsLogin())
             {
-                if (!settings.Contains("name") || !settings.Contains("id") || !settings.Contains("private_token"))
-                {
-                    Json.GetCurrentUser();
-                }
-                else
-                {
-                    ThisUser.name = (string)IsolatedStorageSettings.ApplicationSettings["name"];
-                    ThisUser.id = (string)IsolatedStorageSettings.ApplicationSettings["id"];
-                    ThisUser.private_token = (string)IsolatedStorageSettings.ApplicationSettings["private_token"];
-                }
+                CurrentUser.Read();
             }
         }
 
@@ -143,20 +132,9 @@ namespace Combee
             //    App.ViewModel.LoadData();
             //}
 
-            IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
-
-            if (settings.Contains("private_token"))
+            if (CurrentUser.IsLogin())
             {
-                if (!settings.Contains("name") || !settings.Contains("id") || !settings.Contains("private_token"))
-                {
-                    Json.GetCurrentUser();
-                }
-                else
-                {
-                    ThisUser.name = (string)IsolatedStorageSettings.ApplicationSettings["name"];
-                    ThisUser.id = (string)IsolatedStorageSettings.ApplicationSettings["id"];
-                    ThisUser.private_token = (string)IsolatedStorageSettings.ApplicationSettings["private_token"];
-                }
+                CurrentUser.Read();
             }
 
         }

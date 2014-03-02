@@ -56,27 +56,19 @@ namespace Combee
                 //获取组织资料
                 WebClient orgzWebClient = new WebClient();
                 orgzWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedOrganizations);
-                Uri uri = new Uri(Json.host + "organizations/" + id + Json.rear + ThisUser.private_token);
-
-                orgzWebClient.DownloadStringAsync(uri);
+                orgzWebClient.DownloadStringAsync(UriString.GetOrganizationUri(id));
             }
             {
                 //获取组织的下级组织
                 WebClient childrenWebClient = new WebClient();
                 childrenWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedChildren);
-                Uri uri = new Uri(Json.host + "organizations/" + id + "/children" + Json.rear + ThisUser.private_token);
-
-                childrenWebClient.DownloadStringAsync(uri);
-
+                childrenWebClient.DownloadStringAsync(UriString.GetOrganizationChildrenUri(id));
             }
             {
                 //获取组织的人员
                 WebClient userWebClient = new WebClient();
                 userWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedMembers);
-                Uri uri = new Uri(Json.host + "organizations/" + id + "/members" + Json.rear + ThisUser.private_token);
-
-                userWebClient.DownloadStringAsync(uri);
-                
+                userWebClient.DownloadStringAsync(UriString.GetOrganizationMembersUri(id));
             }
         }
 
@@ -92,20 +84,7 @@ namespace Combee
                 for (int i = 0; i < arr.Count(); i++)
                 {
                     JObject o = JObject.Parse(arr[i].ToString());
-                    Organizations orgz = new Organizations();
-
-                    orgz.Id = (string)o["id"];
-                    orgz.Name = (string)o["name"];
-                    orgz.CreatedAt = (DateTime)o["created_at"];
-                    orgz.Avatar = (string)o["avatar"];
-                    orgz.DisplayAvatar = @"https://combee.co" + orgz.Avatar;
-                    orgz.IsAvatarLocal = false;
-                    orgz.ParentId = (string)o["parent_id"];
-                    orgz.Members = (string)o["members"];
-                    orgz.Bio = null;
-                    orgz.Header = null;
-                    orgz.InIt = false;
-                    orgz.JoinedAt = DateTime.Now;
+                    Organizations orgz = Network.GetOrganization(o, false);
 
                     App.NewViewModel.AddOrganizationsItem(orgz);
                 }
@@ -125,12 +104,9 @@ namespace Combee
                 for (int i = 0; i < arr.Count(); i++)
                 {
                     JObject o = JObject.Parse(arr[i].ToString());
-                    Users user = new Users();
-
-                    user.Id = (string)o["id"];
-                    user.Name = (string)o["name"];
-                    user.CreatedAt = (DateTime)o["created_at"];
-
+                    Users user = Network.GetUser(o);
+                    
+                   
                 }
             }
         }

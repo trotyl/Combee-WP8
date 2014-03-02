@@ -68,7 +68,7 @@ namespace BindingData.ViewModel
 
         // 当前页面组织集合
         private ObservableCollection<Organizations> _organizationsItems;
-        public ObservableCollection<Organizations> OrganizationsItems 
+        public ObservableCollection<Organizations> OrganizationsItems
         {
             get { return _organizationsItems; }
             set
@@ -104,7 +104,7 @@ namespace BindingData.ViewModel
 
         // 当前页面评论集合
         private ObservableCollection<Comment> _commentItems;
-        public ObservableCollection<Comment> CommentItems 
+        public ObservableCollection<Comment> CommentItems
         {
             get { return _commentItems; }
             set
@@ -168,7 +168,7 @@ namespace BindingData.ViewModel
 
                 // 制定在数据库中对所有组织项目的查询.
                 var OrganizationsItemsInDB = from Organizations o in myDB.OrganizationsTable
-                                             where o.InIt == true
+                                             where o.Belong == true
                                              orderby o.Name
                                              select o;
 
@@ -208,7 +208,7 @@ namespace BindingData.ViewModel
                     myDB.SubmitChanges();
 
                     int i = 0;
-                    foreach(Receipts rpt in AllReceiptsItems)
+                    foreach (Receipts rpt in AllReceiptsItems)
                     {
                         if (rpt.CreatedAt > newRpt.CreatedAt)
                             i++;
@@ -228,7 +228,7 @@ namespace BindingData.ViewModel
                         if (theRpt.AuthorAvatar != newRpt.AuthorAvatar)
                         {
                             theRpt.AuthorAvatar = newRpt.AuthorAvatar;
-                            theRpt.DisplayAvatar = newRpt.AuthorAvatar;
+                            theRpt.DisplayAvatar = @"https://combee.co" + newRpt.AuthorAvatar;
                             theRpt.IsAvatarLocal = false;
                         }
                         theRpt.AuthorName = newRpt.AuthorName;
@@ -246,7 +246,7 @@ namespace BindingData.ViewModel
                 Storage.SaveAvatar(newRpt.AuthorAvatar);
             }
         }
- 
+
         // 从数据库和集合中清除一个优信项目.
         public void DeleteReceiptItem(Receipts rpt)
         {
@@ -266,50 +266,61 @@ namespace BindingData.ViewModel
 
         #region Organizations相关方法
         // 在数据库和集合中添加一个组织项目.
-        public void AddOrganizationsItem(Organizations newOrgz)
+        public void AddOrganizationsItem(Organizations orgz)
         {
             lock (thisLock)
             {
-                var query = from orgz in myDB.OrganizationsTable
-                            where orgz.Id == newOrgz.Id
-                            select orgz;
+                var query = from o in myDB.OrganizationsTable
+                            where o.Id == orgz.Id
+                            select o;
 
                 if (query.Count() == 0)
                 {
                     // 在数据上下文中添加一个组织项目.
-                    myDB.OrganizationsTable.InsertOnSubmit(newOrgz);
+                    myDB.OrganizationsTable.InsertOnSubmit(orgz);
 
                     // 在数据库中保存更改.
                     myDB.SubmitChanges();
 
-                    if (newOrgz.InIt)
+                    if (orgz.Belong == true)
                     {
                         // 在所有可观测集合中添加一个新的组织项目.
-                        AllOrganizationsItems.Add(newOrgz);
+                        AllOrganizationsItems.Add(orgz);
                     }
                     else
                     {
-                        
+                        OrganizationsItems.Add(orgz);
                     }
                 }
 
                 else
                 {
                     // 从DataContext中取出该Receipts
-                    Organizations theOrgz = myDB.OrganizationsTable.First(r => r.Id == newOrgz.Id);
+                    Organizations theOrgz = myDB.OrganizationsTable.First(r => r.Id == orgz.Id);
 
-                    if (!theOrgz.Equals(newOrgz))
+                    if (!theOrgz.Equals(orgz))
                     {
-                        if (theOrgz.Avatar != newOrgz.Avatar)
+                        if (theOrgz.Avatar != orgz.Avatar)
                         {
-                            theOrgz.Avatar = newOrgz.Avatar;
-                            theOrgz.DisplayAvatar = newOrgz.Avatar;
+                            theOrgz.Avatar = orgz.Avatar;
+                            theOrgz.DisplayAvatar = orgz.Avatar;
                             theOrgz.IsAvatarLocal = false;
                         }
-                        theOrgz.Name = newOrgz.Name;
-                        theOrgz.Bio = newOrgz.Bio;
-                        theOrgz.Members = newOrgz.Members;
-                        theOrgz.ParentId = newOrgz.ParentId;
+                        if (orgz.Bio != null)
+                        {
+                            theOrgz.Bio = orgz.Bio;
+                        }
+                        if (orgz.Header != null)
+                        {
+                            theOrgz.Header = orgz.Header;
+                        }
+                        if (orgz.JoinedAt != null)
+                        {
+                            theOrgz.JoinedAt = orgz.JoinedAt;
+                        }
+                        theOrgz.Name = orgz.Name;
+                        theOrgz.Members = orgz.Members;
+                        theOrgz.ParentId = orgz.ParentId;
 
                         // 在数据库中保存更改.
                         myDB.SubmitChanges();
@@ -317,12 +328,9 @@ namespace BindingData.ViewModel
                 }
             }
 
-            if (newOrgz.IsAvatarLocal == false)
+            if (orgz.IsAvatarLocal == false)
             {
-                //Task.Run(() =>
-                //{
-                    Storage.SaveAvatar(newOrgz.Avatar);
-                //});
+                Storage.SaveAvatar(orgz.Avatar);
             }
 
         }
@@ -398,7 +406,7 @@ namespace BindingData.ViewModel
             {
                 //Task.Run(() =>
                 //{
-                    Storage.SaveAvatar(newUser.Avatar);
+                Storage.SaveAvatar(newUser.Avatar);
                 //});
             }
 
@@ -440,7 +448,7 @@ namespace BindingData.ViewModel
                 }
 
                 var query_conversation = from cov in myDB.ConversationsTable
-                                         where cov.OriginatorAvatar == avatar
+                                         where cov.LastAvatar == avatar
                                          select cov;
 
                 foreach (Conversations c in query_conversation)
@@ -505,10 +513,10 @@ namespace BindingData.ViewModel
 
                     if (!theCov.Equals(newCov))
                     {
-                        if (theCov.OriginatorAvatar != newCov.OriginatorAvatar)
+                        if (theCov.LastAvatar != newCov.LastAvatar)
                         {
-                            theCov.OriginatorAvatar = newCov.OriginatorAvatar;
-                            theCov.DisplayAvatar = newCov.OriginatorAvatar;
+                            theCov.LastAvatar = newCov.LastAvatar;
+                            theCov.DisplayAvatar = newCov.LastAvatar;
                             theCov.IsAvatarLocal = false;
                         }
                         theCov.Body = newCov.Body;
@@ -524,14 +532,8 @@ namespace BindingData.ViewModel
             }
             if (newCov.IsAvatarLocal == false)
             {
-                //Task.Run(() =>
-                //{
-                    Storage.SaveAvatar(newCov.OriginatorAvatar);
-                //});
+                Storage.SaveAvatar(newCov.LastAvatar);
             }
-
         }
-
     }
-
 }

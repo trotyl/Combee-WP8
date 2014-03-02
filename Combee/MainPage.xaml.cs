@@ -53,31 +53,18 @@ namespace Combee
             IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
 
             // 判断当前是否含有token
-            if (!settings.Contains("private_token"))
+            if (!CurrentUser.IsLogin())
             {
-                if (!PhoneApplicationService.Current.State.ContainsKey("logined"))
-                {
-                    NavigationService.Navigate(new Uri("/Combee;component/Login.xaml", UriKind.Relative));
-                }
+                NavigationService.Navigate(new Uri("/Combee;component/Login.xaml", UriKind.Relative));
             }
             else
             {
-                //获取用户信息
-                if (!settings.Contains("name") || !settings.Contains("id") || !settings.Contains("private_token"))
-                {
-                    Json.GetCurrentUser();
-                }
-                else
-                {
-                    ThisUser.name = (string)IsolatedStorageSettings.ApplicationSettings["name"];
-                    ThisUser.id = (string)IsolatedStorageSettings.ApplicationSettings["id"];
-                    ThisUser.private_token = (string)IsolatedStorageSettings.ApplicationSettings["private_token"];
-                }
+                Network.GetAsyncAll();
 
                 // 首次进入程序导航选项
                 if (!settings.Contains("entered"))
                 {
-                    Json.GetAsyncAll();
+                    Network.GetAsyncAll();
 
                     settings.Add("entered", "true");
                     settings.Save();
@@ -151,16 +138,7 @@ namespace Combee
 
         private void RenewButton_Click(object sender, EventArgs e)
         {
-            IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
-
-            if (!settings.Contains("name") || !settings.Contains("id"))
-            {
-                Json.GetCurrentUser();
-            }
-            else
-            {
-                Json.GetAsyncAll();
-            }
+            Network.GetAsyncAll();
         }
 
         private void NewPostButton_Click(object sender, EventArgs e)

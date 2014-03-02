@@ -30,20 +30,12 @@ namespace Combee
             //加载正文信息
             string id = NavigationContext.QueryString["id"];
 
-            var query = from Receipts rpt in App.NewViewModel.myDB.ReceiptsTable
-                        where rpt.PostId == id
-                        select rpt;
-            if (query.Count() != 0)
+            Receipts r = Storage.FindReceipt(id);
+            if (r != null)
             {
-                Receipts r = query.First();
                 TitleTextBlock.Text = r.Title;
                 FromTextBlock.Text = r.AuthorName;
-
-                IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForApplication();
-                IsolatedStorageFileStream fileStream = isoFile.OpenFile(Storage.GetSmallImage(r.AuthorAvatar), FileMode.Open, FileAccess.Read);
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.SetSource(fileStream);
-                AvatarImage.Source = bitmap;
+                AvatarImage.Source = Storage.GetImageSource(r.AuthorAvatar);
 
                 string rawHtml = string.Empty;
                 rawHtml += "<html><body bgcolor=\"#34495E\"><p>";
@@ -54,9 +46,8 @@ namespace Combee
                 ContentBrowser.NavigateToString(rawHtml);
 
                 WebClient readWebClient = new WebClient();
-                Uri uri = new Uri(Json.host + "receipts/" + r.Id + "/read" + Json.rear + ThisUser.private_token);
                 readWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(PutedRead);
-                readWebClient.UploadStringAsync(uri, "PUT", string.Empty);
+                readWebClient.UploadStringAsync(UriString.GetReceiptReadUri(r.Id), "PUT", string.Empty);
 
                 if (r.FormId != null)
                 {
@@ -66,8 +57,7 @@ namespace Combee
 
                     WebClient formWebClient = new WebClient();
                     formWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedForm);
-                    uri = new Uri(Json.host + "forms/" + r.FormId + Json.rear + ThisUser.private_token);
-                    formWebClient.DownloadStringAsync(uri);
+                    formWebClient.DownloadStringAsync(UriString.GetFormUri(r.FormId));
                 }
             }
 
@@ -75,16 +65,13 @@ namespace Combee
             {
                 WebClient newWebClient = new WebClient();
                 newWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedPost);
-                Uri uri = new Uri(Json.host + "posts" + @"/" + id + Json.rear + ThisUser.private_token);
-
-                newWebClient.DownloadStringAsync(uri);
+                newWebClient.DownloadStringAsync(UriString.GetSinglePostUri(id));
             }
             App.NewViewModel.CommentItems.Clear();
 
             WebClient commentsWebClient = new WebClient();
             commentsWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedComments);
-            Uri theUri = new Uri(Json.host + "posts/" + id + "/comments" + Json.rear + ThisUser.private_token);
-            commentsWebClient.DownloadStringAsync(theUri);
+            commentsWebClient.DownloadStringAsync(UriString.GetCommentsUri(id));
         }
 
         private void RetrievedForm(object sender, DownloadStringCompletedEventArgs e)
@@ -316,9 +303,8 @@ namespace Combee
                 Receipts r = query.First();
                 
                 WebClient readWebClient = new WebClient();
-                Uri uri = new Uri(Json.host + "receipts/" + r.Id + "/archived" + Json.rear + ThisUser.private_token);
                 readWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(PutedRead);
-                readWebClient.UploadStringAsync(uri, "PUT", string.Empty);
+                readWebClient.UploadStringAsync(UriString.GetReceiptArchivedUri(r.Id), "PUT", string.Empty);
 
                 App.NewViewModel.DeleteReceiptItem(r);
                 NavigationService.GoBack();
@@ -422,39 +408,18 @@ namespace Combee
 
         private void SubmitButton_Click(object sender, EventArgs e)
         {
-            string uriStr = Json.host + "forms/" + Form.id + "/collection" + Json.rear + ThisUser.private_token;
             foreach (FormItem item in Form.list)
             {
-                if (item.ready || !item.required)
-                {
-                    if (item._type == "Field::CheckBox")
-                    {
-                        string[] strs = item.value.Split('_');
-                        foreach (string str in strs)
-                        {
-                            if (str != string.Empty)
-                            {
-                                string itemStr = "&entities[" + item.identifier + "][]=" + str;
-                                uriStr += itemStr;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        string itemStr = "&entities[" + item.identifier + "]=" + item.value;
-                        uriStr += itemStr;
-                    }
-                }
-                else
+                if (!item.ready && item.required)
                 {
                     MessageBox.Show("表单未填写完整");
-                    break;
+                    return;
                 }
             }
+            SubmitButton.IsEnabled = false;
             WebClient submitWebClient = new WebClient();
-            Uri uri = new Uri(uriStr);
             submitWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(Submitted);
-            submitWebClient.UploadStringAsync(uri, "POST", string.Empty);
+            submitWebClient.UploadStringAsync(UriString.GetFormCollectionUri(Form.id), "POST", string.Empty);
 
         }
 
@@ -463,10 +428,7 @@ namespace Combee
             if (e.Error != null)
             {
                 MessageBox.Show(e.Error.Message);
-            }
-            else
-            {
-                
+                SubmitButton.IsEnabled = true;
             }
         }
 

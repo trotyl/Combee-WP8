@@ -275,10 +275,10 @@ namespace BindingData.Model
         }
 
         //发送时间
-        private DateTime _createdAt;
+        private DateTime? _createdAt;
 
         [Column]
-        public DateTime CreatedAt
+        public DateTime? CreatedAt
         {
             get { return _createdAt; }
             set
@@ -391,6 +391,21 @@ namespace BindingData.Model
                 NotifyPropertyChanging("Phone");
                 _phone = value;
                 NotifyPropertyChanged("Phone");
+            }
+        }
+
+        // 用户电话
+        private string _organizations;
+
+        [Column]
+        public string organizations
+        {
+            get { return _organizations; }
+            set
+            {
+                NotifyPropertyChanging("organizations");
+                _organizations = value;
+                NotifyPropertyChanged("organizations");
             }
         }
 
@@ -563,10 +578,10 @@ namespace BindingData.Model
         }
 
         // 用户创建时间
-        private DateTime _createdAt;
+        private DateTime? _createdAt;
 
         [Column]
-        public DateTime CreatedAt
+        public DateTime? CreatedAt
         {
             get { return _createdAt; }
             set
@@ -651,10 +666,10 @@ namespace BindingData.Model
         }
 
         // 组织创建时间
-        private DateTime _createdAt;
+        private DateTime? _createdAt;
 
         [Column]
-        public DateTime CreatedAt
+        public DateTime? CreatedAt
         {
             get { return _createdAt; }
             set
@@ -677,6 +692,21 @@ namespace BindingData.Model
                 NotifyPropertyChanging("Avatar");
                 _avatar = value;
                 NotifyPropertyChanged("Avatar");
+            }
+        }
+
+        // 组织来自人员
+        private bool _belong;
+
+        [Column]
+        public bool Belong
+        {
+            get { return _belong; }
+            set
+            {
+                NotifyPropertyChanging("Belong");
+                _belong = value;
+                NotifyPropertyChanged("Belong");
             }
         }
 
@@ -741,10 +771,10 @@ namespace BindingData.Model
         }
 
         // 组织的用户加入时间
-        private DateTime _joinedAt;
+        private DateTime? _joinedAt;
 
         [Column]
-        public DateTime JoinedAt
+        public DateTime? JoinedAt
         {
             get { return _joinedAt; }
             set
@@ -752,21 +782,6 @@ namespace BindingData.Model
                 NotifyPropertyChanging("JoinedAt");
                 _joinedAt = value;
                 NotifyPropertyChanged("JoinedAt");
-            }
-        }
-
-        // 组织的用户加入时间
-        private bool _inIt;
-
-        [Column]
-        public bool InIt
-        {
-            get { return _inIt; }
-            set
-            {
-                NotifyPropertyChanging("InIt");
-                _inIt = value;
-                NotifyPropertyChanged("InIt");
             }
         }
 
@@ -873,10 +888,10 @@ namespace BindingData.Model
         }
 
         //会话创建时间
-        private DateTime _createdAt;
+        private DateTime? _createdAt;
 
         [Column]
-        public DateTime CreatedAt
+        public DateTime? CreatedAt
         {
             get { return _createdAt; }
             set
@@ -891,10 +906,10 @@ namespace BindingData.Model
         }
 
         //会话更新时间
-        private DateTime _updatedAt;
+        private DateTime? _updatedAt;
 
         [Column]
-        public DateTime UpdatedAt
+        public DateTime? UpdatedAt
         {
             get { return _updatedAt; }
             set
@@ -922,6 +937,24 @@ namespace BindingData.Model
                     NotifyPropertyChanging("ParticipantsId");
                     _participantsId = value;
                     NotifyPropertyChanged("ParticipantsId");
+                }
+            }
+        }
+
+        //会话更新人员名称
+        private string _lastName;
+
+        [Column]
+        public string LastName
+        {
+            get { return _lastName; }
+            set
+            {
+                if (_lastName != value)
+                {
+                    NotifyPropertyChanging("LastName");
+                    _lastName = value;
+                    NotifyPropertyChanged("LastName");
                 }
             }
         }
@@ -963,19 +996,19 @@ namespace BindingData.Model
         }
 
         //会话发起人头像
-        private string _originatorAvatar;
+        private string _lastAvatar;
 
         [Column]
-        public string OriginatorAvatar
+        public string LastAvatar
         {
-            get { return _originatorAvatar; }
+            get { return _lastAvatar; }
             set
             {
-                if (_originatorAvatar != value)
+                if (_lastAvatar != value)
                 {
-                    NotifyPropertyChanging("OriginatorAvatar");
-                    _originatorAvatar = value;
-                    NotifyPropertyChanged("OriginatorAvatar");
+                    NotifyPropertyChanging("LastAvatar");
+                    _lastAvatar = value;
+                    NotifyPropertyChanged("LastAvatar");
                 }
             }
         }
@@ -1092,10 +1125,10 @@ namespace BindingData.Model
         }
 
         //评论创建时间
-        private DateTime _createdAt;
+        private DateTime? _createdAt;
 
         [Column]
-        public DateTime CreatedAt
+        public DateTime? CreatedAt
         {
             get { return _createdAt; }
             set
@@ -1262,15 +1295,13 @@ namespace BindingData.Model
         // 给Organizations项指定一个表
         public Table<Organizations> OrganizationsTable;
 
-        // 给Organizations项指定一个表
-        public Table<Organizations> AllOrganizationsTable;
-
         // 给People项指定一个表
         public Table<Users> UsersTable;
 
         // 给Conversations项指定一个表
         public Table<Conversations> ConversationsTable;
 
+        // 给Comment项指定一个表
         public Table<Comment> CommentTable;
 
     }

@@ -11,29 +11,243 @@ using System.Windows.Threading;
 using System.Windows.Media.Imaging;
 using System.Windows;
 using System.ComponentModel;
+using BindingData.Model;
+using BindingData.ViewModel;
+using Newtonsoft.Json.Linq;
 
 namespace Combee
 {
-    class ThisUser
+    class CurrentUser
     {
-        public static string name = string.Empty;
-        public static string id = string.Empty;
-        public static string email = string.Empty;
-        public static DateTime created_at = DateTime.Now;
-        public static string avatar = string.Empty;
-        public static string phone = string.Empty;
-        public static string private_token = string.Empty;
+        private static bool? login = null;
+        private static int? count = null;
+        private static string name = null;
+        private static string id = null;
+        private static string email = null;
+        private static DateTime? created_at = null;
+        private static string avatar = null;
+        private static string phone = null;
+        private static string private_token = null;
 
-        public static void SetValue(string _id, string _name, string _email, DateTime _created_at, string _avatar, string _phone, string _private_token)
-        {
-            id = _id;
-            name = _name;
-            email = _email;
-            created_at = _created_at;
-            avatar = _avatar;
-            phone = _phone;
-            private_token = _private_token;
+        public static void SetLogin(bool _login) { login = _login; Save(); }
+        public static void SetCount(int? _count) { count = _count; Save(); }
+        public static void SetName(string _name) { name = _name; Save(); }
+        public static void SetId(string _id) { id = _id; Save(); }
+        public static void SetEmail(string _email) { email = _email; Save(); }
+        public static void SetCreatedAt(DateTime? _created_at) { created_at = _created_at; Save(); }
+        public static void SetAvatar(string _avatar) { avatar = _avatar; Save(); }
+        public static void SetPhone(string _phone) { phone = _phone; Save(); }
+        public static void SetPrivate_token(string _private_token) { private_token = _private_token; Save(); }
+
+        public static bool IsLogin() 
+        { 
+            if(login == null || login == false)
+                return false;
+            return true;
         }
+
+        public static bool IsFirst()
+        {
+            if (count == null || count == 0)
+                return true;
+            return false;
+        }
+
+        public static string GetName() { return name; }
+        public static string GetId() { return id; }
+        public static string GetEmail() { return email; }
+        public static DateTime? GetCreatedAt() { return created_at; }
+        public static string GetAvatar() { return avatar; }
+        public static string GetPhone() { return phone; }
+        public static string GetPrivate_token() { return private_token; }
+
+        public static void Login(JObject o)
+        {
+            SetLogin(true);
+            SetCount(0);
+            SetId((string)o["id"]);
+            SetName((string)o["name"]);
+            SetEmail((string)o["email"]);
+            SetCreatedAt((DateTime?)o["created_at"]);
+            SetAvatar((string)o["avatar"]);
+            SetPhone((string)o["phone"]);
+            SetPrivate_token((string)o["private_token"]);
+
+            Save();
+        }
+
+        public static void Logout()
+        {
+            SetLogin(false);
+            SetCount(null);
+            SetId(null);
+            SetName(null);
+            SetEmail(null);
+            SetCreatedAt(null);
+            SetAvatar(null);
+            SetPhone(null);
+            SetPrivate_token(null);
+
+            Clear();
+        }
+
+        private static void Save()
+        {
+            IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+
+            if (!settings.Contains("login"))
+            {
+                settings.Add("login", login);
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings["login"] = login;
+            }
+
+            if (!settings.Contains("count"))
+            {
+                settings.Add("count", count);
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings["count"] = count;
+            }
+
+            if (!settings.Contains("id"))
+            {
+                settings.Add("id", id);
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings["id"] = id;
+            }
+
+            if (!settings.Contains("name"))
+            {
+                settings.Add("name", name);
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings["name"] = name;
+            }
+
+            if (!settings.Contains("email"))
+            {
+                settings.Add("email", email);
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings["email"] = email;
+            }
+
+            if (!settings.Contains("created_at"))
+            {
+                settings.Add("created_at", created_at);
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings["created_at"] = created_at;
+            }
+
+            if (!settings.Contains("avatar"))
+            {
+                settings.Add("avatar", avatar);
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings["avatar"] = avatar;
+            }
+
+            if (!settings.Contains("phone"))
+            {
+                settings.Add("phone", phone);
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings["phone"] = phone;
+            }
+
+            if (!settings.Contains("private_token"))
+            {
+                settings.Add("private_token", private_token);
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings["private_token"] = private_token;
+            }
+        }
+
+        private static void Clear()
+        {
+            IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+
+            if (settings.Contains("login"))
+            {
+                IsolatedStorageSettings.ApplicationSettings["login"] = false;
+            }
+
+            if (settings.Contains("count"))
+            {
+                settings.Remove("count");
+            }
+
+            if (settings.Contains("id"))
+            {
+                settings.Remove("id");
+            }
+
+            if (settings.Contains("name"))
+            {
+                settings.Remove("name");
+            }
+
+            if (settings.Contains("email"))
+            {
+                settings.Remove("email");
+            }
+
+            if (settings.Contains("created_at"))
+            {
+                settings.Remove("created_at");
+            }
+
+            if (settings.Contains("avatar"))
+            {
+                settings.Remove("avatar");
+            }
+
+            if (settings.Contains("phone"))
+            {
+                settings.Remove("phone");
+            }
+
+            if (settings.Contains("private_token"))
+            {
+                settings.Remove("private_token");
+            }
+        }
+
+        public static bool Read()
+        {
+            try
+            {
+                IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+                id = (string)IsolatedStorageSettings.ApplicationSettings["id"];
+                name = (string)IsolatedStorageSettings.ApplicationSettings["name"];
+                email = (string)IsolatedStorageSettings.ApplicationSettings["email"];
+                created_at = (DateTime?)IsolatedStorageSettings.ApplicationSettings["created_at"];
+                avatar = (string)IsolatedStorageSettings.ApplicationSettings["avatar"];
+                phone = (string)IsolatedStorageSettings.ApplicationSettings["phone"];
+                private_token = (string)IsolatedStorageSettings.ApplicationSettings["private_token"];
+                return true;
+            }
+            catch (Exception)
+            {
+                Logout();
+                return false;
+            }
+        }
+
     }
 
     class Storage
@@ -169,6 +383,29 @@ namespace Combee
         {
             str = str.Replace("mobile_", string.Empty);
             return str;
+        }
+
+        internal static Receipts FindReceipt(string id)
+        {
+            var query = from Receipts rpt in App.NewViewModel.myDB.ReceiptsTable
+                        where rpt.PostId == id
+                        select rpt;
+            if (query.Count() != 0)
+            {
+                return query.First();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        internal static System.Windows.Media.ImageSource GetImageSource(string path)
+        {
+            IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForApplication();
+            IsolatedStorageFileStream fileStream = isoFile.OpenFile(Storage.GetSmallImage(path), FileMode.Open, FileAccess.Read);
+            BitmapImage bitmap = new BitmapImage();
+            return bitmap;
         }
     }
 }

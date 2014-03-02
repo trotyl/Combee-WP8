@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using Newtonsoft.Json.Linq;
 using System.IO.IsolatedStorage;
 using System.IO;
+using System.Collections.ObjectModel;
 
 namespace Combee
 {
@@ -45,18 +46,23 @@ namespace Combee
                 //获取用户资料
                 WebClient newWebClient = new WebClient();
                 newWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedUsers);
-                Uri uri = new Uri(Json.host + "users" + @"/" + id + Json.rear + ThisUser.private_token);
-
-                newWebClient.DownloadStringAsync(uri);
-
+                newWebClient.DownloadStringAsync(UriString.GetUserUri(id));
             }
             {
                 //获取用户组织
+                var query_user = from user in App.NewViewModel.myDB.UsersTable
+                                         where user.Id == NavigationContext.QueryString["id"]
+                                         select user;
+                string user_orgz = query_user.First().organizations;
+                var query_orgz = from orgz in App.NewViewModel.myDB.OrganizationsTable
+                                 where user_orgz.IndexOf(orgz.Id) != -1
+                                 select orgz;
+
+                App.NewViewModel.OrganizationsItems = new ObservableCollection<Organizations>(query_orgz);
+
                 WebClient webClient = new WebClient();
                 webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedOrganizations);
-                Uri uri = new Uri(Json.host + "users" + @"/" + id + @"/organizations" + Json.rear + ThisUser.private_token);
-
-                webClient.DownloadStringAsync(uri);
+                webClient.DownloadStringAsync(UriString.GetUserOrganizationsUri(id));
 
                 App.NewViewModel.OrganizationsItems.Clear();
             }
@@ -143,24 +149,10 @@ namespace Combee
                 for (int i = 0; i < arr.Count(); i++)
                 {
                     JObject o = JObject.Parse(arr[i].ToString());
-                    Organizations orgz = new Organizations();
-
-                    orgz.Id = (string)o["id"];
-                    orgz.Name = (string)o["name"];
-                    orgz.CreatedAt = (DateTime)o["created_at"];
-                    orgz.Avatar = (string)o["avatar"];
-                    orgz.DisplayAvatar = @"https://combee.co" + (string)o["avatar"];
-                    orgz.IsAvatarLocal = false;
-                    orgz.ParentId = (string)o["parent_id"];
-                    orgz.Members = (string)o["members"];
-                    orgz.Bio = null;
-                    orgz.Header = null;
-                    orgz.InIt = false;
-                    orgz.JoinedAt = DateTime.Now;
+                    Organizations orgz = Network.GetOrganization(o, false);
 
                     Storage.SaveAvatar((string)o["avatar"]);
                     App.NewViewModel.AddOrganizationsItem(orgz);
-                    App.NewViewModel.OrganizationsItems.Add(orgz);
                 }
             }
         }
