@@ -100,7 +100,7 @@
          -->
         
             <!--Panorama 控件-->
-        <phone:Panorama x:Name="MainPagePanorama" Margin="0,0,0,0" FontFamily="Portable User Interface">
+        <phone:Panorama x:Name="MainPagePanorama" Margin="0,0,0,0" FontFamily="Portable User Interface" SelectionChanged="MainPagePanorama_SelectionChanged">
             <!--全景控件标题,只能含单个控件-->
             <phone:Panorama.Title>
                 <Image Source="/Combee;component/Assets/Combee.png" Margin="100,50,0,10"/>

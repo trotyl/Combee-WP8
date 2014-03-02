@@ -9,6 +9,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using Microsoft.Phone.Info;
+using Microsoft.Phone.Net.NetworkInformation;
 
 namespace Combee
 {
@@ -43,6 +44,12 @@ namespace Combee
             body += DeviceStatus.IsKeyboardPresent.ToString() + "\n";
             body += DeviceStatus.IsKeyboardDeployed.ToString() + "\n";
             body += DeviceStatus.PowerSource.ToString() + "\n";
+            body += DeviceNetworkInformation.CellularMobileOperator + "\n";
+            body += DeviceNetworkInformation.IsNetworkAvailable.ToString() + "\n";
+            body += DeviceNetworkInformation.IsCellularDataEnabled.ToString() + "\n";
+            body += DeviceNetworkInformation.IsCellularDataRoamingEnabled.ToString() + "\n";
+            body += DeviceNetworkInformation.IsWiFiEnabled.ToString() + "\n";
+
             body += "\n请输入反馈内容：\n";
             emailComposeTask.Body = body;
             emailComposeTask.To = "support@combee.co";

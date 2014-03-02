@@ -40,7 +40,12 @@ namespace Combee
         public static void SetPrivate_token(string _private_token) { private_token = _private_token; Save(); }
 
         public static bool IsLogin() 
-        { 
+        {
+            IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+            if(settings.Contains("login"))
+            {
+                login = (bool?)settings["login"];
+            }
             if(login == null || login == false)
                 return false;
             return true;
@@ -52,7 +57,8 @@ namespace Combee
                 return true;
             return false;
         }
-
+    
+        public static int? GetCount() { return count; }
         public static string GetName() { return name; }
         public static string GetId() { return id; }
         public static string GetEmail() { return email; }
@@ -72,8 +78,6 @@ namespace Combee
             SetAvatar((string)o["avatar"]);
             SetPhone((string)o["phone"]);
             SetPrivate_token((string)o["private_token"]);
-
-            Save();
         }
 
         public static void Logout()
@@ -101,7 +105,7 @@ namespace Combee
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings["login"] = login;
+                settings["login"] = login;
             }
 
             if (!settings.Contains("count"))
@@ -110,7 +114,7 @@ namespace Combee
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings["count"] = count;
+                settings["count"] = count;
             }
 
             if (!settings.Contains("id"))
@@ -119,7 +123,7 @@ namespace Combee
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings["id"] = id;
+                settings["id"] = id;
             }
 
             if (!settings.Contains("name"))
@@ -128,7 +132,7 @@ namespace Combee
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings["name"] = name;
+                settings["name"] = name;
             }
 
             if (!settings.Contains("email"))
@@ -137,7 +141,7 @@ namespace Combee
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings["email"] = email;
+                settings["email"] = email;
             }
 
             if (!settings.Contains("created_at"))
@@ -146,7 +150,7 @@ namespace Combee
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings["created_at"] = created_at;
+                settings["created_at"] = created_at;
             }
 
             if (!settings.Contains("avatar"))
@@ -155,7 +159,7 @@ namespace Combee
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings["avatar"] = avatar;
+                settings["avatar"] = avatar;
             }
 
             if (!settings.Contains("phone"))
@@ -164,7 +168,7 @@ namespace Combee
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings["phone"] = phone;
+                settings["phone"] = phone;
             }
 
             if (!settings.Contains("private_token"))
@@ -173,8 +177,10 @@ namespace Combee
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings["private_token"] = private_token;
+                settings["private_token"] = private_token;
             }
+
+            settings.Save();
         }
 
         private static void Clear()
@@ -225,6 +231,8 @@ namespace Combee
             {
                 settings.Remove("private_token");
             }
+
+            settings.Save();
         }
 
         public static bool Read()
@@ -232,13 +240,15 @@ namespace Combee
             try
             {
                 IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
-                id = (string)IsolatedStorageSettings.ApplicationSettings["id"];
-                name = (string)IsolatedStorageSettings.ApplicationSettings["name"];
-                email = (string)IsolatedStorageSettings.ApplicationSettings["email"];
-                created_at = (DateTime?)IsolatedStorageSettings.ApplicationSettings["created_at"];
-                avatar = (string)IsolatedStorageSettings.ApplicationSettings["avatar"];
-                phone = (string)IsolatedStorageSettings.ApplicationSettings["phone"];
-                private_token = (string)IsolatedStorageSettings.ApplicationSettings["private_token"];
+                count = (int?)settings["count"];
+                login = (bool?)settings["login"];
+                id = (string)settings["id"];
+                name = (string)settings["name"];
+                email = (string)settings["email"];
+                created_at = (DateTime?)settings["created_at"];
+                avatar = (string)settings["avatar"];
+                phone = (string)settings["phone"];
+                private_token = (string)settings["private_token"];
                 return true;
             }
             catch (Exception)

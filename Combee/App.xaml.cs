@@ -150,6 +150,7 @@ namespace Combee
         // 此代码在停用应用程序时不执行
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
+            // 确保所需的应用程序状态在此处保持不变。
         }
 
         // 导航失败时执行的代码

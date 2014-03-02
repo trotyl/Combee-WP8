@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -10,6 +9,7 @@ using Microsoft.Phone.Shell;
 using Newtonsoft.Json.Linq;
 using System.IO.IsolatedStorage;
 using Microsoft.Phone.Tasks;
+using System.Net;
 
 namespace Combee
 {
@@ -49,23 +49,6 @@ namespace Combee
             }
         }
 
-        private void GetSession(object sender, UploadStringCompletedEventArgs e)
-        {
-            if(e.Error != null)
-            {
-                MessageBox.Show(e.Error.Message, "登录失败!", MessageBoxButton.OK);
-                UserNameTextBox.IsEnabled = true;
-                PasswordTextBox.IsEnabled = true;
-            }
-            else
-            {
-                JObject o = JObject.Parse(e.Result);
-                CurrentUser.Login(o);
-
-                NavigationService.GoBack();
-            }
-        }
-
         private void HelpButton_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/Combee;component/Help.xaml", UriKind.Relative));
@@ -99,11 +82,36 @@ namespace Combee
                 //尝试登录以获取用户信息
                 WebClient client = new WebClient();
                 client.UploadStringCompleted += new UploadStringCompletedEventHandler(GetSession);
-                Uri uri = UriString.GetLoginUri(UserNameTextBox.Text, PasswordTextBox.Password);
+                //Uri uri = UriString.GetLoginUri(UserNameTextBox.Text, PasswordTextBox.Password);
                 //MessageBox.Show(arg.ToString());
-                client.UploadStringAsync(uri, "POST", "", (object)string.Empty);
+                PostArgs arg = new PostArgs();
+                arg["login"] = UserNameTextBox.Text;
+                arg["password"] = PasswordTextBox.Password;
+                Uri uri = new Uri(UriString.host + "session.json?" + arg.ToString());
+
+                client.UploadStringAsync(uri, "");
             }
 
+        }
+
+        private void GetSession(object sender, UploadStringCompletedEventArgs e)
+        {
+            if(e.Error != null)
+            {
+                MessageBox.Show(e.Error.Message, "登录失败!", MessageBoxButton.OK);
+                UserNameTextBox.IsEnabled = true;
+                PasswordTextBox.IsEnabled = true;
+                //JObject o = JObject.Parse("{\"id\":\"5296ec473df68e4148000058\",\"name\":\"余泽江\",\"email\":\"yzj1995@vip.qq.com\",\"created_at\":\"2013-11-28T15:09:59+08:00\",\"avatar\":\"/uploads/avatar/user/5296ec473df68e4148000058_0f63a2d613062e59871b3a22836ef4d3.jpg\",\"phone\":\"15528258522\",\"private_token\":\"FHs5LTD4MpEfrxYEfHnT\"}");
+                //CurrentUser.Login(o);
+                //NavigationService.GoBack();
+            }
+            else
+            {
+                JObject o = JObject.Parse(e.Result);
+                CurrentUser.Login(o);
+
+                NavigationService.GoBack();
+            }
         }
 
         private void RegisterBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)

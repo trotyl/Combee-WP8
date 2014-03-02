@@ -55,23 +55,19 @@ namespace Combee
             // 判断当前是否含有token
             if (!CurrentUser.IsLogin())
             {
-                NavigationService.Navigate(new Uri("/Combee;component/Login.xaml", UriKind.Relative));
+                NavigationService.Navigate(new Uri("/Combee;component/LoginPage.xaml", UriKind.Relative));
             }
             else
             {
                 Network.GetAsyncAll();
 
                 // 首次进入程序导航选项
-                if (!settings.Contains("entered"))
+                if (CurrentUser.IsFirst())
                 {
-                    Network.GetAsyncAll();
-
-                    settings.Add("entered", "true");
-                    settings.Save();
-                    var result = MessageBox.Show("欢迎使用Combee，是否进入新功能介绍？", "首次登录提示", MessageBoxButton.OKCancel);
-                    if (result == MessageBoxResult.OK)
+                    CurrentUser.SetCount(CurrentUser.GetCount() + 1);
+                    MessageBoxResult res = MessageBox.Show("欢迎使用Combee，是否进入新功能介绍？", "首次登录提示", MessageBoxButton.OKCancel);
+                    if (res == MessageBoxResult.OK)
                     {
-                        // cancel the closure of the form.
                         NavigationService.Navigate(new Uri("/Combee;component/Introduction.xaml", UriKind.Relative));
                     }
                 }
@@ -149,6 +145,17 @@ namespace Combee
         private void StackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             NavigationService.Navigate(new Uri("/Combee;component/Organization.xaml?id=" + ((StackPanel)sender).Tag.ToString(), UriKind.Relative));
+        }
+
+        private void MainPagePanorama_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (MainPagePanorama.SelectedIndex)
+            {
+                case 0:
+                    AppBar
+                case 1:
+
+            }
         }
     }
 

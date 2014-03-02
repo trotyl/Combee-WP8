@@ -129,7 +129,7 @@ namespace Combee
             PostArgs arg = new PostArgs();
             arg["login"] = login;
             arg["password"] = password;
-            Uri uri = new Uri(host + "session?" + arg.ToString());
+            Uri uri = new Uri(host + "session.json?" + arg.ToString());
             return uri;
         }
     }
