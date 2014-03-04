@@ -51,7 +51,7 @@ namespace Combee
 
         private void HelpButton_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Combee;component/Help.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Combee;component/HelpPage.xaml", UriKind.Relative));
         }
 
         private void WebSiteButton_Click(object sender, EventArgs e)

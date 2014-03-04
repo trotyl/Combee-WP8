@@ -10,16 +10,11 @@ using Microsoft.Phone.Shell;
 
 namespace Combee
 {
-    public partial class Introduction : PhoneApplicationPage
+    public partial class ConversationPage : PhoneApplicationPage
     {
-        public Introduction()
+        public ConversationPage()
         {
             InitializeComponent();
-        }
-
-        private void EnterButton_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.GoBack();
         }
     }
 }

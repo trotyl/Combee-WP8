@@ -10,9 +10,9 @@ using Microsoft.Phone.Shell;
 
 namespace Combee
 {
-    public partial class NewPost : PhoneApplicationPage
+    public partial class NewPostPage : PhoneApplicationPage
     {
-        public NewPost()
+        public NewPostPage()
         {
             InitializeComponent();
             this.DataContext = App.NewViewModel;

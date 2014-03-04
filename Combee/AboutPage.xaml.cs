@@ -13,9 +13,9 @@ using Microsoft.Phone.Net.NetworkInformation;
 
 namespace Combee
 {
-    public partial class About : PhoneApplicationPage
+    public partial class AboutPage : PhoneApplicationPage
     {
-        public About()
+        public AboutPage()
         {
             InitializeComponent();
         }
@@ -61,7 +61,7 @@ namespace Combee
 
         private void IntroductionButton_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Combee;component/Introduction.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Combee;component/IntroductionPage.xaml", UriKind.Relative));
         }
     }
 }

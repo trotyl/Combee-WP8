@@ -12,65 +12,86 @@ namespace Combee.ViewModels
 {
     public class ItemViewModel : INotifyPropertyChanged
     {
-        private string _lineOne;
+        private string _title;
         /// <summary>
         /// 示例 ViewModel 属性；此属性在视图中用于使用绑定显示它的值。
         /// </summary>
         /// <returns></returns>
-        public string LineOne
+        public string Title
         {
             get
             {
-                return _lineOne;
+                return _title;
             }
             set
             {
-                if (value != _lineOne)
+                if (value != _title)
                 {
-                    _lineOne = value;
-                    NotifyPropertyChanged("LineOne");
+                    _title = value;
+                    NotifyPropertyChanged("Title");
                 }
             }
         }
 
-        private string _lineTwo;
+        private string _authorName;
         /// <summary>
         /// 示例 ViewModel 属性；此属性在视图中用于使用绑定显示它的值。
         /// </summary>
         /// <returns></returns>
-        public string LineTwo
+        public string AuthorName
         {
             get
             {
-                return _lineTwo;
+                return _authorName;
             }
             set
             {
-                if (value != _lineTwo)
+                if (value != _authorName)
                 {
-                    _lineTwo = value;
-                    NotifyPropertyChanged("LineTwo");
+                    _authorName = value;
+                    NotifyPropertyChanged("AuthorName");
                 }
             }
         }
 
-        private string _lineThree;
+        private DateTime? _createdAt;
         /// <summary>
         /// 示例 ViewModel 属性；此属性在视图中用于使用绑定显示它的值。
         /// </summary>
         /// <returns></returns>
-        public string LineThree
+        public DateTime? CreatedAt
         {
             get
             {
-                return _lineThree;
+                return _createdAt;
             }
             set
             {
-                if (value != _lineThree)
+                if (value != _createdAt)
                 {
-                    _lineThree = value;
-                    NotifyPropertyChanged("LineThree");
+                    _createdAt = value;
+                    NotifyPropertyChanged("CreatedAt");
+                }
+            }
+        }
+
+        private string _body;
+        /// <summary>
+        /// 示例 ViewModel 属性；此属性在视图中用于使用绑定显示它的值。
+        /// </summary>
+        /// <returns></returns>
+        public string Body
+        {
+            get
+            {
+                return _body;
+            }
+            set
+            {
+                if (value != _body)
+                {
+                    _body = value;
+                    NotifyPropertyChanged("Body");
                 }
             }
         }

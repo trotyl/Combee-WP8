@@ -16,9 +16,9 @@ using Combee.ViewModels;
 
 namespace Combee
 {
-    public partial class Post : PhoneApplicationPage
+    public partial class ReceiptPage : PhoneApplicationPage
     {
-        public Post()
+        public ReceiptPage()
         {
             InitializeComponent();
 

@@ -995,7 +995,7 @@ namespace BindingData.Model
             }
         }
 
-        //会话发起人头像
+        //会话最后人头像
         private string _lastAvatar;
 
         [Column]
@@ -1009,6 +1009,24 @@ namespace BindingData.Model
                     NotifyPropertyChanging("LastAvatar");
                     _lastAvatar = value;
                     NotifyPropertyChanged("LastAvatar");
+                }
+            }
+        }
+
+        //会话发起人头像
+        private string _originatorAvatar;
+
+        [Column]
+        public string OriginatorAvatar
+        {
+            get { return _originatorAvatar; }
+            set
+            {
+                if (_originatorAvatar != value)
+                {
+                    NotifyPropertyChanging("OriginatorAvatar");
+                    _originatorAvatar = value;
+                    NotifyPropertyChanged("OriginatorAvatar");
                 }
             }
         }

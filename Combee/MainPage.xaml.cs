@@ -68,7 +68,7 @@ namespace Combee
                     MessageBoxResult res = MessageBox.Show("欢迎使用Combee，是否进入新功能介绍？", "首次登录提示", MessageBoxButton.OKCancel);
                     if (res == MessageBoxResult.OK)
                     {
-                        NavigationService.Navigate(new Uri("/Combee;component/Introduction.xaml", UriKind.Relative));
+                        NavigationService.Navigate(new Uri("/Combee;component/IntroductionPage.xaml", UriKind.Relative));
                     }
                 }
 
@@ -80,24 +80,34 @@ namespace Combee
         {
         }
 
-        private void AboutButton_Click(object sender, EventArgs e)
+        private void ReceiptStackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Combee;component/About.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Combee;component/ReceiptPage.xaml?id="+((StackPanel)sender).Tag.ToString(), UriKind.Relative));
         }
 
-        private void fullUmsgStackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/Combee;component/Post.xaml?id="+((StackPanel)sender).Tag.ToString(), UriKind.Relative));
-        }
-
-        private void LikeButton_Click(object sender, EventArgs e)
+        private void LikeMenu_Click(object sender, EventArgs e)
         {
             MarketplaceReviewTask marketplaceReviewTask = new MarketplaceReviewTask();
 
             marketplaceReviewTask.Show();
         }
 
-        private void UserImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void AboutMenu_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Combee;component/AboutPage.xaml", UriKind.Relative));
+        }
+
+         private void SettingMenu_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Combee;component/SettingPage.xaml", UriKind.Relative));
+        }
+
+        private void NewConversationButton_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Combee;component/ConversationPage.xaml", UriKind.Relative));            
+        }
+
+       private void UserImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             string id = ((Image)sender).Tag.ToString();
             NavigationService.Navigate(new Uri("/Combee;component/Users.xaml?id=" + id, UriKind.Relative));
@@ -127,11 +137,6 @@ namespace Combee
             }
         }
 
-        private void ApplicationBarMenuItem_Click(object sender, EventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/Combee;component/Test.xaml", UriKind.Relative));
-        }
-
         private void RenewButton_Click(object sender, EventArgs e)
         {
             Network.GetAsyncAll();
@@ -139,12 +144,11 @@ namespace Combee
 
         private void NewPostButton_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Combee;component/NewPost.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Combee;component/NewPostPage.xaml", UriKind.Relative));
         }
-
         private void StackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Combee;component/Organization.xaml?id=" + ((StackPanel)sender).Tag.ToString(), UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Combee;component/OrganizationPage.xaml?id=" + ((StackPanel)sender).Tag.ToString(), UriKind.Relative));
         }
 
         private void MainPagePanorama_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -152,11 +156,17 @@ namespace Combee
             switch (MainPagePanorama.SelectedIndex)
             {
                 case 0:
-                    AppBar
+                    ApplicationBar = ((ApplicationBar)this.Resources["RptAppBar"]);
+                    break;
                 case 1:
-
+                    ApplicationBar = ((ApplicationBar)this.Resources["OrgzAppBar"]);
+                    break;
+                case 2:
+                    ApplicationBar = ((ApplicationBar)this.Resources["CovAppBar"]);
+                    break;
             }
         }
+
     }
 
 }

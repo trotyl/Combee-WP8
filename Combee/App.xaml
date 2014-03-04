@@ -20,26 +20,26 @@
         <!--<DataTemplate x:Key="UmsgListTemplate">
             <StackPanel Name="AllUmsgStackPanel" Orientation="Horizontal" Margin="12,2,0,4" Height="105" Background="#FF51697A">
                 <Image Name="UserImage" Tag="{Binding AuthorId, Mode=OneWay}" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Tap="UserImage_Tap" Stretch="UniformToFill"/>
-                <StackPanel Name="FullUmsgStackPanel" Tag="{Binding PostId, Mode=OneWay}" Width="311" Margin="8,-7,0,0" Tap="fullUmsgStackPanel_Tap" IsHitTestVisible="True">
-                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0" IsHitTestVisible="True">
-                        <TextBlock Name="UserNameTextBlock" Text="{Binding AuthorName, Mode=OneWay}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" IsHitTestVisible="True" />
-                        <Border Visibility="Collapsed" BorderThickness="1" Width="24" Height="24" Margin="0,4,0,0" BorderBrush="#FFFFC700" Background="White" IsHitTestVisible="True" />
+                <StackPanel Name="FullUmsgStackPanel" Tag="{Binding PostId, Mode=OneWay}" Width="311" Margin="8,-7,0,0" Tap="fullUmsgStackPanel_Tap" >
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0" >
+                        <TextBlock Name="UserNameTextBlock" Text="{Binding AuthorName, Mode=OneWay}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}"  />
+                        <Border Visibility="Collapsed" BorderThickness="1" Width="24" Height="24" Margin="0,4,0,0" BorderBrush="#FFFFC700" Background="White"  />
                     </StackPanel>
-                    <TextBlock Name="TimeTextBlock" Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-32,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" FontFamily="Portable User Interface" IsHitTestVisible="True" />
-                    <TextBlock Name="TitleTextBlock" Text="{Binding Title, Mode=OneWay}" TextWrapping="Wrap" Margin="10,4,0,0"  Height="25" TextTrimming="None" FontFamily="Portable User Interface" IsHitTestVisible="True" />
-                    <TextBlock Name="ContentTextBlock" Text="{Binding Body, Mode=OneWay}" TextWrapping="NoWrap" Margin="10,4,5,0" Style="{StaticResource PhoneTextSubtleStyle}" Height="28" TextTrimming="WordEllipsis" IsHitTestVisible="True" />
+                    <TextBlock Name="TimeTextBlock" Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-32,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" FontFamily="Portable User Interface"  />
+                    <TextBlock Name="TitleTextBlock" Text="{Binding Title, Mode=OneWay}" TextWrapping="Wrap" Margin="10,4,0,0"  Height="25" TextTrimming="None" FontFamily="Portable User Interface"  />
+                    <TextBlock Name="ContentTextBlock" Text="{Binding Body, Mode=OneWay}" TextWrapping="NoWrap" Margin="10,4,5,0" Style="{StaticResource PhoneTextSubtleStyle}" Height="28" TextTrimming="WordEllipsis"  />
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="OrgzListTemplate">
             <StackPanel Orientation="Horizontal" Tag="{Binding Id, Mode=OneWay}" Margin="12,2,0,4" Height="105" Background="#FF51697A" Tap="StackPanel_Tap">
-                <Image Name="OrgzImage" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Stretch="UniformToFill" IsHitTestVisible="True"/>
-                <StackPanel Width="311" Margin="8,-2,0,0" IsHitTestVisible="True">
-                    <TextBlock Text="{Binding Name, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" IsHitTestVisible="True" />
-                    <StackPanel Orientation="Horizontal" IsHitTestVisible="True">
-                        <TextBlock Text="{Binding Members, StringFormat='\{0}人 ', Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextSubtleStyle}" FontSize="{StaticResource PhoneFontSizeNormal}" IsHitTestVisible="True" />
-                        <TextBlock Text="{Binding Bio, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextSubtleStyle}" FontSize="{StaticResource PhoneFontSizeNormal}" IsHitTestVisible="True" />
+                <Image Name="OrgzImage" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Stretch="UniformToFill" />
+                <StackPanel Width="311" Margin="8,-2,0,0" >
+                    <TextBlock Text="{Binding Name, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}"  />
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock Text="{Binding Members, StringFormat='\{0}人 ', Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextSubtleStyle}" FontSize="{StaticResource PhoneFontSizeNormal}"  />
+                        <TextBlock Text="{Binding Bio, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextSubtleStyle}" FontSize="{StaticResource PhoneFontSizeNormal}"  />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

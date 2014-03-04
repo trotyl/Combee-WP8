@@ -11,9 +11,9 @@ using Microsoft.Phone.Tasks;
 
 namespace Combee
 {
-    public partial class Help : PhoneApplicationPage
+    public partial class HelpPage : PhoneApplicationPage
     {
-        public Help()
+        public HelpPage()
         {
             InitializeComponent();
         }

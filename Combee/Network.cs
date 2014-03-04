@@ -108,9 +108,12 @@ namespace Combee
                 for (int i = 0; i < arr.Count; i++)
                 {
                     JObject o = JObject.Parse(arr[i].ToString());
-                    Conversations cov = GetConversation(o);
+                    Users org, lst;
+                    Conversations cov = GetConversation(o, out org, out lst);
 
                     App.NewViewModel.AddConversationsItem(cov);
+                    App.NewViewModel.AddUsersItem(org);
+                    App.NewViewModel.AddUsersItem(lst);
                 }
             }
         }
@@ -184,9 +187,11 @@ namespace Combee
             return orgz;
         }
 
-        internal static Conversations GetConversation(JObject o)
+        internal static Conversations GetConversation(JObject o, out Users org, out Users lst)
         {
             Conversations cov = new Conversations();
+            org = new Users();
+            lst = new Users();
 
             cov.Id = (string)o["id"];
             cov.Body = (string)o["last_message"]["body"];
@@ -200,16 +205,43 @@ namespace Combee
             cov.ParticipantsName = string.Empty;
             for (int ii = 0; ii < o["participants"].Count(); ii++)
             {
-                if ((string)o["participants"][ii]["name"] != CurrentUser.GetName())
+                if ((string)o["participants"][ii]["id"] != CurrentUser.GetId())
                 {
                     cov.ParticipantsName += ((string)o["participants"][ii]["name"] + " ");
                 }
             }
+            cov.OriginatorAvatar = (string)o["originator"]["avatar"];
             cov.LastAvatar = (string)o["last_message"]["user"]["avatar"];
+            if (o["participants"].Count() <= 2)
+            {
+                cov.DisplayAvatar = @"https://combee.co" + cov.OriginatorAvatar;
+            }
+            else
+            {
+                cov.DisplayAvatar = @"https://combee.co" + cov.LastAvatar;               
+            }
+
             cov.LastName = (string)o["last_message"]["user"]["name"];
-            cov.OriginatorId = (string)o["originator"]["id"];
-            cov.DisplayAvatar = @"https://combee.co" + cov.LastAvatar;
             cov.IsAvatarLocal = false;
+            cov.OriginatorId = (string)o["originator"]["id"];
+
+            lst.Id = (string)o["last_message"]["user"]["id"];
+            lst.Name = (string)o["last_message"]["user"]["id"];
+            lst.Email = (string)o["last_message"]["user"]["email"];
+            lst.CreatedAt = (DateTime?)o["last_message"]["user"]["created_at"];
+            lst.Avatar = (string)o["last_message"]["user"]["avatar"];
+            lst.DisplayAvatar = @"https://combee.co" + lst.Avatar;
+            lst.IsAvatarLocal = false;
+            lst.Phone = (string)o["last_message"]["user"]["phone"];
+
+            org.Id = (string)o["originator"]["id"];
+            org.Name = (string)o["originator"]["name"];
+            org.Email = (string)o["originator"]["email"];
+            org.CreatedAt = (DateTime?)o["originator"]["created_at"];
+            org.Avatar = (string)o["originator"]["avatar"];
+            org.DisplayAvatar = @"https://combee.co" + org.Avatar;
+            org.IsAvatarLocal = false;
+            org.Phone = (string)o["originator"]["phone"];
 
             return cov;
         }

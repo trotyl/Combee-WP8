@@ -12,9 +12,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Combee
 {
-    public partial class Organization : PhoneApplicationPage
+    public partial class OrganizationPage : PhoneApplicationPage
     {
-        public Organization()
+        public OrganizationPage()
         {
             InitializeComponent();
         }
@@ -27,12 +27,12 @@ namespace Combee
 
         private void fullUmsgStackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Combee;component/Post.xaml?id=" + ((StackPanel)sender).Tag.ToString(), UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Combee;component/ReceiptPage.xaml?id=" + ((StackPanel)sender).Tag.ToString(), UriKind.Relative));
         }
 
         private void StackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Combee;component/Organization.xaml?id=" + ((StackPanel)sender).Tag.ToString(), UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Combee;component/OrganizationPage.xaml?id=" + ((StackPanel)sender).Tag.ToString(), UriKind.Relative));
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
