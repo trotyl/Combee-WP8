@@ -22,41 +22,38 @@
 
         <!--优信列表控件模版-->
         <DataTemplate x:Key="UmsgListTemplate">
-            <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Background="#FF51697A">
+            <StackPanel Orientation="Vertical" Margin="12,2,0,8" Background="#FF51697A">
                 <StackPanel Orientation="Horizontal">
-                    <Image Tag="{Binding AuthorId, Mode=OneWay}" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Tap="UserImage_Tap" Stretch="UniformToFill"/>
-                    <StackPanel>
-                        <TextBlock Text="{Binding Title, Mode=OneWay}" TextWrapping="NoWrap"  Margin="10,4,0,0" TextTrimming="WordEllipsis"  FontFamily="Microsoft YaHei" FontSize="20"/>
-                        <Grid>
+                    <Image Tag="{Binding AuthorId, Mode=OneWay}" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="50" Height="50" Margin="9,9,9,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
+                    <StackPanel Width="340" Margin="0,6,0,0" Tag="{Binding PostId, Mode=OneWay}" Tap="ReceiptStackPanel_Tap">
+                        <TextBlock Text="{Binding Title, Mode=OneWay}" TextWrapping="NoWrap"  Margin="10,4,0,0" TextTrimming="WordEllipsis"  FontFamily="Microsoft YaHei" FontSize="24" FontWeight="Bold"/>
+                        <Grid Margin="0,5,0,0">
                             <TextBlock Text="{Binding AuthorName, Mode=OneWay}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeSmall}" />
-                            <TextBlock Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" FontSize="{StaticResource PhoneFontSizeSmall}" HorizontalAlignment="Right" FontFamily="Portable User Interface"  />
-                                
+                            <TextBlock Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" FontSize="{StaticResource PhoneFontSizeSmall}" HorizontalAlignment="Right" FontFamily="Portable User Interface"  />     
                         </Grid>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Tag="{Binding PostId, Mode=OneWay}" Width="311" Margin="8,-7,0,0" Tap="ReceiptStackPanel_Tap" >
-                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0" >
-                    </StackPanel>
-                    <TextBlock Text="{Binding Body, Mode=OneWay}" TextWrapping="NoWrap" Margin="10,4,5,0" Style="{StaticResource PhoneTextSubtleStyle}" Height="28" TextTrimming="WordEllipsis"  />
+                <StackPanel Tag="{Binding PostId, Mode=OneWay}" Margin="0,10,0,0" Tap="ReceiptStackPanel_Tap" >
+                    <TextBlock Text="{Binding Body, Mode=OneWay}" TextWrapping="Wrap"  Margin="10,0,10,5" Style="{StaticResource PhoneTextSubtleStyle}" />
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
         <!--组织列表控件模版-->
         <DataTemplate x:Key="OrgzListTemplate">
-            <StackPanel Orientation="Horizontal" Tag="{Binding Id, Mode=OneWay}" Margin="12,2,0,4" Height="105" Background="#FF51697A" Tap="StackPanel_Tap">
-                <Image Name="OrgzImage" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Stretch="UniformToFill" />
+            <StackPanel Orientation="Horizontal" Tag="{Binding Id, Mode=OneWay}" Margin="12,2,0,8" Background="#FF51697A" Tap="StackPanel_Tap">
+                <Image Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="50" Height="50" Margin="9,9,0,0" VerticalAlignment="Top"  Stretch="UniformToFill" />
                 <StackPanel Width="311" Margin="8,-2,0,0" >
-                    <TextBlock Text="{Binding Name, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}"  />
+                    <TextBlock Text="{Binding Name, Mode=OneWay}" TextWrapping="Wrap" Margin="10,5,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeMedium}" FontWeight="Bold"  />
                     <StackPanel Orientation="Horizontal" >
-                        <TextBlock Text="{Binding Members, StringFormat='\{0}人 ', Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextSubtleStyle}" FontSize="{StaticResource PhoneFontSizeNormal}"  />
-                        <TextBlock Text="{Binding Bio, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextSubtleStyle}" FontSize="{StaticResource PhoneFontSizeNormal}"  />
+                        <TextBlock Text="{Binding Members, StringFormat='\{0}人 ', Mode=OneWay}" TextWrapping="Wrap" Margin="10,0,0,5" Style="{StaticResource PhoneTextSubtleStyle}" FontSize="{StaticResource PhoneFontSizeNormal}"  />
+                        <TextBlock Text="{Binding Bio, Mode=OneWay}" Visibility="Collapsed" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextSubtleStyle}" FontSize="{StaticResource PhoneFontSizeNormal}"  />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
         <!--会话列表控件模版-->
         <DataTemplate x:Key="CovListTemplate">
-            <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Background="#FF51697A">
+            <StackPanel Orientation="Horizontal" Margin="12,2,0,8" Height="105" Background="#FF51697A">
                 <Image Name="CovImage" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Stretch="UniformToFill" />
                 <StackPanel Width="311" Margin="8,-2,0,0">
                     <TextBlock Name="ParticipantsNameTextBlock" Text="{Binding ParticipantsName, Mode=OneWay}" Margin="10,8,80,0" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" TextTrimming="WordEllipsis" />
@@ -140,7 +137,7 @@
             提取属性的值。
          -->
         
-            <!--Panorama 控件-->
+        <!--Panorama 控件-->
         <phone:Panorama x:Name="MainPagePanorama" Margin="0,0,0,0" FontFamily="Portable User Interface" SelectionChanged="MainPagePanorama_SelectionChanged">
             <!--全景控件标题,只能含单个控件-->
             <phone:Panorama.Title>
@@ -151,20 +148,29 @@
             </phone:Panorama.Background>
 
             <!--Panorama 项目一-->
-            <phone:PanoramaItem x:Name="ReceiptsPanoramaItem" Header="优信" Orientation="Vertical">
-                <!--具有文字环绕的单行列表-->
+            <phone:PanoramaItem x:Name="ReceiptsPanoramaItem" Orientation="Vertical">
+                <phone:PanoramaItem.Header >
+                    <TextBlock Text="优信" FontSize="50"/>
+                </phone:PanoramaItem.Header>
+                
                 <phone:LongListSelector x:Name="RptList" ItemTemplate="{StaticResource UmsgListTemplate}" ItemsSource="{Binding AllReceiptsItems, Mode=OneWay}" Margin="0,-38,-22,2" />
             </phone:PanoramaItem>
 
             <!--Panorama 项目二-->
-            <phone:PanoramaItem x:Name="OrganizationsPanoramaItem" Header="组织" Orientation="Vertical">
-                <!--包含图像占位符和文字环绕并使用带有内容滚动的浮动标题的双线列表-->
-                <phone:LongListSelector x:Name="OrgzList" ItemTemplate="{StaticResource OrgzListTemplate}" ItemsSource="{Binding AllOrganizationsItems, Mode=OneWay}" Margin="0,-38,-22,2" />
+            <phone:PanoramaItem x:Name="OrganizationsPanoramaItem" Orientation="Vertical">
+                <phone:PanoramaItem.Header>
+                    <TextBlock Text="组织" FontSize="50"/>
+                </phone:PanoramaItem.Header>
+
+                <phone:LongListSelector x:Name="OrgzList" ItemTemplate="{StaticResource OrgzListTemplate}" ItemsSource="{Binding AllOrganizationsItems, Mode=OneWay}" Margin="0,-38,-10,2" />
             </phone:PanoramaItem>
 
             <!--Panorama 项目三-->
-            <phone:PanoramaItem x:Name="ConversationsPanoramaItem" Header="私信" Orientation="Vertical">
-                <!--具有大型图像占位符的双倍宽度的全景-->
+            <phone:PanoramaItem x:Name="ConversationsPanoramaItem" Orientation="Vertical">
+                <phone:PanoramaItem.Header>
+                    <TextBlock Text="私信" FontSize="50"/>
+                </phone:PanoramaItem.Header>
+
                 <phone:LongListSelector x:Name="CovList" ItemTemplate="{StaticResource CovListTemplate}" ItemsSource="{Binding AllConversationsItems, Mode=OneWay}" Margin="0,-38,-10,2" />
             </phone:PanoramaItem>
 

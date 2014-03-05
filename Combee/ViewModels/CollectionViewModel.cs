@@ -123,6 +123,7 @@ namespace BindingData.ViewModel
             myDB = new MyDataContext(toDoDBConnectionString);
 
         }
+        public TheViewModel() { }
 
         // 把数据上下文中的变化写入数据库.
         public void SaveChangesToDB()

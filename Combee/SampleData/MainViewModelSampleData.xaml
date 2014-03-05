@@ -1,15 +1,24 @@
-﻿<vm:MainViewModel
+﻿<vm:TheViewModel
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="clr-namespace:Combee.ViewModels"
-    SampleProperty="示例文本属性值">
+    xmlns:vm="clr-namespace:BindingData.ViewModel"
+    xmlns:md="clr-namespace:BindingData.Model"
+    >
 
-    <vm:MainViewModel.AllReceiptsItems>
-        <vm:ItemViewModel Title="设计一" AuthorName="Maecenas praesent accumsan bibendum" Body="Maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur"/>
-        <vm:ItemViewModel Title="设计二" AuthorName="Dictumst eleifend facilisi faucibus" Body="Pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent"/>
-        <vm:ItemViewModel Title="设计三" AuthorName="Habitant inceptos interdum lobortis" Body="Accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat"/>
-        <vm:ItemViewModel Title="设计四" AuthorName="Nascetur pharetra placerat pulvinar" Body="Pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent accumsan bibendum"/>
-        <vm:ItemViewModel Title="设计五" AuthorName="Sagittis senectus sociosqu suscipit" Body="Dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat pulvinar sagittis"/>
-        <vm:ItemViewModel Title="设计六" AuthorName="Torquent ultrices vehicula volutpat" Body="Senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent accumsan bibendum dictumst eleifend"/>
-    </vm:MainViewModel.AllReceiptsItems>
-</vm:MainViewModel>
+    <vm:TheViewModel.AllReceiptsItems>
+        <md:Receipts Title="设计一" AuthorName="Maecenas" Body="Maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur"/>
+        <md:Receipts Title="设计二" AuthorName="Dictumst" Body="Pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent"/>
+        <md:Receipts Title="设计三" AuthorName="Habitant" Body="Accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat"/>
+        <md:Receipts Title="设计四" AuthorName="Nascetur" Body="Pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent accumsan bibendum"/>
+        <md:Receipts Title="设计五" AuthorName="Sagittis" Body="Dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat pulvinar sagittis"/>
+        <md:Receipts Title="设计六" AuthorName="Torquent" Body="Senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent accumsan bibendum dictumst eleifend"/>
+    </vm:TheViewModel.AllReceiptsItems>
+    <vm:TheViewModel.AllOrganizationsItems>
+        <md:Organizations Name="设计一" Members="Maecenas" />
+        <md:Organizations Name="设计二" Members="Dictumst" />
+        <md:Organizations Name="设计三" Members="Habitant" />
+        <md:Organizations Name="设计四" Members="Nascetur" />
+        <md:Organizations Name="设计五" Members="Sagittis" />
+        <md:Organizations Name="设计六" Members="Torquent" />
+    </vm:TheViewModel.AllOrganizationsItems>
+</vm:TheViewModel>
