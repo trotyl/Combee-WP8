@@ -38,6 +38,7 @@ namespace Combee
                 TitleBlock.Text = r.Title;
                 FromBlock.Text = r.AuthorName;
                 TimeBlock.Text = r.CreatedAt.ToString();
+                ToBlock.Text = "To: 某组织";
                 AvatarImage.Source = Storage.GetImageSource(r.AuthorAvatar);
 
                 TextBlock ContentBlock = new TextBlock() { TextWrapping = TextWrapping.Wrap };
@@ -70,7 +71,7 @@ namespace Combee
                     match = re.Match(source, match.Index + 1);
                 }
                 ContentBlock.Inlines.Add(source.Substring(startidx));
-                ContentGrid.Children.Add(ContentBlock);
+                ContentPanel.Children.Add(ContentBlock);
 
                 if (r.Read == false)
                 {

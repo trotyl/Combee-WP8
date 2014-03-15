@@ -67,7 +67,9 @@
                             <Border Height="1" VerticalAlignment="Bottom" Background="White"/>
                         </Grid>
                     </StackPanel>
-                    <Grid x:Name="ContentGrid" />
+                    <StackPanel x:Name="ContentPanel" >
+                        <TextBlock x:Name="ToBlock" Text="To: WindowsPhone Dev Team" HorizontalAlignment="Right" Margin="0,0,0,10" FontSize="18"/>
+                    </StackPanel>
                     <Grid x:Name="AttachmentGrid" />
                 </StackPanel>
             </phone:PivotItem>
