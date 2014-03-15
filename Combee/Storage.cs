@@ -415,6 +415,7 @@ namespace Combee
             IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForApplication();
             IsolatedStorageFileStream fileStream = isoFile.OpenFile(Storage.GetSmallImage(path), FileMode.Open, FileAccess.Read);
             BitmapImage bitmap = new BitmapImage();
+            bitmap.SetSource(fileStream);
             return bitmap;
         }
     }

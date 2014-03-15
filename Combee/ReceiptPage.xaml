@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:local="clr-namespace:Combee"
+    xmlns:doc="clr-namespace:System.Windows.Documents;assembly=System.Windows"
     mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -45,38 +46,49 @@
     <!--LayoutRoot 是包含所有页面内容的根网格-->
     <Grid x:Name="LayoutRoot" Background="#FF34495E">
         <!--枢轴控件-->
-        <phone:Pivot x:Name="pivot" Title="Combee - 组织消息通知中心">
-            <!--枢轴项一-->
-            <phone:PivotItem Header="正文">
+        <phone:Pivot x:Name="pivot" >
+            <phone:Pivot.Title>
                 <Grid>
-
-                    <StackPanel Grid.Row="0" Margin="12,0,0,28">
-                        <TextBlock x:Name="TitleTextBlock" Text="" TextWrapping="Wrap" Margin="0,0,0,10" FontSize="30"/>
-                        <Grid Height="100">
-                            <Image x:Name="AvatarImage" Margin="0,0,0,0" Width="100" Height="100" HorizontalAlignment="Left" Stretch="UniformToFill" />
-                            <TextBlock x:Name="FromTextBlock" Text="" TextAlignment="Right" Margin="100,0,0,0" Style="{StaticResource PhoneTextNormalStyle}"/>
-                            <Image x:Name="HeaderImage" Margin="100,0,0,0" Stretch="UniformToFill" />
+                    <TextBlock x:Name="TitleBlock" Text="Combee - 组织消息通知中心" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                </Grid>
+            </phone:Pivot.Title>
+            <!--枢轴项一-->
+            <phone:PivotItem Margin="12,0,12,0" >
+                <phone:PivotItem.Header>
+                    <TextBlock Text="内容" FontSize="50" />
+                </phone:PivotItem.Header>
+                <StackPanel>
+                    <StackPanel Grid.Row="0" Margin="0,10,0,0">
+                        <Grid Height="100" Margin="0,0,0,10">
+                            <Border Height="1" VerticalAlignment="Top" Background="White"/>
+                            <Image x:Name="AvatarImage" Margin="10,0,0,0" Width="80" Height="80" HorizontalAlignment="Left" Stretch="UniformToFill" />
+                            <TextBlock x:Name="FromBlock" Text="张建奇" TextAlignment="Left" Margin="120,5,0,0" FontSize="36"/>
+                            <TextBlock x:Name="TimeBlock" Text="2014/3/13 0:13:26" TextAlignment="Left" Margin="120,56,0,0" FontSize="24"/>
+                            <Border Height="1" VerticalAlignment="Bottom" Background="White"/>
                         </Grid>
                     </StackPanel>
-
-                    <phone:WebBrowser x:Name="ContentBrowser" Margin="0,150,0,20" VerticalAlignment="Stretch" Opacity="0" LoadCompleted="ContentBrowser_LoadCompleted" ScrollViewer.VerticalScrollBarVisibility="Auto" IsGeolocationEnabled="True" IsScriptEnabled="True" >
-                        <toolkit:GestureService.GestureListener>
-                            <toolkit:GestureListener Flick="GestureListener_Flick" />
-                        </toolkit:GestureService.GestureListener>
-                    </phone:WebBrowser>
-
-                </Grid>
+                    <Grid x:Name="ContentGrid" />
+                    <Grid x:Name="AttachmentGrid" />
+                </StackPanel>
             </phone:PivotItem>
 
             <!--枢轴项二-->
-            <phone:PivotItem Header="评论">
-                <Grid Margin="0,20,20,0">
-                    <phone:LongListSelector ItemsSource="{Binding CommentItems, Mode=OneWay}" ItemTemplate="{StaticResource CmtListTemplate}" Margin="0,-38,-22,2"/>
+            <phone:PivotItem Margin="12,0,12,0">
+                <phone:PivotItem.Header>
+                    <TextBlock Text="评论" FontSize="50"/>
+                </phone:PivotItem.Header>
+
+                <Grid Margin="0,0,0,0">
+                    <phone:LongListSelector ItemsSource="{Binding CommentItems, Mode=OneWay}" ItemTemplate="{StaticResource CmtListTemplate}" Margin="0,0,0,0"/>
                 </Grid>
             </phone:PivotItem>
 
             <!--枢轴项三-->
-            <phone:PivotItem Header="表单">
+            <phone:PivotItem Margin="12,0,12,0">
+                <phone:PivotItem.Header>
+                    <TextBlock Text="表单" FontSize="50"/>
+                </phone:PivotItem.Header>
+
                 <Grid>
                     <ScrollViewer>
                         <StackPanel x:Name="FormPanel" />

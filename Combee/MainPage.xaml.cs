@@ -59,7 +59,8 @@ namespace Combee
             }
             else
             {
-                Network.GetAsyncAll();
+                if (CurrentUser.IsFirst())
+                    Network.GetAsyncAll();
 
                 // 首次进入程序导航选项
                 if (CurrentUser.IsFirst())

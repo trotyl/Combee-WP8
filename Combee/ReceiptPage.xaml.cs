@@ -13,6 +13,8 @@ using System.IO.IsolatedStorage;
 using System.Windows.Media.Imaging;
 using System.IO;
 using Combee.ViewModels;
+using System.Text.RegularExpressions;
+using System.Windows.Documents;
 
 namespace Combee
 {
@@ -33,21 +35,49 @@ namespace Combee
             Receipts r = Storage.FindReceipt(id);
             if (r != null)
             {
-                TitleTextBlock.Text = r.Title;
-                FromTextBlock.Text = r.AuthorName;
+                TitleBlock.Text = r.Title;
+                FromBlock.Text = r.AuthorName;
+                TimeBlock.Text = r.CreatedAt.ToString();
                 AvatarImage.Source = Storage.GetImageSource(r.AuthorAvatar);
 
-                string rawHtml = string.Empty;
-                rawHtml += "<html><body bgcolor=\"#34495E\"><p>";
-                rawHtml += "<font color=\"#FFFFFF\">";
-                //rawHtml += "";
-                rawHtml += r.BodyHtml;
-                rawHtml += "</p></font></body></html>";
-                ContentBrowser.NavigateToString(rawHtml);
+                TextBlock ContentBlock = new TextBlock() { TextWrapping = TextWrapping.Wrap };
+                Regex re = new Regex(@"<[^>]+>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                string source = r.BodyHtml.Replace("<div>", "").Replace("</div>", "").Replace("<ol>", "").Replace("</ol>", "").Replace("&nbsp;", " ");
+                Match match = re.Match(source);
+                int startidx = 0;
+                bool isBold = false, isItalics = false, isUnderline = false;
+                while (match.Index >= 0 && match.Length > 0)
+                {
+                    ExtractText(ContentBlock, source, startidx, match.Index, re, isBold, isItalics);
+                    startidx = match.Index + match.Length;
+                    bool isEndTag = match.Value.Contains("/");
+                    if (match.Value == "</li>" || match.Value == "<br>")
+                    {
+                        ContentBlock.Inlines.Add(new LineBreak());
+                    }
+                    else if (match.Value == "<b>" || match.Value == "</b>")
+                    {
+                        isBold = !isEndTag;
+                    }
+                    else if (match.Value == "<i>" || match.Value == "</i>" || match.Value == "<em>" || match.Value == "</em>")
+                    {
+                        isItalics = !isEndTag;
+                    }
+                    else if (match.Value == "<u>" || match.Value == "</u>")
+                    {
+                        isUnderline = !isEndTag;
+                    }
+                    match = re.Match(source, match.Index + 1);
+                }
+                ContentBlock.Inlines.Add(source.Substring(startidx));
+                ContentGrid.Children.Add(ContentBlock);
 
-                WebClient readWebClient = new WebClient();
-                readWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(PutedRead);
-                readWebClient.UploadStringAsync(UriString.GetReceiptReadUri(r.Id), "PUT", string.Empty);
+                if (r.Read == false)
+                {
+                    WebClient readWebClient = new WebClient();
+                    readWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(PutedRead);
+                    readWebClient.UploadStringAsync(UriString.GetReceiptReadUri(r.Id), "PUT", string.Empty);
+                }
 
                 if (r.FormId != null)
                 {
@@ -72,6 +102,25 @@ namespace Combee
             WebClient commentsWebClient = new WebClient();
             commentsWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedComments);
             commentsWebClient.DownloadStringAsync(UriString.GetCommentsUri(id));
+        }
+
+        private void ExtractText(TextBlock block, string source, int startidx, int endidx, Regex re, bool isBold, bool isItalics)
+        {
+            string text = source.Substring(startidx, endidx - startidx);
+            text = re.Replace(text, "");
+            if (!isItalics && !isBold)
+            {
+                block.Inlines.Add(text);
+            }
+            else
+            {
+                block.Inlines.Add(new Run()
+                {
+                    FontWeight = (isBold ? FontWeights.Bold : FontWeights.Normal),
+                    FontStyle = (isItalics ? FontStyles.Italic : FontStyles.Normal),
+                    Text = text
+                });
+            }
         }
 
         private void RetrievedForm(object sender, DownloadStringCompletedEventArgs e)
@@ -260,21 +309,9 @@ namespace Combee
             else
             {
                 JObject o = JObject.Parse(e.Result);
-                string rawHtml = string.Empty;
-                rawHtml += "<html><body bgcolor=\"#34495E\"><p>";
-                rawHtml += "<font color=\"#FFFFFF\">";
-                rawHtml += (string)o["body_html"];
-                rawHtml += "</p></font></body></html>";
-                ContentBrowser.NavigateToString(rawHtml);
-                TitleTextBlock.Text = (string)o["title"];
-                FromTextBlock.Text = (string)o["author"]["name"];
+
             }
 
-        }
-
-        private void ContentBrowser_LoadCompleted(object sender, NavigationEventArgs e)
-        {
-            ContentBrowser.Opacity = 1;
         }
 
         private void GestureListener_Flick(object sender, FlickGestureEventArgs e)
