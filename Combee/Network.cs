@@ -126,12 +126,9 @@ namespace Combee
             rpt.Read = (bool)o["read"];
             rpt.Favorited = (bool)o["favorited"];
             rpt.Origin = (bool)o["origin"];
+            rpt.Organizations = o["organizations"].ToString();
+            rpt.Attachments = o["post"]["attachments"].ToString();
             rpt.Title = (string)o["post"]["title"];
-            rpt.OrganizationsId = string.Empty;
-            for (int ii = 0; ii < o["organizations"].Count(); ii++)
-            {
-                rpt.OrganizationsId += ((string)o["organizations"][ii]["id"] + "_");
-            }
             rpt.PostId = (string)o["post"]["id"];
             rpt.Body = (string)o["post"]["body"];
             rpt.BodyHtml = (string)o["post"]["body_html"];

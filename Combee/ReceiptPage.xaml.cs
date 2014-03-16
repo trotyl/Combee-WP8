@@ -15,6 +15,8 @@ using System.IO;
 using Combee.ViewModels;
 using System.Text.RegularExpressions;
 using System.Windows.Documents;
+using Microsoft.Phone.Tasks;
+using System.Windows.Resources;
 
 namespace Combee
 {
@@ -35,21 +37,32 @@ namespace Combee
             Receipts r = Storage.FindReceipt(id);
             if (r != null)
             {
+                if (TitleBlock.Text != string.Empty)
+                    return;
                 TitleBlock.Text = r.Title;
                 FromBlock.Text = r.AuthorName;
                 TimeBlock.Text = r.CreatedAt.ToString();
-                ToBlock.Text = "To: 某组织";
+                userPanel.Tag = r.AuthorId;
+                JArray orgzArray = JArray.Parse(r.Organizations);
+                bool temp = false;
+                ToBlock.Text = "To: ";
+                foreach (JObject o in orgzArray)
+                {
+                    ToBlock.Text += (temp ? "; " : string.Empty);
+                    ToBlock.Text += o["name"];
+                    temp = true;
+                }
                 AvatarImage.Source = Storage.GetImageSource(r.AuthorAvatar);
 
                 TextBlock ContentBlock = new TextBlock() { TextWrapping = TextWrapping.Wrap };
-                Regex re = new Regex(@"<[^>]+>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                Regex re_label = new Regex(@"<[^>]+>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                 string source = r.BodyHtml.Replace("<div>", "").Replace("</div>", "").Replace("<ol>", "").Replace("</ol>", "").Replace("&nbsp;", " ");
-                Match match = re.Match(source);
+                Match match = re_label.Match(source);
                 int startidx = 0;
                 bool isBold = false, isItalics = false, isUnderline = false;
                 while (match.Index >= 0 && match.Length > 0)
                 {
-                    ExtractText(ContentBlock, source, startidx, match.Index, re, isBold, isItalics);
+                    ExtractText(ContentBlock, source, startidx, match.Index, re_label, isBold, isItalics, isUnderline);
                     startidx = match.Index + match.Length;
                     bool isEndTag = match.Value.Contains("/");
                     if (match.Value == "</li>" || match.Value == "<br>")
@@ -68,10 +81,62 @@ namespace Combee
                     {
                         isUnderline = !isEndTag;
                     }
-                    match = re.Match(source, match.Index + 1);
+                    match = re_label.Match(source, match.Index + 1);
                 }
                 ContentBlock.Inlines.Add(source.Substring(startidx));
                 ContentPanel.Children.Add(ContentBlock);
+                Regex re_link = new Regex(@"<a href[^>]+>[^<]+</a>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                Regex re_uri = new Regex(@"http(s)?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                match = re_link.Match(source);
+                if (match.Length > 0)
+                {
+                    TextBlock LinkBlock = new TextBlock() { Text = "打开链接:", Margin = new Thickness(0, 10, 0, 0) };
+                    ContentPanel.Children.Add(LinkBlock);
+                    HyperlinkButton linkButton;
+                    while (match.Length > 0)
+                    {
+                        Match uriMatch = re_uri.Match(match.Value);
+                        linkButton = new HyperlinkButton() { Content = uriMatch.Value, Tag = uriMatch.Value, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left };
+                        linkButton.Tap += linkButton_Tap;
+                        ContentPanel.Children.Add(linkButton);
+                        source = source.Substring(match.Index + 1);
+                        match = re_link.Match(source);
+                    }
+                }
+                else
+                {
+                    Match uriMatch = re_uri.Match(source);
+                    if (uriMatch.Length > 0)
+                    {
+                        TextBlock LinkBlock = new TextBlock() { Text = "打开链接:", Margin = new Thickness(0, 10, 0, 0) };
+                        ContentPanel.Children.Add(LinkBlock);
+                    }
+                    while (uriMatch.Length > 0)
+                    {
+                        HyperlinkButton linkButton;
+                        linkButton = new HyperlinkButton() { Content = uriMatch.Value, Tag = uriMatch.Value, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left };
+                        linkButton.Tap += linkButton_Tap;
+                        ContentPanel.Children.Add(linkButton);
+                        source = source.Substring(uriMatch.Index + 1);
+                        uriMatch = re_link.Match(source);
+                    }
+                }
+
+                JArray attachmentsArray = JArray.Parse(r.Attachments);
+                if (attachmentsArray.Count > 0)
+                {
+                    TextBlock attachBlock = new TextBlock() { Text = "附件(" + attachmentsArray.Count + "):", Margin = new Thickness(0, 20, 0, 0) };
+                    attachmentPanel.Children.Add(attachBlock);
+                }
+                foreach (JObject o in attachmentsArray)
+                {
+                    string file_name = (string)o["file_name"];
+                    string file_size = (string)o["file_size"];
+                    string url = (string)o["url"];
+                    HyperlinkButton linkButton = new HyperlinkButton() { Content = file_name, Tag = url, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left };
+                    linkButton.Tap += linkButton_Tap;
+                    attachmentPanel.Children.Add(linkButton);
+                }
 
                 if (r.Read == false)
                 {
@@ -89,6 +154,22 @@ namespace Combee
                     WebClient formWebClient = new WebClient();
                     formWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedForm);
                     formWebClient.DownloadStringAsync(UriString.GetFormUri(r.FormId));
+                    TextBlock titleBlock = new TextBlock() { Text = Form.title, Margin = new Thickness(10, 10, 0, 0), FontWeight = FontWeights.Bold, FontSize = 24 };
+                    formPanel.Children.Add(titleBlock);
+
+                    //PivotItem formItem = new PivotItem() { Margin = new Thickness(12, 0, 12, 0) };
+                    //TextBlock headerBlock = new TextBlock() { Text = "表单", FontSize = 50 };
+                    //formItem.Header = headerBlock;
+                    //formItem.ContentTemplate = this.formTemplate;
+                    //pivot.Items.Add(formItem);
+                }
+                else
+                {
+                    Form.id = null;
+                    Form.title = null;
+                    Form.list.Clear();
+                    TextBlock titleBlock = new TextBlock() { Text = "该优信不含表单内容~", Margin = new Thickness(10, 10, 0, 0), FontWeight = FontWeights.Bold, FontSize = 24 };
+                    formPanel.Children.Add(titleBlock);
                 }
             }
 
@@ -103,13 +184,29 @@ namespace Combee
             WebClient commentsWebClient = new WebClient();
             commentsWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedComments);
             commentsWebClient.DownloadStringAsync(UriString.GetCommentsUri(id));
+
         }
 
-        private void ExtractText(TextBlock block, string source, int startidx, int endidx, Regex re, bool isBold, bool isItalics)
+
+        private void linkButton_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            string desUri = (string)((HyperlinkButton)sender).Tag;
+            if (desUri.Replace("http", "") == desUri)
+            {
+                desUri = @"https://combee.co" + desUri + "?private_token=" + CurrentUser.GetPrivate_token();
+            }
+
+            WebBrowserTask webBrowserTask = new WebBrowserTask();
+            webBrowserTask.Uri = new Uri(desUri, UriKind.Absolute);
+            webBrowserTask.Show();
+
+        }
+
+        void ExtractText(TextBlock block, string source, int startidx, int endidx, Regex re, bool isBold, bool isItalics, bool isUnderline)
         {
             string text = source.Substring(startidx, endidx - startidx);
             text = re.Replace(text, "");
-            if (!isItalics && !isBold)
+            if (!isItalics && !isBold && !isUnderline)
             {
                 block.Inlines.Add(text);
             }
@@ -119,6 +216,7 @@ namespace Combee
                 {
                     FontWeight = (isBold ? FontWeights.Bold : FontWeights.Normal),
                     FontStyle = (isItalics ? FontStyles.Italic : FontStyles.Normal),
+                    TextDecorations = (isUnderline ? TextDecorations.Underline : null),
                     Text = text
                 });
             }
@@ -155,7 +253,7 @@ namespace Combee
 
                     StackPanel p = new StackPanel();
 
-                    TextBlock b = new TextBlock();
+                    TextBlock b = new TextBlock() { Margin = new Thickness(10, 0, 0, 0) };
                     if (help_text == string.Empty)
                     {
                         b.Text = label;
@@ -258,8 +356,10 @@ namespace Combee
                             }
                     }
                     Form.list.Add(item);
-                    FormPanel.Children.Add(p);
+                    formPanel.Children.Add(p);
                 }
+                Border bdr = new Border() { Height = 100 };
+                formPanel.Children.Add(bdr);
             }
         }
 
@@ -272,23 +372,24 @@ namespace Combee
             else
             {
                 JArray arr = JArray.Parse(e.Result);
-                for (int i = arr.Count() - 1; i >= 0; i--)
+                foreach(JObject o in arr)
                 {
-                    JObject ob = JObject.Parse(arr[i].ToString());
                     Comment cm = new Comment();
 
-                    cm.Id = (string)ob["id"];
-                    cm.Body = (string)ob["body"];
-                    cm.CreatedAt = (DateTime)ob["created_at"];
-                    cm.UserId = (string)ob["user"]["id"];
-                    cm.UserName = (string)ob["user"]["name"];
-                    cm.UserAvatar = (string)ob["user"]["avatar"];
+                    cm.Id = (string)o["id"];
+                    cm.Body = (string)o["body"];
+                    cm.CreatedAt = (DateTime)o["created_at"];
+                    cm.UserId = (string)o["user"]["id"];
+                    cm.UserName = (string)o["user"]["name"];
+                    cm.UserAvatar = (string)o["user"]["avatar"];
                     cm.DisplayAvatar = @"https://combee.co" + cm.UserAvatar;
                     cm.IsAvatarLocal = false;
 
                     Storage.SaveAvatar(cm.UserAvatar);
                     App.NewViewModel.CommentItems.Add(cm);
                 }
+                Comment cmt = new Comment();
+                App.NewViewModel.CommentItems.Add(cmt);
             }
         }
 
@@ -326,11 +427,17 @@ namespace Combee
         private void UserImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             string id = ((Image)sender).Tag.ToString();
-            NavigationService.Navigate(new Uri("/Combee;component/Users.xaml?id=" + id, UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Combee;component/UserPage.xaml?id=" + id, UriKind.Relative));
         }
 
         private void DeletedButton_Click(object sender, EventArgs e)
         {
+            MessageBoxResult mbr = MessageBox.Show("你确定要删除该优信咩..?", "友情提示~", MessageBoxButton.OKCancel);
+            if (mbr == MessageBoxResult.Cancel)
+            {
+                return;
+            }
+
             string id = NavigationContext.QueryString["id"];
 
             var query = from Receipts rpt in App.NewViewModel.myDB.ReceiptsTable
@@ -347,7 +454,6 @@ namespace Combee
                 App.NewViewModel.DeleteReceiptItem(r);
                 NavigationService.GoBack();
             }
-
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -444,8 +550,58 @@ namespace Combee
 
         }
 
+        private void commentButton_Click(object sender, EventArgs e)
+        {
+            commentBox.Visibility = System.Windows.Visibility.Visible;
+            if (pivot.SelectedIndex != 1)
+                pivot.SelectedIndex = 1;
+            ApplicationBar = ((ApplicationBar)this.Resources["cmtgAppBar"]);
+        }
+
+        private void cmtSubmitButton_Click(object sender, EventArgs e)
+        {
+            if (commentBox.Text == string.Empty)
+            {
+                MessageBox.Show("亲~内容不能为空!");
+                return;
+            }
+            string id = NavigationContext.QueryString["id"];
+            Receipts r = Storage.FindReceipt(id);
+
+            WebClient cmtWebClient = new WebClient();
+            cmtWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(Commented);
+            cmtWebClient.UploadStringAsync(UriString.GetReceiptCommentUri(r.PostId, commentBox.Text), string.Empty);
+
+        }
+
+
+        private void commentBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (commentBox.Text == "请在此输入内容~")
+            {
+                commentBox.Text = string.Empty;
+            }
+        }
+
+        private void commentBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (commentBox.Text == string.Empty)
+            {
+                commentBox.Text = "请在此输入内容~";
+            }
+        }
+
+        private void cmtCancelButton_Click(object sender, EventArgs e)
+        {
+            commentBox.Visibility = System.Windows.Visibility.Collapsed;
+            ApplicationBar = ((ApplicationBar)this.Resources["cmtAppBar"]);
+        }
+
         private void SubmitButton_Click(object sender, EventArgs e)
         {
+            if (Form.id == null)
+                return;
+            ((ApplicationBarIconButton)sender).IsEnabled = false;
             foreach (FormItem item in Form.list)
             {
                 if (!item.ready && item.required)
@@ -454,20 +610,75 @@ namespace Combee
                     return;
                 }
             }
-            SubmitButton.IsEnabled = false;
             WebClient submitWebClient = new WebClient();
             submitWebClient.UploadStringCompleted += new UploadStringCompletedEventHandler(Submitted);
             submitWebClient.UploadStringAsync(UriString.GetFormCollectionUri(Form.id), "POST", string.Empty);
 
         }
 
-        private void Submitted(object sender, UploadStringCompletedEventArgs e)
+        private void Commented(object sender, UploadStringCompletedEventArgs e)
         {
             if (e.Error != null)
             {
                 MessageBox.Show(e.Error.Message);
-                SubmitButton.IsEnabled = true;
             }
+            else
+            {
+
+                Comment cmt = new Comment();
+                cmt.Body = commentBox.Text;
+                cmt.CreatedAt = DateTime.Now;
+                cmt.DisplayAvatar = CurrentUser.GetAvatar();
+                cmt.Id = null;
+                cmt.IsAvatarLocal = true;
+                cmt.UserAvatar = CurrentUser.GetAvatar();
+                cmt.UserId = CurrentUser.GetId();
+                cmt.UserName = CurrentUser.GetName();
+                App.NewViewModel.CommentItems.Insert(0, cmt);
+
+                commentBox.Visibility = System.Windows.Visibility.Collapsed;
+                commentBox.Text = string.Empty;
+                ApplicationBar = ((ApplicationBar)this.Resources["cmtAppBar"]);
+            }
+        }
+
+        private void Submitted(object sender, UploadStringCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                //MessageBox.Show(e.Error.Message);
+                MessageBox.Show("提交失败!");
+            }
+        }
+
+        private void attachmentImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            ((Image)sender).Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (pivot.SelectedIndex)
+            {
+                case 0:
+                    ApplicationBar = ((ApplicationBar)this.Resources["cntAppBar"]);
+                    break;
+                case 1:
+                    if (commentBox.Visibility == System.Windows.Visibility.Collapsed)
+                        ApplicationBar = ((ApplicationBar)this.Resources["cmtAppBar"]);
+                    else
+                        ApplicationBar = ((ApplicationBar)this.Resources["cmtgAppBar"]);
+                    break;
+                case 2:
+                    ApplicationBar = ((ApplicationBar)this.Resources["frmAppBar"]);
+                    break;
+            }
+        }
+
+        private void userPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            string id = ((StackPanel)sender).Tag.ToString();
+            NavigationService.Navigate(new Uri("/Combee;component/UserPage.xaml?id=" + id, UriKind.Relative));
         }
 
     }

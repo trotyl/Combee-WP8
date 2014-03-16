@@ -19,9 +19,9 @@ using System.Collections.ObjectModel;
 
 namespace Combee
 {
-    public partial class People : PhoneApplicationPage
+    public partial class UserPage : PhoneApplicationPage
     {
-        public People()
+        public UserPage()
         {
             InitializeComponent();
 
@@ -40,34 +40,22 @@ namespace Combee
             {
                 Users user = thisPerson.First();
                 UseUsers(user);
-            }
-            
-            {
+
                 //获取用户资料
                 WebClient newWebClient = new WebClient();
                 newWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedUsers);
                 newWebClient.DownloadStringAsync(UriString.GetUserUri(id));
-            }
-            {
+
                 //获取用户组织
-                var query_user = from user in App.NewViewModel.myDB.UsersTable
-                                         where user.Id == NavigationContext.QueryString["id"]
-                                         select user;
-                string user_orgz = query_user.First().organizations;
-                var query_orgz = from orgz in App.NewViewModel.myDB.OrganizationsTable
-                                 where user_orgz.IndexOf(orgz.Id) != -1
-                                 select orgz;
-
-                App.NewViewModel.OrganizationsItems = new ObservableCollection<Organizations>(query_orgz);
-
+                App.NewViewModel.OrganizationsItems.Clear();
                 WebClient webClient = new WebClient();
                 webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedOrganizations);
                 webClient.DownloadStringAsync(UriString.GetUserOrganizationsUri(id));
 
-                App.NewViewModel.OrganizationsItems.Clear();
             }
         }
 
+        //发送短信
         private void SmsBurron_Click(object sender, EventArgs e)
         {
             SmsComposeTask smsComposeTask = new SmsComposeTask();
@@ -78,6 +66,7 @@ namespace Combee
             smsComposeTask.Show();
         }
 
+        //拨打电话
         private void CallButton_Click(object sender, EventArgs e)
         {
             try
@@ -85,7 +74,7 @@ namespace Combee
                 PhoneCallTask phoneCallTask = new PhoneCallTask();
 
                 phoneCallTask.PhoneNumber = PhoneTextBlock.Text.Replace("手机: ", string.Empty);
-                phoneCallTask.DisplayName = NameTextBlock.Text;
+                phoneCallTask.DisplayName = NameTextBlock.Text.Replace(" ♂", "").Replace(" ♀", "");
 
                 phoneCallTask.Show();
             }
@@ -95,6 +84,7 @@ namespace Combee
             }
         }
 
+        //保存至通讯录
         private void SaveButton_Click(object sender, EventArgs e)
         {
             try
@@ -116,6 +106,19 @@ namespace Combee
             }
         }
 
+        //发送电子邮件
+         private void EmailButton_Click(object sender, EventArgs e)
+        {
+            EmailComposeTask emailComposeTask = new EmailComposeTask();
+
+            emailComposeTask.Subject = string.Empty;
+            emailComposeTask.Body = "\n\n来自Combee客户端";
+            emailComposeTask.To = MailTextBlock.Text;
+
+            emailComposeTask.Show();
+        }
+
+        //保存联系人完成反馈
         void savePhoneNumberTask_Completed(object sender, TaskEventArgs e)
         {
             switch (e.TaskResult)
@@ -137,6 +140,7 @@ namespace Combee
             }
         }
 
+        //接收组织列表完成反馈
         private void RetrievedOrganizations(object sender, DownloadStringCompletedEventArgs e)
         {
             if(e.Error != null)
@@ -146,14 +150,16 @@ namespace Combee
             else
             {
                 JArray arr = JArray.Parse(e.Result);
-                for (int i = 0; i < arr.Count(); i++)
+                foreach (JObject o in arr)
                 {
-                    JObject o = JObject.Parse(arr[i].ToString());
                     Organizations orgz = Network.GetOrganization(o, false);
 
                     Storage.SaveAvatar((string)o["avatar"]);
+                    App.NewViewModel.OrganizationsItems.Add(orgz);
                     App.NewViewModel.AddOrganizationsItem(orgz);
                 }
+                Organizations org = new Organizations();
+                App.NewViewModel.OrganizationsItems.Add(org);
             }
         }
 
@@ -269,20 +275,25 @@ namespace Combee
                 {
                     App.NewViewModel.ReceiptsItems.Add(rpt);
                 }
+                Receipts rp = new Receipts();
+                App.NewViewModel.ReceiptsItems.Add(rp);
             }
-
         }
 
         private void UserImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-
+            //这里本身就是本人的优信的头像。。。让你点就死循环了。。。
         }
 
-        private void fullUmsgStackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void rptPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-
+            NavigationService.Navigate(new Uri("/Combee;component/ReceiptPage.xaml?id=" + ((StackPanel)sender).Tag.ToString(), UriKind.Relative));
         }
 
+        private void orgzPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Combee;component/OrganizationPage.xaml?id=" + ((StackPanel)sender).Tag.ToString(), UriKind.Relative));
+        }
 
     }
 }

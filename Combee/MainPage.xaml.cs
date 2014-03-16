@@ -111,7 +111,7 @@ namespace Combee
        private void UserImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             string id = ((Image)sender).Tag.ToString();
-            NavigationService.Navigate(new Uri("/Combee;component/Users.xaml?id=" + id, UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Combee;component/UserPage.xaml?id=" + id, UriKind.Relative));
 
         }
 

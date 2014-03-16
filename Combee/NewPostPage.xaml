@@ -15,6 +15,7 @@
     shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0" Loaded="PhoneApplicationPage_Loaded">
     <phone:PhoneApplicationPage.ApplicationBar >
         <shell:ApplicationBar Opacity="0.7">
+            <shell:ApplicationBarIconButton x:Name="choseButton" IconUri="/Toolkit.Content/ApplicationBar.Select.png" IsEnabled="True" Text="选择组织" Click="choseButton_Click"/>
             <shell:ApplicationBarIconButton x:Name="SubmitButton" IconUri="/Images/appbar.check.rest.png" IsEnabled="True" Text="发送" Click="SubmitButton_Click"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
@@ -22,17 +23,20 @@
     <!--LayoutRoot 是包含所有页面内容的根网格-->
     <Grid x:Name="LayoutRoot" Background="#FF34495E">
         <!--枢轴控件-->
-        <phone:Pivot Title="Combee - 组织消息通知中心">
+        <phone:Pivot x:Name="pivot" Title="Combee - 组织消息通知中心" SelectionChanged="pivot_SelectionChanged">
             <!--枢轴项一-->
-            <phone:PivotItem Header="内容">
+            <phone:PivotItem Margin="10,0" >
+                <phone:PivotItem.Header>
+                    <TextBlock Text="内容" FontSize="50"/>
+                </phone:PivotItem.Header>
                 <Grid>
                     <StackPanel>
-                        <TextBox x:Name="TitleBox" Text="标题" GotFocus="TitleBox_GotFocus" LostFocus="TitleBox_LostFocus"/>
-                        <TextBox x:Name="BodyBox" Text="内容" Height="250" GotFocus="BodyBox_GotFocus" LostFocus="BodyBox_LostFocus" TextWrapping="Wrap"/>
+                        <TextBox x:Name="TitleBox" FontSize="24" Height="70" Text="标题" GotFocus="TitleBox_GotFocus" LostFocus="TitleBox_LostFocus"/>
+                        <TextBox x:Name="BodyBox" FontSize="24" Text="内容" Height="250" Margin="0,-10,0,0" GotFocus="BodyBox_GotFocus" LostFocus="BodyBox_LostFocus" TextWrapping="Wrap"/>
                         <StackPanel Orientation="Horizontal">
                             <CheckBox x:Name="TimeBox"/>
-                            <TextBlock x:Name="TimeBlock" Text="2" FontSize="30" VerticalAlignment="Center"/>
-                            <TextBlock Text="小时后发送短信提醒" FontSize="30" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="TimeBlock" Text="2" FontSize="24" VerticalAlignment="Center"/>
+                            <TextBlock Text="小时后发送短信提醒" FontSize="24" VerticalAlignment="Center"/>
                         </StackPanel>
                         <Slider x:Name="TimeSlider" Maximum="24" ValueChanged="Slider_ValueChanged"/>
                     </StackPanel>
@@ -40,7 +44,11 @@
             </phone:PivotItem>
 
             <!--枢轴项二-->
-            <phone:PivotItem Header="组织">
+            <phone:PivotItem Margin="10,0" >
+                <phone:PivotItem.Header>
+                    <TextBlock Text="组织" FontSize="50"/>
+                </phone:PivotItem.Header>
+
                 <Grid>
                     <phone:LongListSelector ItemsSource="{Binding AllOrganizationsItems, Mode=OneWay}">
                         <phone:LongListSelector.ItemTemplate>

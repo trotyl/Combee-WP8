@@ -120,7 +120,7 @@ namespace Combee
                 {
                     organizations_id += ((string)o["organizations"][i]["id"] + "_");
                 }
-                rpt.OrganizationsId = organizations_id;
+                //rpt.OrganizationsId = organizations_id;
 
                 string post_id = (string)o["post"]["id"];
                 rpt.PostId = post_id;

@@ -94,6 +94,42 @@ namespace BindingData.Model
             }
         }
 
+        //优信所涉及组织集合
+        private string _organizations;
+
+        [Column]
+        public string Organizations
+        {
+            get { return _organizations; }
+            set
+            {
+                if (_organizations != value)
+                {
+                    NotifyPropertyChanging("Organizations");
+                    _organizations = value;
+                    NotifyPropertyChanged("Organizations");
+                }
+            }
+        }
+
+        //优信所涉及附件集合
+        private string _attachments;
+
+        [Column]
+        public string Attachments
+        {
+            get { return _attachments; }
+            set
+            {
+                if (_attachments != value)
+                {
+                    NotifyPropertyChanging("Attachments");
+                    _attachments = value;
+                    NotifyPropertyChanged("Attachments");
+                }
+            }
+        }
+
         //表单ID
         private string _formId;
 
@@ -148,23 +184,6 @@ namespace BindingData.Model
             }
         }
 
-        //优信所涉及组织ID集合
-        private string _organizationsId;
-
-        [Column]
-        public string OrganizationsId
-        {
-            get { return _organizationsId; }
-            set
-            {
-                if (_organizationsId != value)
-                {
-                    NotifyPropertyChanging("OrganizationsId");
-                    _organizationsId = value;
-                    NotifyPropertyChanged("OrganizationsId");
-                }
-            }
-        }
 
         //优信所涉及组织ID集合
         private string _postId;
@@ -175,7 +194,7 @@ namespace BindingData.Model
             get { return _postId; }
             set
             {
-                if (_organizationsId != value)
+                if (_organizations != value)
                 {
                     NotifyPropertyChanging("PostId");
                     _postId = value;

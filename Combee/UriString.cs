@@ -132,5 +132,11 @@ namespace Combee
             Uri uri = new Uri(host + "session.json?" + arg.ToString());
             return uri;
         }
+
+        internal static Uri GetReceiptCommentUri(string id, string body)
+        {
+            Uri uri = new Uri(host + "posts/" + id + "/comments" + rear + CurrentUser.GetPrivate_token() + "&body=" + body);
+            return uri;
+        }
     }
 }

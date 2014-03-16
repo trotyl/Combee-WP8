@@ -108,5 +108,31 @@ namespace Combee
                 NavigationService.GoBack();
             }
         }
+
+        private void choseButton_Click(object sender, EventArgs e)
+        {
+            if (pivot.SelectedIndex == 0)
+            {
+                pivot.SelectedIndex = 1;
+            }
+            else
+            {
+                pivot.SelectedIndex = 0;
+            }
+
+        }
+
+        private void pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (pivot.SelectedIndex == 1)
+            {
+                ((ApplicationBarIconButton)ApplicationBar.Buttons[0]).Text = "编辑内容";
+            }
+            else
+            {
+                ((ApplicationBarIconButton)ApplicationBar.Buttons[0]).Text = "选择组织";
+            }
+
+        }
     }
 }

@@ -21,22 +21,52 @@
         <local:DisplayTime x:Key="DisplayTime" />
         <!--评论列表控件模版-->
         <DataTemplate x:Key="CmtListTemplate">
-            <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Background="#FF51697A">
-                <Image Tag="{Binding UserId, Mode=OneWay}" Source="{Binding UserAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
-                <StackPanel Width="311" Margin="8,-2,0,0">
-                    <TextBlock Text="{Binding UserName, Mode=OneWay}" Margin="10,8,80,0" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" TextTrimming="WordEllipsis" />
+            <StackPanel Orientation="Horizontal" Margin="10,5,0,5">
+                <Image Tag="{Binding UserId, Mode=OneWay}" VerticalAlignment="Top" Source="{Binding UserAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="50" Height="50" Margin="9,20,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
+                <StackPanel Width="360" Margin="10,0,0,0">
+                   <Border Height="1" Margin="-64,5,0,0" VerticalAlignment="Top" Background="White"/>
+                   <Grid>
+                        <TextBlock Text="{Binding UserName, Mode=OneWay}" Margin="5,5,0,0" TextWrapping="NoWrap" FontSize="24" TextTrimming="WordEllipsis" />
+                        <TextBlock Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,8,0,0" FontSize="18" HorizontalAlignment="Right" />                     
+                    </Grid>
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-38,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" FontFamily="Portable User Interface" />
-                        <TextBlock Text="{Binding Body, Mode=OneWay}" TextWrapping="Wrap" Margin="10,0,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <TextBlock Text="{Binding Body, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" FontSize="18"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
+        <!--<DataTemplate x:Name="formTemplate">
+            <ScrollViewer>
+                <StackPanel x:Name="formPanel" />
+            </ScrollViewer>
+        </DataTemplate>-->
+
+        <!--内容页面任务栏-->
+        <shell:ApplicationBar x:Key="cntAppBar" Opacity="0.7">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.add.rest.png" IsEnabled="True" Text="评论" Click="commentButton_Click"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.delete.rest.png" IsEnabled="True" Text="删除" Click="DeletedButton_Click"/>
+        </shell:ApplicationBar>
+
+        <!--评论页面任务栏-->
+        <shell:ApplicationBar x:Key="cmtAppBar" Opacity="0.7">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.add.rest.png" IsEnabled="True" Text="评论" Click="commentButton_Click"/>
+        </shell:ApplicationBar>
+
+        <!--评论中页面任务栏-->
+        <shell:ApplicationBar x:Key="cmtgAppBar" Opacity="0.7">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.check.rest.png" IsEnabled="True" Text="提交" Click="cmtSubmitButton_Click"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.cancel.rest.png" IsEnabled="True" Text="取消" Click="cmtCancelButton_Click"/>
+        </shell:ApplicationBar>
+        
+        <!--表单页面任务栏-->
+        <shell:ApplicationBar x:Key="frmAppBar" Opacity="0.7">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.check.rest.png" IsEnabled="True" Text="提交" Click="SubmitButton_Click"/>
+        </shell:ApplicationBar>
 
     </phone:PhoneApplicationPage.Resources>
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Opacity="0.7">
-            <shell:ApplicationBarIconButton x:Name="CommentButton" IconUri="/Images/appbar.add.rest.png" IsEnabled="True" Text="评论"/>
+            <shell:ApplicationBarIconButton x:Name="CommentButton" IconUri="/Images/appbar.add.rest.png" IsEnabled="True" Text="评论" Click="commentButton_Click"/>
             <shell:ApplicationBarIconButton x:Name="DeletedButton" IconUri="/Images/appbar.delete.rest.png" IsEnabled="True" Text="删除" Click="DeletedButton_Click"/>
             <shell:ApplicationBarIconButton x:Name="SubmitButton" IconUri="/Images/appbar.check.rest.png" IsEnabled="True" Text="提交" Click="SubmitButton_Click"/>
         </shell:ApplicationBar>
@@ -46,10 +76,10 @@
     <!--LayoutRoot 是包含所有页面内容的根网格-->
     <Grid x:Name="LayoutRoot" Background="#FF34495E">
         <!--枢轴控件-->
-        <phone:Pivot x:Name="pivot" >
+        <phone:Pivot x:Name="pivot" SelectionChanged="pivot_SelectionChanged" >
             <phone:Pivot.Title>
                 <Grid>
-                    <TextBlock x:Name="TitleBlock" Text="Combee - 组织消息通知中心" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                    <TextBlock x:Name="TitleBlock" HorizontalAlignment="Center" Margin="0,0,0,10"/>
                 </Grid>
             </phone:Pivot.Title>
             <!--枢轴项一-->
@@ -57,21 +87,24 @@
                 <phone:PivotItem.Header>
                     <TextBlock Text="内容" FontSize="50" />
                 </phone:PivotItem.Header>
-                <StackPanel>
-                    <StackPanel Grid.Row="0" Margin="0,10,0,0">
-                        <Grid Height="100" Margin="0,0,0,10">
-                            <Border Height="1" VerticalAlignment="Top" Background="White"/>
-                            <Image x:Name="AvatarImage" Margin="10,0,0,0" Width="80" Height="80" HorizontalAlignment="Left" Stretch="UniformToFill" />
-                            <TextBlock x:Name="FromBlock" Text="张建奇" TextAlignment="Left" Margin="120,5,0,0" FontSize="36"/>
-                            <TextBlock x:Name="TimeBlock" Text="2014/3/13 0:13:26" TextAlignment="Left" Margin="120,56,0,0" FontSize="24"/>
-                            <Border Height="1" VerticalAlignment="Bottom" Background="White"/>
-                        </Grid>
+                <ScrollViewer>
+                    <StackPanel>
+                        <StackPanel x:Name="userPanel" Margin="0,10,0,0" Tap="userPanel_Tap">
+                            <Grid Height="100" Margin="0,0,0,10">
+                                <Border Height="1" VerticalAlignment="Top" Background="White"/>
+                                <Image x:Name="AvatarImage" Margin="10,0,0,0" Width="80" Height="80" HorizontalAlignment="Left" Stretch="UniformToFill" />
+                                <TextBlock x:Name="FromBlock" TextAlignment="Left" Margin="120,5,0,0" FontSize="36"/>
+                                <TextBlock x:Name="TimeBlock" TextAlignment="Left" Margin="120,56,0,0" FontSize="24"/>
+                                <Border Height="1" VerticalAlignment="Bottom" Background="White"/>
+                            </Grid>
+                        </StackPanel>
+                        <StackPanel x:Name="ContentPanel" >
+                            <TextBlock x:Name="ToBlock" HorizontalAlignment="Right" Margin="0,0,0,10" FontSize="18"/>
+                        </StackPanel>
+                        <StackPanel x:Name="attachmentPanel" />
+                        <Grid Height="100"/>
                     </StackPanel>
-                    <StackPanel x:Name="ContentPanel" >
-                        <TextBlock x:Name="ToBlock" Text="To: WindowsPhone Dev Team" HorizontalAlignment="Right" Margin="0,0,0,10" FontSize="18"/>
-                    </StackPanel>
-                    <Grid x:Name="AttachmentGrid" />
-                </StackPanel>
+                </ScrollViewer>
             </phone:PivotItem>
 
             <!--枢轴项二-->
@@ -80,8 +113,9 @@
                     <TextBlock Text="评论" FontSize="50"/>
                 </phone:PivotItem.Header>
 
-                <Grid Margin="0,0,0,0">
+                <Grid>
                     <phone:LongListSelector ItemsSource="{Binding CommentItems, Mode=OneWay}" ItemTemplate="{StaticResource CmtListTemplate}" Margin="0,0,0,0"/>
+                    <TextBox x:Name="commentBox" Text="请在此输入内容~" Visibility="Collapsed" VerticalAlignment="Bottom" Margin="0,0,0,80" FontSize="24" TextWrapping="Wrap" GotFocus="commentBox_GotFocus" LostFocus="commentBox_LostFocus"/>
                 </Grid>
             </phone:PivotItem>
 
@@ -93,7 +127,7 @@
 
                 <Grid>
                     <ScrollViewer>
-                        <StackPanel x:Name="FormPanel" />
+                        <StackPanel x:Name="formPanel" />
                     </ScrollViewer>
                 </Grid>
             </phone:PivotItem>
