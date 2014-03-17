@@ -21,67 +21,102 @@
         <local:StringToImageSource x:Key="StringToImageSource" />
         <local:DisplayTime x:Key="DisplayTime" />
 
-        <!--优信列表控件模版-->
-        <DataTemplate x:Key="UmsgListTemplate">
-            <StackPanel Name="AllUmsgStackPanel" Orientation="Horizontal" Margin="12,2,0,4" Height="105" Background="#FF51697A">
-                <Image Name="UserImage" Tag="{Binding AuthorId, Mode=OneWay}" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Tap="UserImage_Tap" Stretch="UniformToFill"/>
-                <StackPanel Name="FullUmsgStackPanel" Tag="{Binding PostId, Mode=OneWay}" Width="311" Margin="8,-7,0,0" Tap="fullUmsgStackPanel_Tap" >
-                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0" >
-                        <TextBlock Name="UserNameTextBlock" Text="{Binding AuthorName, Mode=OneWay}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}"  />
-                        <Border Visibility="Collapsed" BorderThickness="1" Width="24" Height="24" Margin="0,4,0,0" BorderBrush="#FFFFC700" Background="White"  />
+        <!--优信列表控件模板-->
+        <DataTemplate x:Key="RptListTemplate">
+            <StackPanel Orientation="Horizontal" Margin="10,5,0,0">
+                <Image Tag="{Binding AuthorId, Mode=OneWay}" VerticalAlignment="Top" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="50" Height="50" Margin="9,30,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
+                <StackPanel Tag="{Binding Id}" Width="360" Margin="10,10,0,0" Tap="rptPanel_Tap">
+                    <Border Height="1" Margin="-64,5,0,0" VerticalAlignment="Bottom" Background="White"/>
+                    <Grid Margin="10,5,0,0">
+                        <TextBlock Text="{Binding AuthorName, Mode=OneWay}" Margin="5,5,0,0" TextWrapping="NoWrap" FontSize="24" TextTrimming="WordEllipsis" />
+                        <TextBlock Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,8,0,0" FontSize="18" HorizontalAlignment="Right" />
+                    </Grid>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding Title, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" FontSize="18"/>
+                        <TextBlock Text="{Binding Body, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" FontSize="18"/>
                     </StackPanel>
-                    <TextBlock Name="TimeTextBlock" Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,-32,8,0" FontSize="{StaticResource PhoneFontSizeMedium}" HorizontalAlignment="Right" FontFamily="Portable User Interface"  />
-                    <TextBlock Name="TitleTextBlock" Text="{Binding Title, Mode=OneWay}" TextWrapping="Wrap" Margin="10,4,0,0"  Height="25" TextTrimming="None" FontFamily="Portable User Interface"  />
-                    <TextBlock Name="ContentTextBlock" Text="{Binding Body, Mode=OneWay}" TextWrapping="NoWrap" Margin="10,4,5,0" Style="{StaticResource PhoneTextSubtleStyle}" Height="28" TextTrimming="WordEllipsis"  />
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
+
         <!--组织列表控件模版-->
         <DataTemplate x:Key="OrgzListTemplate">
-            <StackPanel Orientation="Horizontal" Tag="{Binding Id, Mode=OneWay}" Margin="12,2,0,4" Height="105" Background="#FF51697A" Tap="StackPanel_Tap">
-                <Image Name="OrgzImage" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="90" Height="90" Margin="9,0,0,0" Stretch="UniformToFill" />
-                <StackPanel Width="311" Margin="8,-2,0,0" >
-                    <TextBlock Text="{Binding Name, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}"  />
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBlock Text="{Binding Members, StringFormat='\{0}人 ', Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextSubtleStyle}" FontSize="{StaticResource PhoneFontSizeNormal}"  />
-                        <TextBlock Text="{Binding Bio, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" Style="{StaticResource PhoneTextSubtleStyle}" FontSize="{StaticResource PhoneFontSizeNormal}"  />
-                    </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10,5,0,5">
+                <Image Tag="{Binding Id, Mode=OneWay}" VerticalAlignment="Top" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="50" Height="50" Margin="9,20,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
+                <StackPanel Tag="{Binding Id}" Width="360" Margin="10,0,0,0" Tap="orgzPanel_Tap">
+                    <Border Height="1" Margin="-64,5,0,0" VerticalAlignment="Top" Background="White"/>
+                    <Grid Margin="10,20,0,5">
+                        <TextBlock Text="{Binding Name, Mode=OneWay}" TextWrapping="NoWrap" FontSize="24" TextTrimming="WordEllipsis" />
+                        <TextBlock Text="{Binding Members, StringFormat='\{0}人', Mode=OneWay}" TextWrapping="NoWrap" Margin="0,8,0,0" FontSize="18" HorizontalAlignment="Right" />
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+        
+        <!--人员列表控件模板-->
+        <DataTemplate x:Key="UserListTemplate">
+            <StackPanel Orientation="Horizontal" Margin="10,5,0,0">
+                <Image Tag="{Binding Id, Mode=OneWay}" VerticalAlignment="Top" Source="{Binding Avatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="50" Height="50" Margin="9,30,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
+                <StackPanel Tag="{Binding Id}" Width="360" Margin="10,10,0,0" Tap="rptPanel_Tap">
+                    <Border Height="1" Margin="-64,5,0,0" VerticalAlignment="Bottom" Background="White"/>
+                    <Grid Margin="10,5,0,0">
+                        <TextBlock Text="{Binding Name, Mode=OneWay}" Margin="5,5,0,0" TextWrapping="NoWrap" FontSize="24" TextTrimming="WordEllipsis" />
+                        <TextBlock Text="{Binding Email, Mode=OneWay}" TextWrapping="NoWrap" Margin="5,40,0,0" FontSize="18" HorizontalAlignment="Left" />
+                    </Grid>
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
 
     </phone:PhoneApplicationPage.Resources>
 
+
     <!--LayoutRoot 是包含所有页面内容的根网格-->
     <Grid x:Name="LayoutRoot" Background="#FF34495E">
         <!--枢轴控件-->
-        <phone:Pivot Title="Combee - 组织消息通知中心" FontFamily="Portable User Interface">
+        <phone:Pivot x:Name="pivot" Title="Windows Phone Dev Team" FontFamily="Portable User Interface">
             <!--枢轴项一-->
-            <phone:PivotItem Header="资料">
-                <Grid>
+            <phone:PivotItem >
+                <phone:PivotItem.Header>
+                    <TextBlock Text="资料" FontSize="50"/>
+                </phone:PivotItem.Header>
+                <ScrollViewer>
                     <StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Image x:Name="AvatarImage" Height="100" Width="100" />
-                            <StackPanel Margin="10,0,0,0">
-                                <TextBlock x:Name="NameBlock" Text="WindowsPhone Dev Team" FontSize="30"/>
-                                <TextBlock x:Name="MemberBlock" Text="人数: 1人" FontSize="20" Margin="0,5,0,0"/>
-                                <TextBlock x:Name="BioBlock" Text="座右铭: 12123456789023456" Margin="0,5,0,0"/>
-                            </StackPanel>
+                        <StackPanel Margin="0,10,0,0">
+                            <Grid Height="100" Margin="0,0,0,10">
+                                <Border Height="1" VerticalAlignment="Top" Background="White"/>
+                                <Image x:Name="AvatarImage" Margin="10,0,0,0" Width="80" Height="80" HorizontalAlignment="Left" Stretch="UniformToFill" />
+                                <TextBlock x:Name="BioBlock" Text="该组织还没有设置座右铭哦！赶快联系鹳狸猿吧~" TextAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Margin="120,5,0,0" FontSize="28"/>
+                                <TextBlock x:Name="MemberBlock" Text="5人" TextAlignment="Left" Margin="50,60,0,0" FontSize="18"/>
+                                <Border Height="1" VerticalAlignment="Bottom" Background="White"/>
+                            </Grid>
                         </StackPanel>
+
                         <TextBlock Text="下级组织:" Margin="20,20,0,0" FontFamily="Microsoft YaHei UI" />
-                        <phone:LongListSelector ItemsSource="{Binding ChildrenItems}" ItemTemplate="{StaticResource OrgzListTemplate}"/>
+                        <phone:LongListSelector ItemsSource="{Binding OrganizationsItems}" ItemTemplate="{StaticResource OrgzListTemplate}"/>
                     </StackPanel>
-                </Grid>
+                </ScrollViewer>
             </phone:PivotItem>
 
             <!--枢轴项二-->
-            <phone:PivotItem Header="优信">
-                <Grid/>
+            <phone:PivotItem >
+                <phone:PivotItem.Header>
+                    <TextBlock Text="优信" FontSize="50"/>
+                </phone:PivotItem.Header>
+
+                <ScrollViewer>
+                    <phone:LongListSelector ItemsSource="{Binding ReceiptsItems}" ItemTemplate="{StaticResource RptListTemplate}"/>
+                </ScrollViewer>
             </phone:PivotItem>
  
             <!--枢轴项三-->
-            <phone:PivotItem Header="人员">
-                <Grid/>
+            <phone:PivotItem >
+                <phone:PivotItem.Header>
+                    <TextBlock Text="人员" FontSize="50"/>
+                </phone:PivotItem.Header>
+
+                <ScrollViewer>
+                    <phone:LongListSelector ItemsSource="{Binding UsersItems}" ItemTemplate="{StaticResource UserListTemplate}"/>
+                </ScrollViewer>
             </phone:PivotItem>
         </phone:Pivot>
     </Grid>

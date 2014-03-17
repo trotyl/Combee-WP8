@@ -395,6 +395,16 @@ namespace Combee
             return str;
         }
 
+
+        internal static System.Windows.Media.ImageSource GetImageSource(string path)
+        {
+            IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForApplication();
+            IsolatedStorageFileStream fileStream = isoFile.OpenFile(Storage.GetSmallImage(path), FileMode.Open, FileAccess.Read);
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.SetSource(fileStream);
+            return bitmap;
+        }
+
         internal static Receipts FindReceipt(string id)
         {
             var query = from Receipts rpt in App.NewViewModel.myDB.ReceiptsTable
@@ -410,13 +420,19 @@ namespace Combee
             }
         }
 
-        internal static System.Windows.Media.ImageSource GetImageSource(string path)
+        internal static Organizations FindOrganization(string id)
         {
-            IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForApplication();
-            IsolatedStorageFileStream fileStream = isoFile.OpenFile(Storage.GetSmallImage(path), FileMode.Open, FileAccess.Read);
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.SetSource(fileStream);
-            return bitmap;
+            var query = from Organizations orgz in App.NewViewModel.myDB.OrganizationsTable
+                        where orgz.Id == id
+                        select orgz;
+            if (query.Count() != 0)
+            {
+                return query.First();
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

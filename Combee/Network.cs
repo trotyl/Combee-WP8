@@ -86,9 +86,8 @@ namespace Combee
             else
             {
                 JArray arr = JArray.Parse(e.Result);
-                for (int i = 0; i < arr.Count; i++)
+                foreach(JObject o in arr)
                 {
-                    JObject o = JObject.Parse(arr[i].ToString());
                     Organizations orgz = GetOrganization(o, true);
 
                     App.NewViewModel.AddOrganizationsItem(orgz);
@@ -105,9 +104,8 @@ namespace Combee
             else
             {
                 JArray arr = JArray.Parse(e.Result);
-                for (int i = 0; i < arr.Count; i++)
+                foreach(JObject o in arr)
                 {
-                    JObject o = JObject.Parse(arr[i].ToString());
                     Users org, lst;
                     Conversations cov = GetConversation(o, out org, out lst);
 
@@ -151,12 +149,12 @@ namespace Combee
         {
             Users user = new Users();
 
-            user.Id = (string)o["post"]["author"]["id"];
-            user.Name = (string)o["post"]["author"]["name"];
-            user.Email = (string)o["post"]["author"]["email"];
-            user.CreatedAt = (DateTime?)o["post"]["author"]["created_at"];
-            user.Avatar = (string)o["post"]["author"]["avatar"];
-            user.Phone = (string)o["post"]["author"]["phone"];
+            user.Id = (string)o["id"];
+            user.Name = (string)o["name"];
+            user.Email = (string)o["email"];
+            user.CreatedAt = (DateTime?)o["created_at"];
+            user.Avatar = (string)o["avatar"];
+            user.Phone = (string)o["phone"];
             user.DisplayAvatar = @"https://combee.co" + user.Avatar;
             user.IsAvatarLocal = false;
 
