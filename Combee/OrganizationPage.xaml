@@ -25,7 +25,7 @@
         <DataTemplate x:Key="RptListTemplate">
             <StackPanel Orientation="Horizontal" Margin="10,5,0,0">
                 <Image Tag="{Binding AuthorId, Mode=OneWay}" VerticalAlignment="Top" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="50" Height="50" Margin="9,30,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
-                <StackPanel Tag="{Binding Id}" Width="360" Margin="10,10,0,0" Tap="rptPanel_Tap">
+                <StackPanel Tag="{Binding PostId, Mode=OneWay}" Width="360" Margin="10,10,0,0" Tap="rptPanel_Tap">
                     <Border Height="1" Margin="-64,5,0,0" VerticalAlignment="Bottom" Background="White"/>
                     <Grid Margin="10,5,0,0">
                         <TextBlock Text="{Binding AuthorName, Mode=OneWay}" Margin="5,5,0,0" TextWrapping="NoWrap" FontSize="24" TextTrimming="WordEllipsis" />
@@ -57,7 +57,7 @@
         <DataTemplate x:Key="UserListTemplate">
             <StackPanel Orientation="Horizontal" Margin="10,5,0,0">
                 <Image Tag="{Binding Id, Mode=OneWay}" VerticalAlignment="Top" Source="{Binding Avatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="50" Height="50" Margin="9,30,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
-                <StackPanel Tag="{Binding Id}" Width="360" Margin="10,10,0,0" Tap="rptPanel_Tap">
+                <StackPanel Tag="{Binding Id}" Width="360" Margin="10,10,0,0" Tap="userPanel_Tap">
                     <Border Height="1" Margin="-64,5,0,0" VerticalAlignment="Bottom" Background="White"/>
                     <Grid Margin="10,5,0,0">
                         <TextBlock Text="{Binding Name, Mode=OneWay}" Margin="5,5,0,0" TextWrapping="NoWrap" FontSize="24" TextTrimming="WordEllipsis" />
@@ -86,13 +86,14 @@
                                 <Border Height="1" VerticalAlignment="Top" Background="White"/>
                                 <Image x:Name="AvatarImage" Margin="10,0,0,0" Width="80" Height="80" HorizontalAlignment="Left" Stretch="UniformToFill" />
                                 <TextBlock x:Name="BioBlock" Text="该组织还没有设置座右铭哦！赶快联系鹳狸猿吧~" TextAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Margin="120,5,0,0" FontSize="28"/>
-                                <TextBlock x:Name="MemberBlock" Text="5人" TextAlignment="Left" Margin="50,60,0,0" FontSize="18"/>
+                                <TextBlock x:Name="MemberBlock" Text="" TextAlignment="Left" Margin="50,60,0,0" FontSize="18"/>
                                 <Border Height="1" VerticalAlignment="Bottom" Background="White"/>
                             </Grid>
                         </StackPanel>
-
+                        <TextBlock Text="上级组织:" Margin="20,20,0,0" FontFamily="Microsoft YaHei UI" />
+                        <ListBox ItemsSource="{Binding ParentCollection}" ItemTemplate="{StaticResource OrgzListTemplate}"/>
                         <TextBlock Text="下级组织:" Margin="20,20,0,0" FontFamily="Microsoft YaHei UI" />
-                        <phone:LongListSelector ItemsSource="{Binding OrganizationsItems}" ItemTemplate="{StaticResource OrgzListTemplate}"/>
+                        <phone:LongListSelector ItemsSource="{Binding OrgzCollection}" ItemTemplate="{StaticResource OrgzListTemplate}"/>
                     </StackPanel>
                 </ScrollViewer>
             </phone:PivotItem>
@@ -104,7 +105,7 @@
                 </phone:PivotItem.Header>
 
                 <ScrollViewer>
-                    <phone:LongListSelector ItemsSource="{Binding ReceiptsItems}" ItemTemplate="{StaticResource RptListTemplate}"/>
+                    <phone:LongListSelector x:Name="rptList" ItemsSource="{Binding RptCollection}" ItemTemplate="{StaticResource RptListTemplate}"/>
                 </ScrollViewer>
             </phone:PivotItem>
  
@@ -115,7 +116,7 @@
                 </phone:PivotItem.Header>
 
                 <ScrollViewer>
-                    <phone:LongListSelector ItemsSource="{Binding UsersItems}" ItemTemplate="{StaticResource UserListTemplate}"/>
+                    <phone:LongListSelector ItemsSource="{Binding UserCollection}" ItemTemplate="{StaticResource UserListTemplate}"/>
                 </ScrollViewer>
             </phone:PivotItem>
         </phone:Pivot>

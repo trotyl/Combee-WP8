@@ -20,8 +20,8 @@ namespace Combee
         public static void GetAsyncAll()
         {
             GetAsync("receipts", "receipts");
-            GetAsync("organizations", "users/" + CurrentUser.GetId() + "/organizations");
-            GetAsync("conversations", "conversations");
+            //GetAsync("organizations", "users/" + CurrentUser.GetId() + "/organizations");
+            //GetAsync("conversations", "conversations");
         }
 
         public static void GetAsync(string item, string mode)
@@ -68,11 +68,10 @@ namespace Combee
                 {
                     JObject o = JObject.Parse(arr[i].ToString());
                     Receipts rpt = GetReceipt(o);
-                    Users user = GetUser(o);
+                    Users user = GetReceiptUser(o);
 
-                    App.NewViewModel.AddUsersItem(user);
                     App.NewViewModel.AddReceiptsItem(rpt);
-
+                    App.NewViewModel.AddUsersItem(user);
                 }
             }
         }
@@ -145,6 +144,22 @@ namespace Combee
             return rpt;
         }
 
+        internal static Users GetReceiptUser(JObject o)
+        {
+            Users user = new Users();
+
+            user.Id = (string)o["post"]["author"]["id"];
+            user.Name = (string)o["post"]["author"]["name"];
+            user.Email = (string)o["post"]["author"]["email"];
+            user.CreatedAt = (DateTime?)o["post"]["author"]["created_at"];
+            user.Avatar = (string)o["post"]["author"]["avatar"];
+            user.Phone = (string)o["post"]["author"]["phone"];
+            user.DisplayAvatar = @"https://combee.co" + user.Avatar;
+            user.IsAvatarLocal = false;
+
+            return user;
+        }
+
         internal static Users GetUser(JObject o)
         {
             Users user = new Users();
@@ -160,7 +175,6 @@ namespace Combee
 
             return user;
         }
-
 
         internal static Organizations GetOrganization(JObject o, bool belong)
         {

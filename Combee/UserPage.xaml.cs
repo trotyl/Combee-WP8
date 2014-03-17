@@ -31,14 +31,15 @@ namespace Combee
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
+            App.NewViewModel.ReceiptsItems.Clear();
+            App.NewViewModel.OrganizationsItems.Clear();
+
             //加载人员信息
             string id = NavigationContext.QueryString["id"];
-            var thisPerson = from user in App.NewViewModel.myDB.UsersTable
-                             where user.Id == id
-                             select user;
-            if(thisPerson.Count() != 0)
+
+            Users user = Storage.FindUser(id);
+            if(user != null)
             {
-                Users user = thisPerson.First();
                 UseUsers(user);
 
                 //获取用户资料
@@ -47,10 +48,23 @@ namespace Combee
                 newWebClient.DownloadStringAsync(UriString.GetUserUri(id));
 
                 //获取用户组织
-                App.NewViewModel.OrganizationsItems.Clear();
                 WebClient webClient = new WebClient();
                 webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedOrganizations);
                 webClient.DownloadStringAsync(UriString.GetUserOrganizationsUri(id));
+
+                var thisReceipts = from rpt in App.NewViewModel.myDB.ReceiptsTable
+                                   where rpt.AuthorId == user.Id
+                                   select rpt;
+
+                if (thisReceipts.Count() != 0)
+                {
+                    foreach (Receipts rpt in thisReceipts)
+                    {
+                        App.NewViewModel.ReceiptsItems.Add(rpt);
+                    }
+                    Receipts rp = new Receipts();
+                    App.NewViewModel.ReceiptsItems.Add(rp);
+                }
 
             }
         }
@@ -261,22 +275,6 @@ namespace Combee
             else
             {
                 CreatedTextBlock.Visibility = System.Windows.Visibility.Collapsed;
-            }
-
-            var thisReceipts = from rpt in App.NewViewModel.myDB.ReceiptsTable
-                        where rpt.AuthorId == user.Id
-                        select rpt;
-
-            App.NewViewModel.ReceiptsItems.Clear();
-
-            if(thisReceipts.Count() != 0)
-            {
-                foreach(Receipts rpt in thisReceipts)
-                {
-                    App.NewViewModel.ReceiptsItems.Add(rpt);
-                }
-                Receipts rp = new Receipts();
-                App.NewViewModel.ReceiptsItems.Add(rp);
             }
         }
 

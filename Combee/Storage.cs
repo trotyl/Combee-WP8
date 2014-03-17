@@ -434,5 +434,20 @@ namespace Combee
                 return null;
             }
         }
+
+        internal static Users FindUser(string id)
+        {
+            var query = from user in App.NewViewModel.myDB.UsersTable
+                             where user.Id == id
+                             select user;
+            if (query.Count() != 0)
+            {
+                return query.First();
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
