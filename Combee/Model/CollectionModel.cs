@@ -1161,6 +1161,24 @@ namespace BindingData.Model
             }
         }
 
+        //优信ID
+        private string _postId;
+
+        [Column]
+        public string PostId
+        {
+            get { return _postId; }
+            set
+            {
+                if (_postId != value)
+                {
+                    NotifyPropertyChanging("PostId");
+                    _postId = value;
+                    NotifyPropertyChanged("PostId");
+                }
+            }
+        }
+
         //评论创建时间
         private DateTime? _createdAt;
 

@@ -114,7 +114,7 @@
                 </phone:PivotItem.Header>
 
                 <Grid>
-                    <phone:LongListSelector ItemsSource="{Binding CommentItems, Mode=OneWay}" ItemTemplate="{StaticResource CmtListTemplate}" Margin="0,0,0,0"/>
+                    <phone:LongListSelector ItemsSource="{Binding CmtCollection, Mode=OneWay}" ItemTemplate="{StaticResource CmtListTemplate}" Margin="0,0,0,0"/>
                     <TextBox x:Name="commentBox" Text="请在此输入内容~" Visibility="Collapsed" VerticalAlignment="Bottom" Margin="0,0,0,80" FontSize="24" TextWrapping="Wrap" GotFocus="commentBox_GotFocus" LostFocus="commentBox_LostFocus"/>
                 </Grid>
             </phone:PivotItem>

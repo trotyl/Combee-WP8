@@ -17,22 +17,65 @@ using System.Text.RegularExpressions;
 using System.Windows.Documents;
 using Microsoft.Phone.Tasks;
 using System.Windows.Resources;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace Combee
 {
-    public partial class ReceiptPage : PhoneApplicationPage
+    public partial class ReceiptPage : PhoneApplicationPage, INotifyPropertyChanged
     {
+        private string post_id;
+        private ObservableCollection<Comment> _cmtCollection;
+        public ObservableCollection<Comment> CmtCollection
+        {
+            get { return _cmtCollection; }
+            set
+            {
+                _cmtCollection = value;
+                NotifyPropertyChanged("CmtCollection");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // 用来通知程序某属性已改变.
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
         public ReceiptPage()
         {
             InitializeComponent();
 
-            this.DataContext = App.NewViewModel;
+            //this.DataContext = App.NewViewModel;
+            this.DataContext = this;
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
             //加载正文信息
-            string id = NavigationContext.QueryString["id"];
+            string id =post_id = NavigationContext.QueryString["id"];
+
+            var query_cmt = from Comment cmt in App.NewViewModel.myDB.CommentTable
+                            where cmt.PostId == post_id
+                            orderby cmt.Id descending
+                            select cmt;
+
+            if (CmtCollection == null)
+            {
+                CmtCollection = new ObservableCollection<Comment>(query_cmt);
+                CmtCollection.Add(new Comment());
+            }
+            else
+            {
+                CmtCollection = new ObservableCollection<Comment>();
+                CmtCollection.Add(new Comment());
+            }
 
             Receipts r = Storage.FindReceipt(id);
             if (r != null)
@@ -179,7 +222,6 @@ namespace Combee
                 newWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedPost);
                 newWebClient.DownloadStringAsync(UriString.GetSinglePostUri(id));
             }
-            App.NewViewModel.CommentItems.Clear();
 
             WebClient commentsWebClient = new WebClient();
             commentsWebClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedComments);
@@ -226,7 +268,7 @@ namespace Combee
         {
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message);
+                //MessageBox.Show(e.Error.Message);
             }
             else
             {
@@ -367,7 +409,7 @@ namespace Combee
         {
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message);
+                //MessageBox.Show(e.Error.Message);
             }
             else
             {
@@ -376,7 +418,8 @@ namespace Combee
                 {
                     Comment cm = new Comment();
 
-                    cm.Id = (string)o["id"];
+                    cm.Id = o["id"].ToString();
+                    cm.PostId = post_id;
                     cm.Body = (string)o["body"];
                     cm.CreatedAt = (DateTime)o["created_at"];
                     cm.UserId = (string)o["user"]["id"];
@@ -386,10 +429,21 @@ namespace Combee
                     cm.IsAvatarLocal = false;
 
                     Storage.SaveAvatar(cm.UserAvatar);
-                    App.NewViewModel.CommentItems.Add(cm);
+                    bool already = false;
+                    foreach (Comment c in CmtCollection)
+                    {
+                        if (c.Id == cm.Id)
+                        {
+                            already = true;
+                            break;
+                        }
+                    }
+                    if (!already)
+                    {
+                        CmtCollection.Insert(0, cm);
+                    }
+                    App.NewViewModel.AddCommentItem(cm);
                 }
-                Comment cmt = new Comment();
-                App.NewViewModel.CommentItems.Add(cmt);
             }
         }
 
@@ -397,7 +451,7 @@ namespace Combee
         {
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message);
+                //MessageBox.Show(e.Error.Message);
             }
 
         }
@@ -406,7 +460,7 @@ namespace Combee
         {
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message);
+                //MessageBox.Show(e.Error.Message);
             }
             else
             {
@@ -620,7 +674,7 @@ namespace Combee
         {
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message);
+                //MessageBox.Show(e.Error.Message);
             }
             else
             {
@@ -634,7 +688,7 @@ namespace Combee
                 cmt.UserAvatar = CurrentUser.GetAvatar();
                 cmt.UserId = CurrentUser.GetId();
                 cmt.UserName = CurrentUser.GetName();
-                App.NewViewModel.CommentItems.Insert(0, cmt);
+                CmtCollection.Insert(0, cmt);
 
                 commentBox.Visibility = System.Windows.Visibility.Collapsed;
                 commentBox.Text = string.Empty;
@@ -671,6 +725,10 @@ namespace Combee
                     break;
                 case 2:
                     ApplicationBar = ((ApplicationBar)this.Resources["frmAppBar"]);
+                    if (Form.id == null)
+                    {
+                        ((ApplicationBarIconButton)ApplicationBar.Buttons[0]).IsEnabled = false;
+                    }
                     break;
             }
         }

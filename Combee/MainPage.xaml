@@ -73,7 +73,7 @@
                 <shell:ApplicationBarMenuItem IsEnabled="True" Text="设置" Click="SettingMenu_Click"/>
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/refresh.png" IsEnabled="True" Text="刷新" Click="RenewButton_Click"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/share.png" IsEnabled="True" Text="通知中心" Click="ToastButton_Click"/>
+            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/share.png" IsEnabled="False" Text="通知中心" Click="ToastButton_Click"/>
             <shell:ApplicationBarIconButton IconUri="/Images/appbar.add.rest.png" IsEnabled="True" Text="新优信" Click="NewPostButton_Click"/>
         </shell:ApplicationBar>
 
@@ -82,10 +82,10 @@
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem IsEnabled="True" Text="评价此应用" Click="LikeMenu_Click"/>
                 <shell:ApplicationBarMenuItem IsEnabled="True" Text="关于" Click="AboutMenu_Click"/>
-                <shell:ApplicationBarMenuItem IsEnabled="True" Text="设置" Click="SettingMenu_Click"/>
+                <shell:ApplicationBarMenuItem IsEnabled="True" Text="注销" Click="SettingMenu_Click"/>
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/refresh.png" IsEnabled="True" Text="刷新" Click="RenewButton_Click"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/share.png" IsEnabled="True" Text="通知中心" Click="ToastButton_Click"/>
+            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/share.png" IsEnabled="False" Text="通知中心" Click="ToastButton_Click"/>
         </shell:ApplicationBar>
 
         <!--私信页面任务栏-->
@@ -107,10 +107,10 @@
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem x:Name="LikeButton" IsEnabled="True" Text="评价此应用" Click="LikeMenu_Click"/>
                 <shell:ApplicationBarMenuItem x:Name="LikeMenu_ClickButton" IsEnabled="True" Text="关于" Click="AboutMenu_Click"/>
-                <shell:ApplicationBarMenuItem IsEnabled="True" Text="设置" Click="SettingMenu_Click"/>
+                <shell:ApplicationBarMenuItem IsEnabled="True" Text="注销" Click="SettingMenu_Click"/>
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton x:Name="RenewButton" IconUri="/Assets/AppBar/refresh.png" IsEnabled="True" Text="刷新" Click="RenewButton_Click"/>
-            <shell:ApplicationBarIconButton x:Name="ToastButton" IconUri="/Assets/AppBar/share.png" IsEnabled="True" Text="通知中心" Click="ToastButton_Click"/>
+            <shell:ApplicationBarIconButton x:Name="ToastButton" IconUri="/Assets/AppBar/share.png" IsEnabled="False" Text="通知中心" Click="ToastButton_Click"/>
             <shell:ApplicationBarIconButton x:Name="NewPostButton" IconUri="/Images/appbar.add.rest.png" IsEnabled="True" Text="新优信" Click="NewPostButton_Click"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
@@ -166,13 +166,13 @@
             </phone:PanoramaItem>
 
             <!--Panorama 项目三-->
-            <phone:PanoramaItem x:Name="ConversationsPanoramaItem" Orientation="Vertical">
+            <!--<phone:PanoramaItem x:Name="ConversationsPanoramaItem" Orientation="Vertical">
                 <phone:PanoramaItem.Header>
                     <TextBlock Text="私信" FontSize="50"/>
                 </phone:PanoramaItem.Header>
 
                 <phone:LongListSelector x:Name="CovList" ItemTemplate="{StaticResource CovListTemplate}" ItemsSource="{Binding AllConversationsItems, Mode=OneWay}" Margin="0,-38,-10,2" />
-            </phone:PanoramaItem>
+            </phone:PanoramaItem>-->
 
             <!--Panorama 项目四-->
             <phone:PanoramaItem Header="无题" Visibility="Collapsed" Orientation="Vertical">

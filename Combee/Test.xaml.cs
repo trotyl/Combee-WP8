@@ -51,7 +51,7 @@ namespace Combee
 
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message.ToString());
+                MessageBox.Show(e.Error.Message);
             }
             else
             {
@@ -93,7 +93,7 @@ namespace Combee
 
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message.ToString());
+                MessageBox.Show(e.Error.Message);
             }
             else
             {

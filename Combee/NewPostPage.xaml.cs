@@ -100,7 +100,7 @@ namespace Combee
         {
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message);
+                //MessageBox.Show(e.Error.Message);
                 SubmitButton.IsEnabled = true;
             }
             else

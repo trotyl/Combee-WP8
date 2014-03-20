@@ -16,29 +16,63 @@ using Newtonsoft.Json.Linq;
 using System.IO.IsolatedStorage;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace Combee
 {
-    public partial class UserPage : PhoneApplicationPage
+    public partial class UserPage : PhoneApplicationPage, INotifyPropertyChanged
     {
+        private ObservableCollection<Organizations> _orgzCollection;
+        public ObservableCollection<Organizations> OrgzCollection
+        {
+            get { return _orgzCollection; }
+            set
+            {
+                _orgzCollection = value;
+                NotifyPropertyChanged("OrgzCollection");
+            }
+        }
+
+        private ObservableCollection<Receipts> _rptCollection;
+        public ObservableCollection<Receipts> RptCollection
+        {
+            get { return _rptCollection; }
+            set
+            {
+                _rptCollection = value;
+                NotifyPropertyChanged("RptCollection");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // 用来通知程序某属性已改变.
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
         public UserPage()
         {
             InitializeComponent();
 
             // 为观测模型设置页面的数据上下文属性.
-            this.DataContext = App.NewViewModel;
+            //this.DataContext = App.NewViewModel;
+            this.DataContext = this;
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            App.NewViewModel.ReceiptsItems.Clear();
-            App.NewViewModel.OrganizationsItems.Clear();
 
             //加载人员信息
             string id = NavigationContext.QueryString["id"];
 
             Users user = Storage.FindUser(id);
-            if(user != null)
+            if (user != null)
             {
                 UseUsers(user);
 
@@ -52,20 +86,20 @@ namespace Combee
                 webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(RetrievedOrganizations);
                 webClient.DownloadStringAsync(UriString.GetUserOrganizationsUri(id));
 
-                var thisReceipts = from rpt in App.NewViewModel.myDB.ReceiptsTable
-                                   where rpt.AuthorId == user.Id
-                                   select rpt;
-
-                if (thisReceipts.Count() != 0)
+                if (RptCollection == null)
                 {
-                    foreach (Receipts rpt in thisReceipts)
-                    {
-                        App.NewViewModel.ReceiptsItems.Add(rpt);
-                    }
-                    Receipts rp = new Receipts();
-                    App.NewViewModel.ReceiptsItems.Add(rp);
+                    var thisReceipts = from rpt in App.NewViewModel.myDB.ReceiptsTable
+                                       where rpt.AuthorId == user.Id
+                                       select rpt;
+
+                    RptCollection = new ObservableCollection<Receipts>(thisReceipts);
+                    RptCollection.Add(new Receipts());
                 }
 
+                if (OrgzCollection == null)
+                {
+                    OrgzCollection = new ObservableCollection<Organizations>();
+                }
             }
         }
 
@@ -159,7 +193,7 @@ namespace Combee
         {
             if(e.Error != null)
             {
-                MessageBox.Show(e.Error.Message.ToString());
+                //MessageBox.Show(e.Error.Message);
             }
             else
             {
@@ -169,11 +203,10 @@ namespace Combee
                     Organizations orgz = Network.GetOrganization(o, false);
 
                     Storage.SaveAvatar((string)o["avatar"]);
-                    App.NewViewModel.OrganizationsItems.Add(orgz);
+                    OrgzCollection.Add(orgz);
                     App.NewViewModel.AddOrganizationsItem(orgz);
                 }
-                Organizations org = new Organizations();
-                App.NewViewModel.OrganizationsItems.Add(org);
+                OrgzCollection.Add(new Organizations());
             }
         }
 
@@ -182,7 +215,7 @@ namespace Combee
 
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message.ToString());
+                //MessageBox.Show(e.Error.Message.ToString());
             }
             else
             {

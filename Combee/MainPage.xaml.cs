@@ -66,11 +66,11 @@ namespace Combee
                 if (CurrentUser.IsFirst())
                 {
                     CurrentUser.SetCount(CurrentUser.GetCount() + 1);
-                    MessageBoxResult res = MessageBox.Show("欢迎使用Combee，是否进入新功能介绍？", "首次登录提示", MessageBoxButton.OKCancel);
-                    if (res == MessageBoxResult.OK)
-                    {
-                        NavigationService.Navigate(new Uri("/Combee;component/IntroductionPage.xaml", UriKind.Relative));
-                    }
+                    //MessageBoxResult res = MessageBox.Show("欢迎使用Combee，是否进入新功能介绍？", "首次登录提示", MessageBoxButton.OKCancel);
+                    //if (res == MessageBoxResult.OK)
+                    //{
+                    //    NavigationService.Navigate(new Uri("/Combee;component/IntroductionPage.xaml", UriKind.Relative));
+                    //}
                 }
 
             }
@@ -98,9 +98,23 @@ namespace Combee
             NavigationService.Navigate(new Uri("/Combee;component/AboutPage.xaml", UriKind.Relative));
         }
 
-         private void SettingMenu_Click(object sender, EventArgs e)
+        private void SettingMenu_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Combee;component/SettingPage.xaml", UriKind.Relative));
+            CurrentUser.Logout();
+            App.NewViewModel.myDB.CommentTable.DeleteAllOnSubmit(App.NewViewModel.myDB.CommentTable);
+            App.NewViewModel.myDB.ReceiptsTable.DeleteAllOnSubmit(App.NewViewModel.myDB.ReceiptsTable);
+            App.NewViewModel.myDB.OrganizationsTable.DeleteAllOnSubmit(App.NewViewModel.myDB.OrganizationsTable);
+            App.NewViewModel.myDB.ConversationsTable.DeleteAllOnSubmit(App.NewViewModel.myDB.ConversationsTable);
+            App.NewViewModel.myDB.UsersTable.DeleteAllOnSubmit(App.NewViewModel.myDB.UsersTable);
+
+            App.NewViewModel.AllConversationsItems.Clear();
+            App.NewViewModel.AllOrganizationsItems.Clear();
+            App.NewViewModel.AllReceiptsItems.Clear();
+            App.NewViewModel.AllUsersItems.Clear();
+            App.NewViewModel.myDB.SubmitChanges();
+            NavigationService.Navigate(new Uri("/Combee;component/LoginPage.xaml", UriKind.Relative));
+
+            //NavigationService.Navigate(new Uri("/Combee;component/SettingPage.xaml", UriKind.Relative));
         }
 
         private void NewConversationButton_Click(object sender, EventArgs e)

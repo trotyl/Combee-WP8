@@ -16,7 +16,7 @@
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Opacity="0.7">
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem x:Name="IntroductionButton" IsEnabled="True" Text="新功能介绍" Click="IntroductionButton_Click"/>
+                <shell:ApplicationBarMenuItem x:Name="IntroductionButton" IsEnabled="False" Text="新功能介绍" Click="IntroductionButton_Click"/>
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton x:Name="LikeButton" IconUri="/Assets/AppBar/like.png" IsEnabled="True" Text="评价" Click="LikeButton_Click"/>
             <shell:ApplicationBarIconButton x:Name="SupportButton" IconUri="/Assets/AppBar/feature.email.png" IsEnabled="True" Text="反馈" Click="SupportButton_Click"/>

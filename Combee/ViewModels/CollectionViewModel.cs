@@ -67,52 +67,52 @@ namespace BindingData.ViewModel
         }
 
         // 当前页面组织集合
-        private ObservableCollection<Organizations> _organizationsItems;
-        public ObservableCollection<Organizations> OrganizationsItems
-        {
-            get { return _organizationsItems; }
-            set
-            {
-                _organizationsItems = value;
-                NotifyPropertyChanged("OrganizationsItems");
-            }
-        }
+        //private ObservableCollection<Organizations> _organizationsItems;
+        //public ObservableCollection<Organizations> OrganizationsItems
+        //{
+        //    get { return _organizationsItems; }
+        //    set
+        //    {
+        //        _organizationsItems = value;
+        //        NotifyPropertyChanged("OrganizationsItems");
+        //    }
+        //}
 
         // 当前页面优信集合
-        private ObservableCollection<Receipts> _receiptsItems;
-        public ObservableCollection<Receipts> ReceiptsItems
-        {
-            get { return _receiptsItems; }
-            set
-            {
-                _receiptsItems = value;
-                NotifyPropertyChanged("ReceiptsItems");
-            }
-        }
+        //private ObservableCollection<Receipts> _receiptsItems;
+        //public ObservableCollection<Receipts> ReceiptsItems
+        //{
+        //    get { return _receiptsItems; }
+        //    set
+        //    {
+        //        _receiptsItems = value;
+        //        NotifyPropertyChanged("ReceiptsItems");
+        //    }
+        //}
 
         // 当前页面人员项目.
-        private ObservableCollection<Users> _usersItems;
-        public ObservableCollection<Users> UsersItems
-        {
-            get { return _usersItems; }
-            set
-            {
-                _usersItems = value;
-                NotifyPropertyChanged("UsersItems");
-            }
-        }
+        //private ObservableCollection<Users> _usersItems;
+        //public ObservableCollection<Users> UsersItems
+        //{
+        //    get { return _usersItems; }
+        //    set
+        //    {
+        //        _usersItems = value;
+        //        NotifyPropertyChanged("UsersItems");
+        //    }
+        //}
 
         // 当前页面评论集合
-        private ObservableCollection<Comment> _commentItems;
-        public ObservableCollection<Comment> CommentItems
-        {
-            get { return _commentItems; }
-            set
-            {
-                _commentItems = value;
-                NotifyPropertyChanged("CommentItems");
-            }
-        }
+        //private ObservableCollection<Comment> _commentItems;
+        //public ObservableCollection<Comment> CommentItems
+        //{
+        //    get { return _commentItems; }
+        //    set
+        //    {
+        //        _commentItems = value;
+        //        NotifyPropertyChanged("CommentItems");
+        //    }
+        //}
 
         // 对本地数据库的 LINQ to SQL 的数据上下文.
         public MyDataContext myDB;
@@ -183,10 +183,10 @@ namespace BindingData.ViewModel
                 // 查询数据库并加载所有人员项目.
                 AllUsersItems = new ObservableCollection<Users>(UsersItemsInDB);
 
-                ReceiptsItems = new ObservableCollection<Receipts>();
-                OrganizationsItems = new ObservableCollection<Organizations>();
-                UsersItems = new ObservableCollection<Users>();
-                CommentItems = new ObservableCollection<Comment>();
+                //ReceiptsItems = new ObservableCollection<Receipts>();
+                //OrganizationsItems = new ObservableCollection<Organizations>();
+                //UsersItems = new ObservableCollection<Users>();
+                //CommentItems = new ObservableCollection<Comment>();
             }
         }
 
@@ -288,10 +288,6 @@ namespace BindingData.ViewModel
                     {
                         // 在所有可观测集合中添加一个新的组织项目.
                         AllOrganizationsItems.Add(orgz);
-                    }
-                    else
-                    {
-                        OrganizationsItems.Add(orgz);
                     }
                 }
 
@@ -414,6 +410,31 @@ namespace BindingData.ViewModel
 
         }
 
+        public void AddCommentItem(Comment newCmt)
+        {
+            lock (thisLock)
+            {
+                var query = from cmt in myDB.CommentTable
+                            where cmt.Id == newCmt.Id
+                            select cmt;
+
+                if (query.Count() == 0)
+                {
+                    // 在数据上下文中添加一个人员项目.
+                    myDB.CommentTable.InsertOnSubmit(newCmt);
+
+                    // 在数据库中保存更改.
+                    myDB.SubmitChanges();
+                }
+
+            }
+            if (newCmt.IsAvatarLocal == false)
+            {
+                Storage.SaveAvatar(newCmt.UserAvatar);
+            }
+
+        }
+
         public void AlterAvatar(string avatar)
         {
 
@@ -469,14 +490,6 @@ namespace BindingData.ViewModel
                     c.IsAvatarLocal = true;
                 }
 
-                foreach (Organizations o in App.NewViewModel.OrganizationsItems)
-                {
-                    if (o.Avatar == avatar)
-                    {
-                        o.DisplayAvatar = avatar;
-                        o.IsAvatarLocal = true;
-                    }
-                }
                 // 在数据库中保存更改.
                 myDB.SubmitChanges();
             }

@@ -20,7 +20,7 @@ namespace Combee
         public static void GetAsyncAll()
         {
             GetAsync("receipts", "receipts");
-            //GetAsync("organizations", "users/" + CurrentUser.GetId() + "/organizations");
+            GetAsync("organizations", "users/" + CurrentUser.GetId() + "/organizations");
             //GetAsync("conversations", "conversations");
         }
 
