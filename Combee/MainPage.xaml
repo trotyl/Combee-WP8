@@ -70,7 +70,7 @@
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem IsEnabled="True" Text="评价此应用" Click="LikeMenu_Click"/>
                 <shell:ApplicationBarMenuItem IsEnabled="True" Text="关于" Click="AboutMenu_Click"/>
-                <shell:ApplicationBarMenuItem IsEnabled="True" Text="设置" Click="SettingMenu_Click"/>
+                <shell:ApplicationBarMenuItem IsEnabled="True" Text="注销" Click="SettingMenu_Click"/>
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/refresh.png" IsEnabled="True" Text="刷新" Click="RenewButton_Click"/>
             <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/share.png" IsEnabled="False" Text="通知中心" Click="ToastButton_Click"/>
@@ -93,7 +93,7 @@
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem IsEnabled="True" Text="评价此应用" Click="LikeMenu_Click"/>
                 <shell:ApplicationBarMenuItem IsEnabled="True" Text="关于" Click="AboutMenu_Click"/>
-                <shell:ApplicationBarMenuItem IsEnabled="True" Text="设置" Click="SettingMenu_Click"/>
+                <shell:ApplicationBarMenuItem IsEnabled="True" Text="注销" Click="SettingMenu_Click"/>
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/refresh.png" IsEnabled="True" Text="刷新" Click="RenewButton_Click"/>
             <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/share.png" IsEnabled="True" Text="通知中心" Click="ToastButton_Click"/>
