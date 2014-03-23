@@ -87,7 +87,7 @@ namespace Combee
                 MessageBox.Show("所选发送组织为空!");
                 return;
             }
-            SubmitButton.IsEnabled = false;
+            //SubmitButton.IsEnabled = false;
             int time = (int)(TimeSlider.Value * 3600);
             Uri uri = UriString.GetPostUri(TitleBox.Text, BodyBox.Text, (TimeBox.IsChecked == true ? (int?)time : null));
 

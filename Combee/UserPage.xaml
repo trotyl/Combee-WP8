@@ -1,0 +1,130 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="Combee.UserPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Combee"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0" Loaded="PhoneApplicationPage_Loaded">
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar Opacity="0.7">
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem IsEnabled="True" Text="保存为联系人" Click="SaveButton_Click"/>
+                <shell:ApplicationBarMenuItem IsEnabled="True" Text="发送电子邮件" Click="EmailButton_Click"/>
+            </shell:ApplicationBar.MenuItems>
+            <shell:ApplicationBarIconButton x:Name="NewMsgButton" IconUri="/Assets/AppBar/favs.addto.png" IsEnabled="False" Text="新私信"/>
+            <shell:ApplicationBarIconButton x:Name="CallButton" IconUri="/Assets/AppBar/feature.phone.png" IsEnabled="True" Text="呼叫" Click="CallButton_Click"/>
+            <shell:ApplicationBarIconButton x:Name="SmsBurron" IconUri="/Assets/AppBar/feature.email.png" IsEnabled="True" Text="短信" Click="SmsBurron_Click"/>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+    
+    <!--好好的一个页面居然也能失踪！-->
+    <phone:PhoneApplicationPage.Resources>
+        <local:StringToImageSource x:Key="StringToImageSource" />
+        <local:DisplayTime x:Key="DisplayTime" />
+
+        <!--优信列表控件模板-->
+        <DataTemplate x:Key="RptListTemplate">
+            <StackPanel Orientation="Horizontal" Margin="10,5,0,0">
+                <Image Tag="{Binding AuthorId, Mode=OneWay}" VerticalAlignment="Top" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="50" Height="50" Margin="9,30,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
+                <StackPanel Tag="{Binding Id}" Width="360" Margin="10,10,0,0" Tap="rptPanel_Tap">
+                    <Border Height="1" Margin="-64,5,0,0" VerticalAlignment="Bottom" Background="White"/>
+                    <Grid Margin="10,5,0,0">
+                        <TextBlock Text="{Binding AuthorName, Mode=OneWay}" Margin="5,5,0,0" TextWrapping="NoWrap" FontSize="24" TextTrimming="WordEllipsis" />
+                        <TextBlock Text="{Binding CreatedAt, Converter={StaticResource DisplayTime}, Mode=OneWay}" TextWrapping="NoWrap" Margin="0,8,0,0" FontSize="18" HorizontalAlignment="Right" />
+                    </Grid>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding Title, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" FontSize="18"/>
+                        <TextBlock Text="{Binding Body, Mode=OneWay}" TextWrapping="Wrap" Margin="10,10,0,0" FontSize="18"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+        
+        <!--组织列表控件模版-->
+        <DataTemplate x:Key="OrgzListTemplate">
+            <StackPanel Orientation="Horizontal" Margin="10,5,0,5">
+                <Image Tag="{Binding Id, Mode=OneWay}" VerticalAlignment="Top" Source="{Binding DisplayAvatar, Converter={StaticResource StringToImageSource}, Mode=OneWay}" Width="50" Height="50" Margin="9,20,0,0" Tap="UserImage_Tap" Stretch="UniformToFill" />
+                <StackPanel Tag="{Binding Id}" Width="360" Margin="10,0,0,0" Tap="orgzPanel_Tap">
+                    <Border Height="1" Margin="-64,5,0,0" VerticalAlignment="Top" Background="White"/>
+                    <Grid Margin="10,20,0,5">
+                        <TextBlock Text="{Binding Name, Mode=OneWay}" TextWrapping="NoWrap" FontSize="24" TextTrimming="WordEllipsis" />
+                        <TextBlock Text="{Binding Members, StringFormat='\{0}人', Mode=OneWay}" TextWrapping="NoWrap" Margin="0,8,0,0" FontSize="18" HorizontalAlignment="Right" />
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
+
+    <!--LayoutRoot 是包含所有页面内容的根网格-->
+    <Grid x:Name="LayoutRoot" Background="#FF34495E">
+        <!--枢轴控件-->
+        <phone:Pivot Margin="0,7,0,0">
+            <phone:Pivot.Title>
+                <StackPanel Orientation="Horizontal"  Margin="0,0,0,0">
+                    <TextBlock Text="Combee - 组织消息通知中心"/>
+                </StackPanel>
+            </phone:Pivot.Title>
+
+            <!--枢轴项一-->
+            <phone:PivotItem Margin="12,0,12,0">
+                <phone:PivotItem.Header >
+                    <TextBlock Text="资料" FontSize="50"/>
+                </phone:PivotItem.Header>
+                <Grid>
+                    <StackPanel >
+                        <StackPanel Margin="0,10,0,0">
+                            <Grid Height="100" Margin="0,0,0,10">
+                                <Border Height="1" VerticalAlignment="Top" Background="White"/>
+                                <Image x:Name="AvatarImage" Margin="10,0,0,0" Width="80" Height="80" HorizontalAlignment="Left" Stretch="UniformToFill" />
+                                <TextBlock x:Name="NameTextBlock" TextAlignment="Left" Margin="120,5,0,0" FontSize="36"/>
+                                <TextBlock x:Name="MailTextBlock" TextAlignment="Left" Margin="120,56,0,0" FontSize="24"/>
+                                <Border Height="1" VerticalAlignment="Bottom" Background="White"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <Border Height="24"/>
+                        <TextBlock x:Name="UidTextBlock" Text="" Margin="20,20,0,10" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="24" />
+                        <TextBlock x:Name="QqTextBlock" Text="" Margin="20,0,0,10" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="24" />
+                        <TextBlock x:Name="PhoneTextBlock" Text="" Margin="20,0,0,10" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="24" />
+                        <TextBlock x:Name="BioTextBlock" Text="" Margin="20,0,0,10" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="24" />
+                        <Border Height="24"/>
+                        <TextBlock x:Name="CreatedTextBlock" Text="" Margin="20,0,0,10" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="18" />
+
+                    </StackPanel>
+                </Grid>
+            </phone:PivotItem>
+ 
+            <!--枢轴项二-->
+            <phone:PivotItem Margin="12,0,12,0">
+                <phone:PivotItem.Header >
+                    <TextBlock Text="优信" FontSize="50"/>
+                </phone:PivotItem.Header>
+
+                <Grid Margin="0,0,0,0">
+                    <phone:LongListSelector ItemsSource="{Binding RptCollection, Mode=OneWay}" ItemTemplate="{StaticResource RptListTemplate}" Margin="0,0,0,0"/>
+                </Grid>
+            </phone:PivotItem>
+
+            <!--枢轴项三-->
+            <phone:PivotItem Margin="12,0,12,0">
+                <phone:PivotItem.Header >
+                    <TextBlock Text="组织" FontSize="50"/>
+                </phone:PivotItem.Header>
+
+                <Grid Margin="0,0,0,0">
+                    <phone:LongListSelector ItemsSource="{Binding OrgzCollection, Mode=OneWay}" ItemTemplate="{StaticResource OrgzListTemplate}" Margin="0,0,0,0"/>
+                </Grid>
+            </phone:PivotItem>
+        </phone:Pivot>
+    </Grid>
+    
+</phone:PhoneApplicationPage>
