@@ -28,6 +28,7 @@ namespace Combee
         private static string avatar = null;
         private static string phone = null;
         private static string private_token = null;
+        private static string channel_uri = null;
 
         public static void SetLogin(bool _login) { login = _login; Save(); }
         public static void SetCount(int? _count) { count = _count; Save(); }
@@ -38,6 +39,7 @@ namespace Combee
         public static void SetAvatar(string _avatar) { avatar = _avatar; Save(); }
         public static void SetPhone(string _phone) { phone = _phone; Save(); }
         public static void SetPrivate_token(string _private_token) { private_token = _private_token; Save(); }
+        public static void SetChannelUri(string _channel_uri) { channel_uri = _channel_uri; Save(); }
 
         public static bool IsLogin() 
         {
@@ -66,6 +68,7 @@ namespace Combee
         public static string GetAvatar() { return avatar; }
         public static string GetPhone() { return phone; }
         public static string GetPrivate_token() { return private_token; }
+        public static string GetChannelUri() { return channel_uri; }
 
         public static void Login(JObject o)
         {

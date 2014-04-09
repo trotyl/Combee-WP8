@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://yuzejiang.cn:2012/PushService.asmx?wsdl" docRef="http://yuzejiang.cn:2012/PushService.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://yuzejiang.cn:2012/PushService.asmx" xmlns:q1="http://889200.ichengyun.net/" binding="q1:PushServiceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://yuzejiang.cn:2012/PushService.asmx" xmlns:q2="http://889200.ichengyun.net/" binding="q2:PushServiceSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>
